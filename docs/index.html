@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="GPA, Group 6's software engineering project: a campus canteen dish recommendation system built around taste, budget and ingredient preferences.">
+<meta name="theme-color" content="#174c35">
+<title>GPA — Campus Canteen Dish Recommendation System</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23174c35'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Arial' font-weight='700' font-size='40' fill='%23d5f566'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header wrap">
+ <a class="brand" href="#" aria-label="GPA home">GPA<span>Good Palate <br>Association</span></a>
+ <nav aria-label="Main navigation"><a href="#why">The problem</a><a href="#scope">The plan</a><a href="#team">The team</a></nav>
+ <span class="edition">GROUP 06 / SOFTWARE ENGINEERING</span>
+</header>
+<main id="main">
+ <section class="hero wrap" aria-labelledby="hero-title">
+  <div class="hero-copy"><p class="eyebrow">CAMPUS CANTEEN DISH RECOMMENDATION SYSTEM</p>
+   <h1 id="hero-title">Good food.<br>Your taste.<br><em>Less guesswork.</em></h1>
+   <p class="intro">A simpler way to choose what to eat on campus. Find dishes that fit your taste, budget and ingredient preferences.</p>
+   <a class="button" href="#scope">Explore the project</a>
+   <p class="status">Task 1 · Project proposal · October 2026</p>
+  </div>
+  <figure class="hero-image"><img src="meal.png" alt="Four meals featuring rice, vegetables, meat and a hot pot." width="1156" height="1521" fetchpriority="high"><figcaption>Everyday meals. More personal choices.<span>Meal selection</span></figcaption></figure>
+ </section>
+ <div class="facts-band"><div class="wrap facts"><p><strong>01</strong> campus canteen planned</p><p><strong>3–5</strong> pilot stalls planned</p><p><strong>40–60</strong> dish records targeted</p><p class="pilot-note">A focused pilot.<br>Scope depends on verified data.</p></div></div>
+ <section id="why" class="section wrap">
+  <div class="section-heading"><p class="eyebrow">01 / THE PROBLEM</p><h2>Choosing lunch should <br>take less effort.</h2></div>
+  <div class="research-layout"><p class="lead">Students compare taste, price, ingredients and stall location before choosing a meal. Our proposal brings that information together and narrows the options to a useful shortlist.</p>
+   <div class="research"><div class="stat"><strong>96</strong><p>valid responses in our<br>proposal's survey snapshot</p></div><div class="stat"><strong>43.75<span>%</span></strong><p>put taste first<br><span class="muted">42 of 96 respondents</span></p></div><div class="stat"><strong>91.67<span>%</span></strong><p>would use or try a recommendation tool<br><span class="muted">88 of 96 respondents</span></p></div></div>
+  </div>
+  <figure class="canteen-photo"><img src="canteen.png" alt="Canteen seating and food stalls beneath green beams and large pendant lights." width="1280" height="1574" loading="lazy"><figcaption>The setting for everyday meal decisions.</figcaption></figure>
+  <p class="source-note">Source: the team's 96-response survey snapshot, cited in the proposal. The sample is concentrated in third-year students and respondents from Central China; willingness to try is not evidence of actual adoption. <a href="https://www.wjx.cn/report/387401901.aspx">View survey source</a></p>
+ </section>
+ <section id="scope" class="scope-section"><div class="wrap section">
+  <div class="section-heading"><p class="eyebrow">02 / THE PROPOSED EXPERIENCE</p><h2>Five functions. <br>One clearer choice.</h2><p class="section-intro">Planned for the initial release. Development and student trials will follow the proposal.</p></div>
+  <ol class="features">
+   <li><span class="feature-id">F1</span><div><h3>Tell us what suits you</h3><p>Set and save taste preferences, a budget and ingredients you exclude.</p></div><span class="owner">Owner A</span></li>
+   <li><span class="feature-id">F2</span><div><h3>See what's on the menu</h3><p>Browse by stall, price and tags. Check dish details, location and the latest verification date.</p></div><span class="owner">Owner B</span></li>
+   <li><span class="feature-id">F3</span><div><h3>Get a shortlist with reasons</h3><p>Receive up to five candidates, filtered by your restrictions and ranked by taste and personal feedback.</p></div><span class="owner">Owner C</span></li>
+   <li><span class="feature-id">F4</span><div><h3>Keep favorites. Refine your choices.</h3><p>Save dishes, remove favorites and give feedback to inform later recommendations.</p></div><span class="owner">Owner D</span></li>
+   <li><span class="feature-id">F5</span><div><h3>Keep dish information useful</h3><p>Authorized maintainers update dishes, prices and the latest known availability.</p></div><span class="owner">Owner B</span></li>
+  </ol>
+  <div class="boundary"><h3>A clear boundary</h3><p>The first release focuses on choosing dishes. Payments, ordering, spending statistics, rankings and complaints are outside its scope. Nutrition references are an extension, subject to reliable source and portion information.</p></div>
+ </div></section>
+ <section class="section wrap rules-section">
+  <div><p class="eyebrow">HOW THE RECOMMENDATION WILL WORK</p><h2>Restrictions first. <br>Preferences next.</h2></div>
+  <div class="rules"><article><span>01</span><div><h3>Check the conditions</h3><p>Exclude over-budget dishes, known ingredient conflicts and dishes recorded as unavailable. When ingredient exclusions are set, unverified ingredient records are also excluded.</p></div></article><article><span>02</span><div><h3>Rank and explain</h3><p>Rank the remaining dishes by taste compatibility and personal feedback, with specific reasons for each suggestion.</p></div></article><article><span>03</span><div><h3>Respect an empty result</h3><p>If nothing matches, say so. The student decides whether to change the conditions; the system will not silently relax them.</p></div></article><p class="source-note">Availability reflects the latest check, not real-time stock. Recorded ingredients do not constitute allergen certification.</p></div>
+ </section>
+ <section id="plan" class="section wrap plan-section">
+  <div class="section-heading"><p class="eyebrow">03 / THE WORK PLAN</p><h2>From a question <br>to a working prototype.</h2><p class="section-intro">Six weeks planned after proposal submission. Milestones remain subject to the course schedule.</p></div>
+  <ol class="timeline"><li><span>WEEK 01</span><h3>Define the pilot</h3><p>Confirm scope, ownership, sample data and screen sketches.</p></li><li><span>WEEK 02</span><h3>Confirm the needs</h3><p>Consult the assigned customer group; establish menu and preference workflows.</p></li><li><span>WEEK 03</span><h3>Build the shortlist</h3><p>Connect filtering, ranking, explanations and empty results.</p></li><li><span>WEEK 04</span><h3>Connect feedback</h3><p>Integrate favorites, menu updates and access permissions.</p></li><li><span>WEEK 05</span><h3>Test with students</h3><p>Check rules, usability and selection time; fix major issues.</p></li><li><span>WEEK 06</span><h3>Refine and present</h3><p>Complete documentation and test records; prepare the demonstration.</p></li></ol>
+  <details class="evaluation"><summary>How will we judge success?</summary><div><p>Proposed targets, not completed results:</p><ul><li>Pass predefined cases for budget boundaries, ingredient conflicts, unknown information, availability and empty results.</li><li>In the planned trial of approximately 10 students, aim for at least eight to find a dish they would choose and at least nine to complete the core workflow independently.</li><li>Compare median selection time against ordinary menu browsing using the same menu and counterbalanced order.</li><li>Verify consistent menu updates, reversible favorites and feedback, and separation of account data.</li></ul></div></details>
+ </section>
+ <section id="team" class="team-section"><div class="wrap section"><p class="eyebrow">04 / THE TEAM</p><div class="team-heading"><h2>Good Palate <br>Association.</h2><p>Group 6 · Macau University of Science and Technology<br>Software Engineering · 2026<br><br>Four functional owners. Two working pairs.<br>Shared implementation, testing and documentation.</p></div>
+ <div class="pairs"><article><p class="eyebrow">PAIR A + C</p><h3>Preferences to recommendations</h3><p><strong>A · LIU KAIXI</strong><br>Team lead · Accounts and preferences</p><p><strong>C · RONG KEYI</strong><br>Filtering, ranking and explanations</p></article><article><p class="eyebrow">PAIR B + D</p><h3>Menus and personal feedback</h3><p><strong>B · LIU SIMIN</strong><br>Menu search, dish details and maintenance</p><p><strong>D · WEN FANGE</strong><br>Favorites, feedback and personal records</p></article></div>
+ <p class="team-note">This website introduces the course project at proposal stage. It is not a live canteen service. Planned source collaboration: GitHub. Progress reporting: Feishu.</p>
+ </div></section>
+</main>
+<footer class="wrap footer"><a class="brand" href="#">GPA<span>Good Palate Association<br>Group 06 · 2026</span></a><p>Project information based on Task 1.<br><a href="#main">Back to top</a></p></footer>
+</body>
+</html>
