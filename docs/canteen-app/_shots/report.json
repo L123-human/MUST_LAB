@@ -1,0 +1,810 @@
+{
+  "src": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\食堂好味道-校园食堂菜品推荐.html",
+  "url": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/%E9%A3%9F%E5%A0%82%E5%A5%BD%E5%91%B3%E9%81%93-%E6%A0%A1%E5%9B%AD%E9%A3%9F%E5%A0%82%E8%8F%9C%E5%93%81%E6%8E%A8%E8%8D%90.html",
+  "outdir": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "slices": [
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p1of3.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p2of3.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p3of3.jpg"
+      ],
+      "sliceHint": "按顺序 Read slices 里的各分片。",
+      "truncated": false,
+      "structure": {
+        "title": "食堂好味道 · 校园食堂菜品推荐",
+        "firstH1": "",
+        "viewport": {
+          "w": 1406,
+          "h": 756
+        },
+        "fullpage": {
+          "w": 1406,
+          "h": 9769
+        },
+        "counts": {
+          "section": 2,
+          "h1": 0,
+          "h2": 0,
+          "img": 57,
+          "canvas": 0,
+          "svg": 177,
+          "links": 0,
+          "buttons": 136
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "duplicateImagesWarning": [
+        {
+          "count": 16,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 16,
+          "sizes": [
+            "351x263",
+            "351x263",
+            "351x264",
+            "351x263",
+            "351x263",
+            "351x264"
+          ],
+          "alts": [
+            "农家小炒肉",
+            "麻婆豆腐",
+            "干煸四季豆",
+            "辣子鸡丁"
+          ],
+          "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/chuan.jpg"
+        },
+        {
+          "count": 12,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 12,
+          "sizes": [
+            "351x263",
+            "351x264",
+            "351x263",
+            "351x263",
+            "351x264",
+            "351x263"
+          ],
+          "alts": [
+            "红烧牛肉面",
+            "番茄鸡蛋面",
+            "麻辣拌面",
+            "葱油拌面"
+          ],
+          "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/mian.jpg"
+        },
+        {
+          "count": 8,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 8,
+          "sizes": [
+            "351x263",
+            "351x264",
+            "351x263",
+            "351x263",
+            "351x264",
+            "351x263"
+          ],
+          "alts": [
+            "牛油果鸡胸沙拉",
+            "藜麦蔬菜碗",
+            "金枪鱼沙拉",
+            "减脂杂粮饭"
+          ],
+          "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/qingshi.jpg"
+        },
+        {
+          "count": 8,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 8,
+          "sizes": [
+            "351x263",
+            "351x263",
+            "351x264",
+            "351x263",
+            "351x263",
+            "351x264"
+          ],
+          "alts": [
+            "番茄牛肉汤粉",
+            "清汤牛腩粉",
+            "酸辣肥肠粉",
+            "麻辣烫"
+          ],
+          "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/tangfen.jpg"
+        },
+        {
+          "count": 12,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 12,
+          "sizes": [
+            "351x264",
+            "351x263",
+            "351x263",
+            "351x264",
+            "351x263",
+            "351x263"
+          ],
+          "alts": [
+            "烧鸭饭",
+            "叉烧饭",
+            "白切鸡饭",
+            "蜜汁叉烧拼饭"
+          ],
+          "src": "…e:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/shaola.jpg"
+        }
+      ],
+      "duplicateImagesHint": "info · 同一图片资源在多处使用；count 是次数，contentImageTotal 是内容图总数。尺寸和 alt 差异仅供参考，不代表使用错误；总览、局部探索和详情可以复用同图。本项不要求换图、减少展示数量或修改布局。",
+      "reportSource": "cdp"
+    },
+    "mobile": {
+      "slices": [
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p1of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p2of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p3of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p4of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p5of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p6of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p7of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p8of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p9of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p10of11.jpg",
+        "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p11of11.jpg"
+      ],
+      "sliceHint": "按顺序 Read slices 里的各分片。",
+      "truncated": false,
+      "structure": {
+        "title": "食堂好味道 · 校园食堂菜品推荐",
+        "firstH1": "",
+        "viewport": {
+          "w": 492,
+          "h": 700
+        },
+        "fullpage": {
+          "w": 492,
+          "h": 32327
+        },
+        "counts": {
+          "section": 2,
+          "h1": 0,
+          "h2": 0,
+          "img": 57,
+          "canvas": 0,
+          "svg": 177,
+          "links": 0,
+          "buttons": 136
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "duplicateImagesWarning": [
+        {
+          "count": 16,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 16,
+          "sizes": [
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347"
+          ],
+          "alts": [
+            "农家小炒肉",
+            "麻婆豆腐",
+            "干煸四季豆",
+            "辣子鸡丁"
+          ],
+          "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/chuan.jpg"
+        },
+        {
+          "count": 12,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 12,
+          "sizes": [
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347"
+          ],
+          "alts": [
+            "红烧牛肉面",
+            "番茄鸡蛋面",
+            "麻辣拌面",
+            "葱油拌面"
+          ],
+          "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/mian.jpg"
+        },
+        {
+          "count": 8,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 8,
+          "sizes": [
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347"
+          ],
+          "alts": [
+            "牛油果鸡胸沙拉",
+            "藜麦蔬菜碗",
+            "金枪鱼沙拉",
+            "减脂杂粮饭"
+          ],
+          "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/qingshi.jpg"
+        },
+        {
+          "count": 8,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 8,
+          "sizes": [
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347"
+          ],
+          "alts": [
+            "番茄牛肉汤粉",
+            "清汤牛腩粉",
+            "酸辣肥肠粉",
+            "麻辣烫"
+          ],
+          "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/tangfen.jpg"
+        },
+        {
+          "count": 12,
+          "contentImageTotal": 57,
+          "sameRenderedSize": true,
+          "distinctAlts": 12,
+          "sizes": [
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347",
+            "462x347"
+          ],
+          "alts": [
+            "烧鸭饭",
+            "叉烧饭",
+            "白切鸡饭",
+            "蜜汁叉烧拼饭"
+          ],
+          "src": "…e:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/shaola.jpg"
+        }
+      ],
+      "duplicateImagesHint": "info · 同一图片资源在多处使用；count 是次数，contentImageTotal 是内容图总数。尺寸和 alt 差异仅供参考，不代表使用错误；总览、局部探索和详情可以复用同图。本项不要求换图、减少展示数量或修改布局。",
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "publishBrokenAssets": [
+    {
+      "file": "assets\\chuan.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    },
+    {
+      "file": "assets\\hero.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    },
+    {
+      "file": "assets\\mian.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    },
+    {
+      "file": "assets\\qingshi.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    },
+    {
+      "file": "assets\\shaola.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    },
+    {
+      "file": "assets\\tangfen.jpg",
+      "reason": "js-literal",
+      "severity": "error",
+      "loadedAtRuntime": false,
+      "onDisk": true
+    }
+  ],
+  "publishBrokenAssetsHint": "含义：发布链路靠静态扫描 HTML 源码决定上传哪些图片文件，**只认 `src` 属性和 CSS `url()` 两个位置**（线上实测）。写在别处的路径不会被上传，发布后 404 裂图。本地打开和自检截图都看不出来——文件真实存在，浏览器照样加载。 | severity=error 的逐条改，改法都是同一个：把路径挪到 `<img src=\"assets/x.png\">` 或 CSS `url('assets/x.png')`。reason=js-literal 路径写在 JS 字符串里（`const g=['assets/x.png']` 这种常量数组也算，照样裂）；reason=js-concat 路径由 JS 拼接（`'assets/img'+i+'.png'`）；reason=non-src-attr 路径写在 `data-src`、`srcset`、`poster` 等非 `src` 属性上——**这类即便静态写在 HTML 属性里也会裂**，懒加载写法要在 `src` 上放真实路径。 | severity=warning（reason=unreferenced-file）是提醒不是错误：`assets/` 里有这个文件，但源码和运行时都没引用到它。可能是没用上的多余素材（删掉即可），也可能是路径拼接且当前视口没渲染到的图（那就是会裂的，按 error 处理）。**这一条只在本地电脑（macOS / Windows）检测**——云电脑图片走 `lark-cli drive +html-image-upload`，HTML 引用外链、`assets/` 里的原图本就该保留且不被引用，在那儿报是纯误报，所以直接不报；**别因为这条去删云电脑上的原图**。自行判断，别的规则不受它影响。",
+  "elapsedSec": 14.36,
+  "schemaVersion": 2,
+  "status": "fail",
+  "engineInfo": {
+    "name": "chrome_cli",
+    "degraded": true,
+    "degradedReasons": [
+      "playwright 未装"
+    ]
+  },
+  "input": {
+    "original": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\食堂好味道-校园食堂菜品推荐.html",
+    "resolvedPath": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\食堂好味道-校园食堂菜品推荐.html",
+    "baseUrl": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/%E9%A3%9F%E5%A0%82%E5%A5%BD%E5%91%B3%E9%81%93-%E6%A0%A1%E5%9B%AD%E9%A3%9F%E5%A0%82%E8%8F%9C%E5%93%81%E6%8E%A8%E8%8D%90.html",
+    "protocol": "file",
+    "cwd": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "tiles": [
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p1of3.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p2of3.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_desktop_p3of3.jpg"
+        ],
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      },
+      {
+        "viewport": "mobile",
+        "tiles": [
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p1of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p2of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p3of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p4of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p5of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p6of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p7of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p8of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p9of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p10of11.jpg",
+          "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\食堂好味道-校园食堂菜品推荐_mobile_p11of11.jpg"
+        ],
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 6,
+    "warning": 0,
+    "info": 10
+  },
+  "findings": [
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "desktop",
+      "selector": null,
+      "evidence": {
+        "count": 16,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 16,
+        "sizes": [
+          "351x263",
+          "351x263",
+          "351x264",
+          "351x263",
+          "351x263",
+          "351x264"
+        ],
+        "alts": [
+          "农家小炒肉",
+          "麻婆豆腐",
+          "干煸四季豆",
+          "辣子鸡丁"
+        ],
+        "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/chuan.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|desktop||0"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "desktop",
+      "selector": null,
+      "evidence": {
+        "count": 12,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 12,
+        "sizes": [
+          "351x263",
+          "351x264",
+          "351x263",
+          "351x263",
+          "351x264",
+          "351x263"
+        ],
+        "alts": [
+          "红烧牛肉面",
+          "番茄鸡蛋面",
+          "麻辣拌面",
+          "葱油拌面"
+        ],
+        "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/mian.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|desktop||1"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "desktop",
+      "selector": null,
+      "evidence": {
+        "count": 8,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 8,
+        "sizes": [
+          "351x263",
+          "351x264",
+          "351x263",
+          "351x263",
+          "351x264",
+          "351x263"
+        ],
+        "alts": [
+          "牛油果鸡胸沙拉",
+          "藜麦蔬菜碗",
+          "金枪鱼沙拉",
+          "减脂杂粮饭"
+        ],
+        "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/qingshi.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|desktop||2"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "desktop",
+      "selector": null,
+      "evidence": {
+        "count": 8,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 8,
+        "sizes": [
+          "351x263",
+          "351x263",
+          "351x264",
+          "351x263",
+          "351x263",
+          "351x264"
+        ],
+        "alts": [
+          "番茄牛肉汤粉",
+          "清汤牛腩粉",
+          "酸辣肥肠粉",
+          "麻辣烫"
+        ],
+        "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/tangfen.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|desktop||3"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "desktop",
+      "selector": null,
+      "evidence": {
+        "count": 12,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 12,
+        "sizes": [
+          "351x264",
+          "351x263",
+          "351x263",
+          "351x264",
+          "351x263",
+          "351x263"
+        ],
+        "alts": [
+          "烧鸭饭",
+          "叉烧饭",
+          "白切鸡饭",
+          "蜜汁叉烧拼饭"
+        ],
+        "src": "…e:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/shaola.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|desktop||4"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "mobile",
+      "selector": null,
+      "evidence": {
+        "count": 16,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 16,
+        "sizes": [
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347"
+        ],
+        "alts": [
+          "农家小炒肉",
+          "麻婆豆腐",
+          "干煸四季豆",
+          "辣子鸡丁"
+        ],
+        "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/chuan.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|mobile||0"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "mobile",
+      "selector": null,
+      "evidence": {
+        "count": 12,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 12,
+        "sizes": [
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347"
+        ],
+        "alts": [
+          "红烧牛肉面",
+          "番茄鸡蛋面",
+          "麻辣拌面",
+          "葱油拌面"
+        ],
+        "src": "file:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/mian.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|mobile||1"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "mobile",
+      "selector": null,
+      "evidence": {
+        "count": 8,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 8,
+        "sizes": [
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347"
+        ],
+        "alts": [
+          "牛油果鸡胸沙拉",
+          "藜麦蔬菜碗",
+          "金枪鱼沙拉",
+          "减脂杂粮饭"
+        ],
+        "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/qingshi.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|mobile||2"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "mobile",
+      "selector": null,
+      "evidence": {
+        "count": 8,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 8,
+        "sizes": [
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347"
+        ],
+        "alts": [
+          "番茄牛肉汤粉",
+          "清汤牛腩粉",
+          "酸辣肥肠粉",
+          "麻辣烫"
+        ],
+        "src": "…:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/tangfen.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|mobile||3"
+    },
+    {
+      "ruleId": "duplicateImagesWarning",
+      "severity": "info",
+      "kind": "content",
+      "viewport": "mobile",
+      "selector": null,
+      "evidence": {
+        "count": 12,
+        "contentImageTotal": 57,
+        "sameRenderedSize": true,
+        "distinctAlts": 12,
+        "sizes": [
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347",
+          "462x347"
+        ],
+        "alts": [
+          "烧鸭饭",
+          "叉烧饭",
+          "白切鸡饭",
+          "蜜汁叉烧拼饭"
+        ],
+        "src": "…e:///C:/Users/ADMINN%20HP/Doubao/chats/2026-11-04/new-chat/canteen-app/assets/shaola.jpg"
+      },
+      "dedupeKey": "duplicateImagesWarning|mobile||4"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\chuan.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||0"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\hero.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||1"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\mian.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||2"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\qingshi.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||3"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\shaola.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||4"
+    },
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "kind": "publish",
+      "viewport": null,
+      "selector": null,
+      "evidence": {
+        "file": "assets\\tangfen.jpg",
+        "reason": "js-literal",
+        "severity": "error",
+        "loadedAtRuntime": false,
+        "onDisk": true
+      },
+      "dedupeKey": "publishBrokenAssets|top||5"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "ruleId": "publishBrokenAssets",
+      "severity": "error",
+      "viewport": null,
+      "selector": null
+    }
+  ],
+  "reportPath": "C:\\Users\\ADMINN HP\\Doubao\\chats\\2026-11-04\\new-chat\\canteen-app\\_shots\\report.json"
+}

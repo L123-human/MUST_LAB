@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>食堂好味道 · 校园食堂菜品推荐</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E4622C'/%3E%3Cpath d='M16 22h32v8a16 16 0 0 1-32 0z' fill='%23FFF7EE'/%3E%3Cpath d='M12 22h40' stroke='%23FFF7EE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M32 10v4M22 8v4M42 8v4' stroke='%23FFF7EE' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FAF8F0;
+  --surface:#FFFFFF;
+  --surface-2:#FBF7EC;
+  --ink:#2B2620;
+  --ink-2:#6B6458;
+  --muted:#9A9282;
+  --line:#E8DFC6;
+  --accent:#E0833C;
+  --accent-deep:#C66B28;
+  --accent-soft:#FBE7D6;
+  --green:#3E9C63;
+  --green-deep:#2F7A4D;
+  --green-soft:#E2F2E8;
+  --amber:#C0850F;
+  --amber-soft:#FCF0DA;
+  --red:#D6453A;
+  --red-soft:#FBE5E2;
+  --shadow:0 1px 2px rgba(32,38,30,.05),0 12px 30px rgba(32,38,30,.08);
+  --r:16px;
+  transition:background .25s,color .25s;
+}
+body{transition:background .25s,color .25s}
+.tag,.price,.fav.on,.pill-gr{transition:background-color .25s ease,color .25s ease}
+/* 健康模式：整体转为柔和的浅鲜绿，通透清新，抑制食欲 */
+body[data-theme="health"]{
+  --bg:#EDF6E8;
+  --surface-2:#F3F9EF;
+  --line:#DEE8D6;
+  --accent:#5CB871;
+  --accent-deep:#46A05C;
+  --accent-soft:#E0F3E4;
+  --green:#3E9C63;
+  --green-deep:#2F7A4D;
+  --green-soft:#E2F2E8;
+}
+.theme-switch{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 6px;font-size:12.5px;font-weight:700;color:var(--ink-2);transition:border-color .25s,background .25s;cursor:pointer}
+.theme-switch:hover{border-color:#c9cec0}
+.switch-track{position:relative;width:46px;height:26px;border-radius:999px;background:var(--accent);flex:none;transition:background-color .3s ease}
+.switch-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.28);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+body[data-theme="health"] .switch-knob{transform:translateX(20px)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:16px}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+
+/* ===== 顶部 ===== */
+.app{max-width:1120px;margin:0 auto;padding:0 14px 64px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 2px 14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-name{font-size:20px;font-weight:800;letter-spacing:.5px}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:.3px}
+.account{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.user-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);padding:6px 12px 6px 8px;border-radius:999px;font-size:13px}
+.user-chip .role{font-size:11px;color:#fff;background:var(--accent);border-radius:999px;padding:1px 8px}
+.user-chip .role.r-green{background:var(--green)}
+.user-chip .role.r-amber{background:var(--amber)}
+.btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:11px;padding:9px 16px;font-size:14px;font-weight:600;transition:transform .06s,background .15s,box-shadow .15s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.btn-primary:hover{background:var(--accent-deep)}
+.btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.btn-ghost:hover{border-color:#c9cec0;background:var(--surface-2)}
+.btn-soft{background:var(--accent-soft);color:var(--accent-deep)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-deep)}
+.btn-danger{background:var(--red-soft);color:var(--red)}
+.btn-sm{padding:6px 12px;font-size:13px;border-radius:9px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ===== 导航 ===== */
+.tabs{position:sticky;top:0;z-index:30;display:flex;gap:6px;background:rgba(243,245,238,.92);backdrop-filter:blur(8px);padding:8px 2px;margin:2px -2px 20px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--ink-2);font-size:14.5px;font-weight:600;padding:9px 15px;border-radius:11px;white-space:nowrap}
+.tab:hover{background:var(--surface);color:var(--ink)}
+.tab.on{background:var(--ink);color:#fff}
+.tab .dot{width:7px;height:7px;border-radius:50%;background:var(--red);display:none}
+.tab.locked{color:var(--muted)}
+
+/* ===== 通用 ===== */
+.content h2{font-size:20px;margin:0 0 4px}
+.page-desc{color:var(--ink-2);font-size:14px;margin:0 0 18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.panel{padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.section-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;margin:0 0 14px}
+.section-title .bar{width:4px;height:16px;border-radius:2px;background:var(--accent)}
+.hint{font-size:13px;color:var(--muted)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink-2)}
+.input,.select,.textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:var(--surface);color:var(--ink)}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1;min-width:120px}
+
+/* ===== 首页 hero ===== */
+.hero{position:relative;border-radius:var(--r);overflow:hidden;margin-bottom:22px;min-height:210px;display:flex;align-items:flex-end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,24,18,0) 0%,rgba(20,24,18,.62) 100%)}
+.hero .txt{position:relative;z-index:2;padding:22px;color:#fff}
+.hero .hi{font-size:13px;font-weight:600;opacity:.92;letter-spacing:.3px}
+.hero .big{font-size:30px;font-weight:800;line-height:1.2;margin:4px 0 10px}
+.hero .search{display:flex;gap:8px;max-width:520px;background:#fff;border-radius:13px;padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.16)}
+.hero .search input{flex:1;border:0;outline:none;font-size:15px;padding:6px 10px}
+.hero .search .btn{padding:9px 18px}
+
+/* ===== 筛选 ===== */
+.filters{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.filters-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filters-row .fitem{flex:1;min-width:130px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;transition:all .12s}
+.chip:hover{border-color:#c9cec0}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.ton.on{background:var(--accent);border-color:var(--accent)}
+.range{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.range .input{width:84px;text-align:center;padding:8px 6px}
+
+/* ===== 菜品卡片 ===== */
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+.dish{overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .2s}
+.dish:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(32,38,30,.06),0 16px 34px rgba(32,38,30,.12)}
+.dish .thumb{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--surface-2)}
+.dish .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.dish:hover .thumb img{transform:scale(1.05)}
+.dish .badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;color:#fff}
+.b-on{background:var(--green)}
+.b-off{background:#7a8076}
+.b-unv{background:var(--amber)}
+.b-pilot{background:rgba(32,38,30,.72);backdrop-filter:blur(3px)}
+.dish .fav{position:absolute;top:9px;right:9px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.9);display:grid;place-items:center;color:var(--ink-2);box-shadow:0 2px 8px rgba(0,0,0,.14)}
+.dish .fav.on{color:var(--accent)}
+.dish .body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.dish .nm{font-size:16.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dish .price{color:var(--accent-deep);font-weight:800;font-size:16px;white-space:nowrap}
+.dish .meta{font-size:12.5px;color:var(--ink-2);display:flex;gap:10px;flex-wrap:wrap}
+.dish .meta svg{width:14px;height:14px;color:var(--muted)}
+.dish .tastes{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11.5px;color:var(--accent-deep);background:var(--accent-soft);border-radius:6px;padding:2px 8px;font-weight:600}
+.tag.g{color:var(--green-deep);background:var(--green-soft)}
+.dish .ing{font-size:12.5px;color:var(--muted);line-height:1.5}
+.dish .acts{display:flex;gap:8px;margin-top:auto;padding-top:4px}
+.dish .acts .btn{flex:1;justify-content:center}
+
+/* ===== 推荐 ===== */
+.rec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.rec-head .btn{flex-shrink:0}
+.reason{font-size:12.5px;color:var(--ink-2);background:var(--surface-2);border:1px dashed var(--line);border-radius:9px;padding:8px 11px}
+.reason b{color:var(--green-deep);font-weight:700}
+.empty{text-align:center;padding:44px 20px;color:var(--ink-2)}
+.empty svg{width:52px;height:52px;margin:0 auto 12px;color:#c6ccc0}
+.empty .t{font-weight:700;color:var(--ink);font-size:16px;margin-bottom:4px}
+.empty .d{font-size:13.5px;color:var(--muted)}
+
+/* ===== 收藏/反馈 ===== */
+.feedbtn{display:flex;gap:8px}
+.feedbtn button{flex:1;border:1px solid var(--line);border-radius:11px;padding:9px;background:var(--surface);color:var(--ink-2);font-weight:600;font-size:13.5px}
+.feedbtn button.on-like{background:var(--green);border-color:var(--green);color:#fff}
+.feedbtn button.on-not{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ===== 维护表格 ===== */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{width:100%;border-collapse:collapse;min-width:720px;font-size:13.5px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:12.5px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px}
+.pill-ok{background:var(--green-soft);color:var(--green-deep)}
+.pill-no{background:var(--red-soft);color:var(--red)}
+.pill-wa{background:var(--amber-soft);color:var(--amber)}
+.pill-gr{background:var(--accent-soft);color:var(--accent-deep)}
+.pill-mu{background:#ECEEEA;color:var(--ink-2)}
+
+/* ===== 登录/模态 ===== */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.modal .mask{position:absolute;inset:0;background:rgba(22,26,20,.5);backdrop-filter:blur(2px)}
+.modal .box{position:relative;background:var(--surface);border-radius:18px;width:100%;max-width:460px;max-height:90vh;overflow:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal .box.wide{max-width:620px}
+.modal h3{margin:0 0 4px;font-size:19px}
+.modal .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+.m-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:0;background:var(--surface-2);color:var(--ink-2);display:grid;place-items:center}
+.m-close:hover{background:var(--line)}
+.togglers{display:flex;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:18px}
+.togglers button{flex:1;border:0;background:transparent;padding:8px;border-radius:8px;font-weight:700;color:var(--ink-2);font-size:14px}
+.togglers button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.errline{color:var(--red);font-size:12.5px;margin:2px 0 0;min-height:0}
+.form-err{background:var(--red-soft);color:var(--red);border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:12px;display:none}
+.form-err.on{display:block}
+
+/* ===== toast ===== */
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--ink);color:#fff;font-size:13.5px;padding:11px 18px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:88vw;animation:tp .22s ease}
+.toast.err{background:var(--red)}
+.toast.ok{background:var(--green-deep)}
+@keyframes tp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* 覆盖/试点 */
+.coverage{display:flex;flex-wrap:wrap;gap:10px}
+.cov-item{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 14px;font-size:13.5px;font-weight:600}
+.cov-item input{width:18px;height:18px;accent-color:var(--green)}
+
+@media (min-width:640px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .hero .big{font-size:38px}
+}
+@media (min-width:980px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="var(--accent)"/><path d="M16 22h32v8a16 16 0 0 1-32 0z" fill="#FFF7EE"/><path d="M12 22h40" stroke="#FFF7EE" stroke-width="5" stroke-linecap="round"/><path d="M32 10v4M22 8v4M42 8v4" stroke="#FFF7EE" stroke-width="4" stroke-linecap="round"/></svg>
+      <div>
+        <div class="brand-name">食堂好味道</div>
+        <div class="brand-sub">校园食堂菜品推荐 · Campus Canteen Pick</div>
+      </div>
+    </div>
+    <div class="account">
+      <button class="theme-switch" id="themeToggle" onclick="toggleTheme()" role="switch" aria-checked="false" title="切换普通 / 健康模式"><span class="switch-track"><span class="switch-knob"></span></span><span id="themeLabel">普通模式</span></button>
+      <span id="accountArea"></span>
+    </div>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="主导航"></nav>
+  <main class="content" id="view"></main>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toast"></div>
+
+<script>
+// ============ 静态数据 ============
+const STALLS = [
+  {name:"川湘小炒", img:"assets/chuan.jpg"},
+  {name:"粤味烧腊", img:"assets/shaola.jpg"},
+  {name:"面食工坊", img:"assets/mian.jpg"},
+  {name:"轻食沙拉", img:"assets/qingshi.jpg"},
+  {name:"现煮汤粉", img:"assets/tangfen.jpg"}
+];
+const TASTES = ["微辣","中辣","重辣","香辣","清淡","下饭","高蛋白","少油","素食","汤水","甜口","酸辣"];
+const EXCLUDED_ING = ["香菜","葱","蒜","花生","鸡蛋","牛奶","牛肉","猪肉","虾","菌菇","辣椒","豆制品"];
+const HERO_IMG = "assets/hero.jpg";
+
+// [菜名, 摊位序号, 价格(空为待定价), 份量, 口味标签, 食材, 是否在售, 食材是否已验证]
+const DISHES_RAW = [
+  ["农家小炒肉",0,18,"中份",["微辣","中辣","下饭"],["猪肉","辣椒","蒜","葱"],1,1],
+  ["麻婆豆腐",0,12,"中份",["中辣","下饭","素食"],["豆腐","辣椒","花椒","葱"],1,1],
+  ["干煸四季豆",0,14,"中份",["微辣","下饭","少油"],["四季豆","蒜","辣椒"],1,1],
+  ["辣子鸡丁",0,20,"中份",["重辣","香辣","下饭","高蛋白"],["鸡肉","辣椒","花椒","葱"],1,1],
+  ["鱼香肉丝",0,16,"中份",["微辣","酸辣","下饭"],["猪肉","木耳","胡萝卜","葱"],1,1],
+  ["回锅肉",0,19,"中份",["中辣","下饭"],["猪肉","蒜苗","辣椒","豆豉"],1,1],
+  ["宫保鸡丁",0,17,"中份",["微辣","香辣","下饭","高蛋白"],["鸡肉","花生","葱","辣椒"],1,1],
+  ["水煮肉片",0,22,"大份",["重辣","香辣","下饭"],["猪肉","豆芽","辣椒","花椒"],1,1],
+  ["醋溜土豆丝",0,9,"小份",["清淡","素食","少油"],["土豆","醋","辣椒"],1,1],
+  ["地三鲜",0,15,"中份",["清淡","素食"],["茄子","土豆","青椒","蒜"],1,1],
+  ["小炒黄牛肉",0,23,"中份",["中辣","下饭","高蛋白"],["牛肉","辣椒","葱","蒜"],1,1],
+  ["剁椒蒸鱼",0,21,"中份",["中辣","香辣","高蛋白"],["鱼肉","剁椒","葱","姜"],1,0],
+  ["虎皮尖椒",0,13,"中份",["中辣","素食"],["青椒","蒜","酱油"],0,1],
+  ["干锅花菜",0,16,"中份",["微辣","下饭","素食"],["花菜","猪肉","蒜","辣椒"],1,1],
+  ["酸辣土豆丝",0,10,"小份",["酸辣","素食","少油"],["土豆","辣椒","醋"],1,1],
+  ["毛血旺",0,24,"大份",["重辣","香辣","下饭"],["鸭血","午餐肉","豆芽","辣椒"],0,1],
+  ["烧鸭饭",1,20,"中份",["下饭","高蛋白"],["鸭肉","青菜","米饭","姜"],1,1],
+  ["叉烧饭",1,19,"中份",["甜口","下饭"],["猪肉","叉烧酱","青菜","米饭"],1,1],
+  ["白切鸡饭",1,18,"中份",["清淡","高蛋白"],["鸡肉","姜","葱","米饭"],1,1],
+  ["蜜汁叉烧拼饭",1,22,"大份",["甜口","下饭"],["猪肉","叉烧酱","青菜"],1,1],
+  ["豉油鸡饭",1,20,"中份",["清淡","下饭"],["鸡肉","豉油","葱"],1,1],
+  ["卤水拼盘饭",1,21,"大份",["下饭"],["猪肉","猪蹄","卤汁","鸡蛋"],1,1],
+  ["烧鹅饭",1,23,"中份",["下饭","高蛋白"],["鹅肉","青菜","米饭"],1,1],
+  ["蜜汁鸡腿饭",1,19,"中份",["甜口","下饭","高蛋白"],["鸡腿","蜜汁","青菜"],1,1],
+  ["双拼烧腊饭",1,24,"大份",["下饭","高蛋白"],["烧鸭","叉烧","米饭","青菜"],1,1],
+  ["豉汁排骨饭",1,21,"中份",["下饭"],["排骨","豆豉","米饭"],1,0],
+  ["海南鸡饭",1,22,"中份",["清淡","下饭"],["鸡肉","姜","米饭","黄瓜"],1,1],
+  ["油鸡拼叉烧饭",1,23,"大份",["甜口","下饭"],["鸡肉","叉烧","米饭"],0,1],
+  ["红烧牛肉面",2,20,"大份",["微辣","汤水","下饭"],["牛肉","面条","青菜","葱"],1,1],
+  ["番茄鸡蛋面",2,13,"中份",["清淡","汤水"],["番茄","鸡蛋","面条","葱"],1,1],
+  ["麻辣拌面",2,15,"中份",["重辣","香辣","下饭"],["面条","辣椒油","花生","葱"],1,1],
+  ["葱油拌面",2,12,"中份",["清淡","少油"],["面条","葱","酱油"],1,1],
+  ["兰州牛肉拉面",2,19,"大份",["中辣","汤水"],["牛肉","面条","萝卜","香菜"],1,1],
+  ["酸辣粉",2,13,"中份",["酸辣","汤水"],["粉条","花生","辣椒","酸豆角"],1,1],
+  ["鲜虾云吞面",2,21,"大份",["清淡","汤水","高蛋白"],["虾","面条","云吞","葱"],1,1],
+  ["油泼面",2,14,"中份",["中辣","下饭"],["面条","辣椒面","蒜","葱"],1,1],
+  ["阳春面",2,9,"小份",["清淡","汤水","素食"],["面条","葱","猪油"],1,1],
+  ["担担面",2,14,"中份",["中辣","香辣"],["面条","肉末","花生","辣椒油"],0,1],
+  ["麻酱拌面",2,13,"中份",["清淡"],["面条","麻酱","黄瓜","花生"],1,0],
+  ["红烧排骨面",2,22,"大份",["微辣","汤水","下饭"],["排骨","面条","青菜"],1,1],
+  ["牛油果鸡胸沙拉",3,26,"一份",["清淡","高蛋白","少油"],["鸡胸肉","牛油果","生菜","番茄"],1,1],
+  ["藜麦蔬菜碗",3,22,"一份",["清淡","素食","少油"],["藜麦","生菜","玉米","紫甘蓝"],1,1],
+  ["金枪鱼沙拉",3,25,"一份",["清淡","高蛋白"],["金枪鱼","生菜","玉米","番茄"],1,1],
+  ["减脂杂粮饭",3,20,"一份",["清淡","素食","少油"],["糙米","玉米","胡萝卜","西兰花"],1,0],
+  ["凯撒沙拉",3,23,"一份",["清淡"],["生菜","鸡胸","鸡蛋","面包丁"],1,1],
+  ["凉拌鸡丝",3,16,"一份",["清淡","高蛋白","少油"],["鸡肉","黄瓜","胡萝卜"],1,1],
+  ["水果酸奶碗",3,15,"一份",["甜口","素食"],["酸奶","香蕉","苹果","燕麦"],1,1],
+  ["蔬菜能量杯",3,18,"一份",["清淡","素食","少油"],["生菜","番茄","黄瓜","玉米"],1,1],
+  ["番茄牛肉汤粉",4,18,"大份",["中辣","汤水"],["牛肉","番茄","米粉","葱"],1,1],
+  ["清汤牛腩粉",4,20,"大份",["清淡","汤水"],["牛肉","米粉","萝卜","姜"],1,1],
+  ["酸辣肥肠粉",4,16,"中份",["酸辣","香辣","汤水"],["肥肠","米粉","酸豆角","辣椒"],1,1],
+  ["麻辣烫",4,16,"中份",["中辣","香辣","汤水"],["粉丝","豆皮","白菜","鱼丸"],1,1],
+  ["海鲜汤粉",4,22,"大份",["清淡","汤水","高蛋白"],["虾","花甲","米粉","葱"],1,1],
+  ["鸡汤米线",4,17,"中份",["清淡","汤水"],["鸡肉","米线","香菇","青菜"],1,0],
+  ["猪脚粉",4,18,"中份",["下饭","汤水"],["猪脚","米粉","花生","葱"],1,1],
+  ["三鲜汤粉",4,17,"中份",["清淡","汤水"],["瘦肉","香菇","米线","青菜"],1,1]
+];
+function buildDishes(){
+  return DISHES_RAW.map((r,i)=>{
+    const vd = r[7] ? "2026-10-28" : "";
+    return {
+      id:i+1, name:r[0], stall:r[1], price:r[2], portion:r[3],
+      tastes:r[4], ingredients:r[5], available:!!r[6], verified:!!r[7],
+      vdate:vd, img:STALLS[r[1]].img
+    };
+  });
+}
+
+// 演示账号（真实系统应改为服务端加盐哈希 + HTTPS）
+const DEMO_USERS = [
+  {username:"student", password:"123456", email:"student@m.edu.mo", role:"diner", stall:null, note:"学生 / 普通就餐者"},
+  {username:"maintainer", password:"123456", email:"m@m.edu.mo", role:"maintainer", stall:0, note:"川湘小炒 摊位维护员"},
+  {username:"admin", password:"123456", email:"admin@m.edu.mo", role:"admin", stall:null, note:"系统管理员"}
+];
+// 忌口/口味预设展示文案
+const ROLE_NAMES = {diner:"就餐者", maintainer:"维护员", admin:"管理员"};
+
+</script>
+<script>
+// ===================== 基础设施 =====================
+const LS={users:'ccd_users_v1',dishes:'ccd_dishes_v1',reports:'ccd_reports_v1',session:'ccd_session_v1',coverage:'ccd_coverage_v1',temp:'ccd_temp_v1',theme:'ccd_theme_v1'};
+const $=s=>document.querySelector(s);
+const el=(id)=>document.getElementById(id);
+function load(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(p){return p==null?'待定价':'¥'+p.toFixed(2)}
+function hash(str,salt){let h=5381;const s=salt+':'+str;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))>>>0}return 'h'+h.toString(16)}
+function genSalt(){return Math.random().toString(36).slice(2,10)}
+
+const ICONS={
+  menu:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  rec:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>',
+  heart:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 0 0-7 0L12 7.4l-1.8-1.8a5 5 0 0 0-7 7L12 21l8.8-8.4a5 5 0 0 0 0-7z"/></svg>',
+  pref:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v1h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4V5a3 3 0 0 1 3-3z"/><circle cx="12" cy="14" r="2.5"/></svg>',
+  edit:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L7 21H3v-4L17 3z"/></svg>',
+  flag:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M4 4h13l-2 4 2 4H4"/></svg>',
+  search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>',
+  pin:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  bowl:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M5 12V7M9 12V5M13 12V4M17 12V5M21 12V8"/></svg>',
+  logout:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
+  user:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>',
+  close:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 7"/></svg>',
+  x:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  eye:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+};
+
+// ===================== 主题切换 =====================
+function applyTheme(){
+  const th=load(LS.theme,'warm');
+  document.body.dataset.theme=th;
+  const lb=el('themeLabel');
+  if(lb)lb.textContent=th==='health'?'健康模式':'普通模式';
+  const tg=el('themeToggle');
+  if(tg)tg.setAttribute('aria-checked', th==='health'?'true':'false');
+}
+function toggleTheme(){
+  const th=load(LS.theme,'warm')==='health'?'warm':'health';
+  save(LS.theme,th);applyTheme();
+  toast(th==='health'?'已切换到健康模式（浅绿）':'已切换到普通模式（暖橙）','ok');
+}
+
+// ===================== 状态 =====================
+let users=load(LS.users,null);
+let dishes=load(LS.dishes,null);
+let reports=load(LS.reports,[]);
+let coverage=load(LS.coverage,null);
+let tempPrefs=load(LS.temp,{tastes:[],budget:null,excluded:[]});
+let session=load(LS.session,null);
+let menuFilter={kw:'',stall:-1,pmin:'',pmax:'',tastes:[]};
+
+function seed(){
+  if(!users){users={};DEMO_USERS.forEach(d=>{const salt=genSalt();users[d.username]={email:d.email,role:d.role,stall:d.stall,note:d.note,salt,hash:hash(d.password,salt),prefs:{tastes:[],budget:null,excluded:[]},favorites:[],feedback:{},fbtext:{},createdAt:Date.now()}});save(LS.users,users)}
+  if(!dishes){dishes=buildDishes();save(LS.dishes,dishes)}
+  if(!Array.isArray(coverage)){coverage=STALLS.map((_,i)=>i);save(LS.coverage,coverage)}
+}
+seed();
+applyTheme();
+
+function currentUser(){return session?users[session]:null}
+function isMaintainer(){const u=currentUser();return !!u&&(u.role==='maintainer'||u.role==='admin')}
+function isAdmin(){const u=currentUser();return !!u&&u.role==='admin'}
+function stallCovered(si){return coverage.includes(si)}
+function getPrefs(){
+  const u=currentUser();
+  if(u)return {tastes:[...(u.prefs.tastes||[])],budget:u.prefs.budget,excluded:[...(u.prefs.excluded||[])]};
+  return {tastes:[...tempPrefs.tastes],budget:tempPrefs.budget,excluded:[...tempPrefs.excluded]};
+}
+function saveTemp(prefs){tempPrefs={tastes:[...prefs.tastes],budget:prefs.budget,excluded:[...prefs.excluded]};save(LS.temp,tempPrefs)}
+
+// ===================== Toast =====================
+function toast(msg,type){const t=document.createElement('div');t.className='toast'+(type?' '+type:'');t.textContent=msg;el('toast').appendChild(t);setTimeout(()=>{t.remove()},2400)}
+
+// ===================== 模态 =====================
+function openModal(html,wide){
+  const root=el('modalRoot');
+  root.innerHTML='<div class="modal on"><div class="mask" data-close></div><div class="box'+(wide?' wide':'')+'">'+html+'</div></div>';
+  root.querySelector('[data-close]').addEventListener('click',closeModal);
+}
+function closeModal(){el('modalRoot').innerHTML=''}
+function bindClose(){document.querySelectorAll('#modalRoot [data-close2]').forEach(b=>b.addEventListener('click',closeModal))}
+
+// ===================== 账号 =====================
+function renderAccount(){
+  const a=el('accountArea');const u=currentUser();
+  if(u){
+    const rc=u.role==='admin'?'r-amber':(u.role==='maintainer'?'r-green':'');
+    a.innerHTML='<div class="user-chip">'+ICONS.user+'<span>'+esc(u.username)+'</span><span class="role '+rc+'">'+ROLE_NAMES[u.role]+'</span></div><button class="btn btn-ghost btn-sm" onclick="doLogout()">'+ICONS.logout+'退出</button>';
+  }else{
+    a.innerHTML='<button class="btn btn-ghost btn-sm" onclick="openLogin()">登录 / 注册</button><button class="btn btn-primary btn-sm" onclick="openLogin()">立即体验推荐</button>';
+  }
+}
+function doLogout(){session=null;save(LS.session,null);renderAccount();renderTabs();renderView();toast('已退出登录');}
+
+function openLogin(){renderAccount();
+  openModal(
+  '<div class="togglers"><button id="lg_tab" class="on">登录</button><button id="rg_tab">注册</button></div>'+
+  '<h3 id="auth_title">登录食堂好味道</h3><p class="sub">浏览与推荐无需登录；收藏、反馈、保存偏好需登录</p>'+
+  '<div class="form-err" id="auth_err"></div>'+
+  '<div class="field"><label>用户名</label><input class="input" id="a_user" placeholder="请输入用户名" autocomplete="username"></div>'+
+  '<div class="field" id="a_emailwrap" style="display:none"><label>邮箱（选填）</label><input class="input" id="a_email" placeholder="you@example.com"></div>'+
+  '<div class="field"><label>密码</label><input class="input" id="a_pass" type="password" placeholder="请输入密码" autocomplete="current-password"></div>'+
+  '<div class="field" id="a_pass2wrap" style="display:none"><label>确认密码</label><input class="input" id="a_pass2" type="password" placeholder="再次输入密码"></div>'+
+  '<button class="btn btn-primary" style="width:100%;justify-content:center" id="a_submit">登录</button>'+
+  '<div class="hint" style="margin-top:14px;line-height:1.7">演示账号（密码均为 123456）：<br>student（就餐者）· maintainer（维护员）· admin（管理员）</div>');
+  const lg=$('#lg_tab'),rg=$('#rg_tab');
+  function setMode(mode){
+    lg.classList.toggle('on',mode==='login');rg.classList.toggle('on',mode==='reg');
+    $('#a_emailwrap').style.display=mode==='reg'?'block':'none';
+    $('#a_pass2wrap').style.display=mode==='reg'?'block':'none';
+    $('#auth_title').textContent=mode==='login'?'登录食堂好味道':'注册新账号';
+    $('#a_submit').textContent=mode==='login'?'登录':'注册';
+  }
+  lg.addEventListener('click',()=>setMode('login'));
+  rg.addEventListener('click',()=>setMode('reg'));
+  $('#a_submit').addEventListener('click',()=>{
+    const mode=$('#rg_tab').classList.contains('on')?'reg':'login';
+    const user=$('#a_user').value.trim(),pass=$('#a_pass').value,err=$('#auth_err');
+    err.classList.remove('on');err.textContent='';
+    if(!user||!pass){err.textContent='用户名和密码不能为空';err.classList.add('on');return}
+    if(mode==='reg'){
+      if(users[user]){err.textContent='该用户名已被占用，请换一个';err.classList.add('on');return}
+      if(pass.length<6){err.textContent='密码至少 6 位';err.classList.add('on');return}
+      if($('#a_pass2').value!==pass){err.textContent='两次输入的密码不一致';err.classList.add('on');return}
+      const salt=genSalt();
+      users[user]={email:$('#a_email').value.trim()||'',role:'diner',stall:null,note:'注册用户',salt,hash:hash(pass,salt),prefs:{tastes:[],budget:null,excluded:[]},favorites:[],feedback:{},fbtext:{},createdAt:Date.now()};
+      save(LS.users,users);
+      session=user;save(LS.session,session);
+      closeModal();renderAccount();renderTabs();renderView();toast('注册成功，已登录','ok');
+    }else{
+      const u=users[user];
+      if(!u||u.hash!==hash(pass,u.salt)){err.textContent='用户名或密码错误';err.classList.add('on');return}
+      session=user;save(LS.session,session);
+      closeModal();renderAccount();renderTabs();renderView();toast('欢迎回来，'+user,'ok');
+    }
+  });
+}
+
+// ===================== 路由 =====================
+const TABS=[
+  {id:'menu',label:'菜单浏览',icon:'menu',auth:null},
+  {id:'recommend',label:'智能推荐',icon:'rec',auth:null},
+  {id:'favorites',label:'我的收藏',icon:'heart',auth:'login'},
+  {id:'preferences',label:'偏好设置',icon:'pref',auth:null},
+  {id:'maintain',label:'菜单维护',icon:'edit',auth:'maintain'},
+  {id:'reports',label:'错误报告',icon:'flag',auth:'admin'}
+];
+function renderTabs(){
+  const nav=el('tabs');const cur=(location.hash||'#menu').replace('#','');
+  nav.innerHTML=TABS.map(t=>{
+    const on=cur===t.id;let locked=false,cls='tab';
+    if(t.auth==='login'&&!currentUser())locked=true;
+    if(t.auth==='maintain'&&!isMaintainer())locked=true;
+    if(t.auth==='admin'&&!isAdmin())locked=true;
+    if(on)cls+=' on';if(locked)cls+=' locked';
+    let extra='';
+    if(t.id==='reports'&&isAdmin()){const p=reports.filter(r=>r.status==='pending').length;if(p>0)extra=' <span class="dot" style="display:inline-block"></span>'}
+    return '<button class="'+cls+'" data-tab="'+t.id+'">'+ICONS[t.icon]+'<span>'+t.label+'</span>'+extra+'</button>';
+  }).join('');
+  nav.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.tab;const t=TABS.find(x=>x.id===id);let locked=false;
+    if(t.auth==='login'&&!currentUser())locked=true;
+    if(t.auth==='maintain'&&!isMaintainer())locked=true;
+    if(t.auth==='admin'&&!isAdmin())locked=true;
+    if(locked){toast(t.auth==='login'?'该功能需登录后使用':'该功能需对应角色权限');if(t.auth==='login')openLogin();return}
+    location.hash=id;renderTabs();renderView();
+  }));
+}
+function renderView(){
+  const cur=(location.hash||'#menu').replace('#','');
+  const fn={menu:viewMenu,recommend:viewRecommend,favorites:viewFavorites,preferences:viewPreferences,maintain:viewMaintain,reports:viewReports}[cur]||viewMenu;
+  fn();
+}
+window.addEventListener('hashchange',()=>{renderTabs();renderView()});
+
+// ===================== 菜品卡片/详情 =====================
+function dishBadges(d){
+  let s='';
+  if(!d.available)s+='<span class="badge b-off">已售罄</span>';
+  else s+='<span class="badge b-on">在售</span>';
+  if(!d.verified)s+='<span class="badge b-unv">食材未核验</span>';
+  if(!stallCovered(d.stall))s+='<span class="badge b-pilot">试点外</span>';
+  return s;
+}
+function isFav(did){const u=currentUser();return u&&u.favorites.includes(did)}
+function dishCard(d){
+  const u=currentUser();const fav=isFav(d.id);
+  return '<article class="card dish" data-dish="'+d.id+'">'+
+    '<div class="thumb"><img src="'+d.img+'" alt="'+esc(d.name)+'" loading="lazy">'+
+      '<div class="badges">'+dishBadges(d)+'</div>'+
+      (u?'<button class="fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+d.id+')" title="收藏">'+ICONS.heart+'</button>':'')+
+    '</div>'+
+    '<div class="body">'+
+      '<div class="nm"><span>'+esc(d.name)+'</span><span class="price">'+fmt(d.price)+'</span></div>'+
+      '<div class="meta"><span>'+ICONS.pin+esc(STALLS[d.stall].name)+'</span><span>'+ICONS.bowl+esc(d.portion)+'</span></div>'+
+      '<div class="tastes">'+d.tastes.map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>'+
+      '<div class="ing">食材：'+esc(d.ingredients.join('、'))+(d.verified?'':' <span style="color:var(--amber)">（未核验）</span>')+'</div>'+
+      '<div class="acts">'+
+        '<button class="btn btn-ghost btn-sm" onclick="openDish('+d.id+')">'+ICONS.eye+'详情</button>'+
+        '<button class="btn btn-soft btn-sm" onclick="openDish('+d.id+')">查看推荐理由</button>'+
+      '</div>'+
+    '</div></article>';
+}
+function openDish(id){
+  const d=dishes.find(x=>x.id===id);if(!d)return;
+  const u=currentUser();const fb=u?u.feedback[id]:null;
+  openModal(
+  '<div style="display:flex;gap:18px;flex-wrap:wrap">'+
+    '<img src="'+d.img+'" alt="'+esc(d.name)+'" style="width:100%;max-width:230px;border-radius:12px;object-fit:cover;flex:1;min-width:160px">'+
+    '<div style="flex:2;min-width:220px"><h3>'+esc(d.name)+'</h3><div style="display:flex;gap:6px;margin:8px 0;flex-wrap:wrap">'+dishBadges(d)+'</div>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);align-items:center"><span>'+ICONS.pin+esc(STALLS[d.stall].name)+'</span><span>'+ICONS.bowl+esc(d.portion)+'</span><span style="color:var(--accent-deep);font-weight:800;font-size:16px">'+fmt(d.price)+'</span></div>'+
+      '<div style="margin-top:12px"><b style="font-size:13px">口味：</b><span class="tastes">'+d.tastes.map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</span></div>'+
+      '<div style="margin-top:9px"><b style="font-size:13px">食材：</b><span style="font-size:13px;color:var(--ink-2)">'+esc(d.ingredients.join('、'))+'</span></div>'+
+      '<div style="margin-top:9px;font-size:12.5px;color:var(--muted)">核验状态：'+(d.verified?'食材已验证（'+esc(d.vdate||'')+'）':'食材信息未核验，仅作菜单展示')+' · '+(d.available?'当前在售':'当前已售罄')+'</div>'+
+    '</div>'+
+  '</div>'+
+  (u?'<div class="feedbtn" style="margin-top:16px">'+
+    '<button class="'+(fb==='like'?'on-like':'')+'" onclick="setFeedback('+d.id+',\'like\')">'+ICONS.heart+' 喜欢</button>'+
+    '<button class="'+(fb==='not'?'on-not':'')+'" onclick="setFeedback('+d.id+',\'not\')">'+ICONS.x+' 不感兴趣</button>'+
+    '<button class="btn '+(isFav(id)?'btn-green':'btn-ghost')+'" style="flex:1;border-radius:11px" onclick="toggleFav('+d.id+')">'+(isFav(id)?'已收藏':'收藏')+'</button>'+
+  '</div>':'')+
+  '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'+
+    (u?'<button class="btn btn-ghost btn-sm" onclick="openReport('+d.id+')">'+ICONS.flag+' 举报菜单错误</button>':'<span class="hint">登录后可收藏、评分与举报</span>')+
+    '<button class="btn btn-ghost btn-sm" onclick="openRecommendPrefilled('+d.id+')">找同类口味</button>'+
+  '</div>','wide');
+  bindClose();
+}
+function toggleFav(id){
+  const u=currentUser();
+  if(!u){toast('请先登录','err');openLogin();return}
+  const d=dishes.find(x=>x.id===id);if(!d){toast('菜品不存在','err');return}
+  if(u.favorites.includes(id)){u.favorites=u.favorites.filter(x=>x!==id);save(LS.users,users);toast('已取消收藏')}
+  else{if(u.favorites.length>=20){toast('收藏已达上限 20 道','err');return}u.favorites.push(id);save(LS.users,users);toast('已加入收藏','ok')}
+  renderView();
+}
+function setFeedback(id,val){
+  const u=currentUser();
+  if(!u){toast('请先登录','err');openLogin();return}
+  const d=dishes.find(x=>x.id===id);if(!d){toast('菜品不存在','err');return}
+  if(u.feedback[id]===val){delete u.feedback[id];toast('已移除该标记')}
+  else{u.feedback[id]=val;toast(val==='like'?'已标记「喜欢」':'已标记「不感兴趣」','ok')}
+  save(LS.users,users);renderView();
+}
+// ===================== 视图：菜单浏览 =====================
+function viewMenu(){
+  el('view').innerHTML=
+  '<section class="hero"><img src="'+HERO_IMG+'" alt="校园食堂"><div class="veil"></div><div class="txt">'+
+    '<div class="hi">校园食堂 · 试点摊位</div><div class="big">今天，想吃点什么？</div>'+
+    '<div class="search"><input id="m_kw" placeholder="搜索菜名，如：牛肉、烧鸭、沙拉" value="'+esc(menuFilter.kw)+'"><button class="btn btn-primary" onclick="applyMenuFilter()">'+ICONS.search+'搜索</button></div>'+
+  '</div></section>'+
+  '<section class="card panel">'+
+    '<div class="filters">'+
+      '<div class="filters-row">'+
+        '<div class="fitem"><select class="select" id="m_stall"><option value="-1">全部摊位</option>'+STALLS.map((s,i)=>'<option value="'+i+'"'+(menuFilter.stall===i?' selected':'')+'>'+esc(s.name)+'</option>').join('')+'</select></div>'+
+        '<div class="fitem range"><input class="input" id="m_pmin" type="number" min="0" placeholder="最低价" value="'+esc(menuFilter.pmin)+'"><span>—</span><input class="input" id="m_pmax" type="number" min="0" placeholder="最高价" value="'+esc(menuFilter.pmax)+'"></div>'+
+        '<button class="btn btn-ghost" onclick="applyMenuFilter()">应用</button><button class="btn btn-ghost" onclick="clearMenuFilter()">清除</button>'+
+      '</div>'+
+      '<div class="filters-row"><span class="hint" style="flex:none">口味：</span><div class="chips" id="m_tastes">'+TASTES.map(t=>'<button class="chip'+(menuFilter.tastes.includes(t)?' ton on':'')+'" data-t="'+esc(t)+'" onclick="toggleMenuTaste(this,\''+esc(t)+'\')">'+esc(t)+'</button>').join('')+'</div></div>'+
+    '</div>'+
+  '</section>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;margin:16px 2px 12px;flex-wrap:wrap;gap:6px"><span class="hint" id="m_count"></span><span class="hint">试点摊位：'+coverage.length+' 个 · 菜品 '+dishes.filter(d=>stallCovered(d.stall)).length+' 道</span></div>'+
+  '<div class="grid" id="m_grid"></div>'+
+  '<div class="empty" id="m_empty" style="display:none">'+ICONS.search+'<div class="t">没有找到匹配的菜品</div><div class="d">试试更换关键词或放宽筛选条件</div></div>';
+  renderMenuList();
+}
+function toggleMenuTaste(btn,t){
+  const i=menuFilter.tastes.indexOf(t);
+  if(i>=0)menuFilter.tastes.splice(i,1);else menuFilter.tastes.push(t);
+  btn.classList.toggle('on');btn.classList.toggle('ton');
+}
+function applyMenuFilter(){
+  menuFilter.kw=el('m_kw').value.trim();
+  menuFilter.stall=parseInt(el('m_stall').value||'-1',10);
+  const pmin=parseFloat(el('m_pmin').value),pmax=parseFloat(el('m_pmax').value);
+  if(pmin&&pmax&&pmin>pmax){toast('最低价不能大于最高价','err');return}
+  menuFilter.pmin=pmin||'';menuFilter.pmax=pmax||'';
+  renderMenuList();
+}
+function clearMenuFilter(){menuFilter={kw:'',stall:-1,pmin:'',pmax:'',tastes:[]};viewMenu()}
+function renderMenuList(){
+  let list=dishes.filter(d=>stallCovered(d.stall));
+  const f=menuFilter;
+  if(f.kw)list=list.filter(d=>d.name.includes(f.kw));
+  if(f.stall>=0)list=list.filter(d=>d.stall===f.stall);
+  if(f.pmin!=='')list=list.filter(d=>d.price!=null&&d.price>=f.pmin);
+  if(f.pmax!=='')list=list.filter(d=>d.price!=null&&d.price<=f.pmax);
+  if(f.tastes.length)list=list.filter(d=>f.tastes.every(t=>d.tastes.includes(t)));
+  list.sort((a,b)=>STALLS[a.stall].name.localeCompare(STALLS[b.stall].name,'zh')||a.id-b.id);
+  const grid=el('m_grid'),empty=el('m_empty'),cnt=el('m_count');
+  if(!grid)return;
+  if(list.length===0){grid.innerHTML='';empty.style.display='block';cnt.textContent='共 0 道菜'}
+  else{grid.innerHTML=list.map(dishCard).join('');empty.style.display='none';cnt.textContent='共 '+list.length+' 道菜'}
+}
+
+// ===================== 视图：智能推荐 =====================
+let recResult=null;
+function viewRecommend(){
+  const u=currentUser();const prefs=getPrefs();
+  el('view').innerHTML=
+  '<h2>智能推荐</h2><p class="page-desc">按口味、预算与忌口食材，从试点在售且食材已验证的菜品中，最多为你推荐 5 道并附理由。'+(u?'':'（游客使用临时偏好，登录后保存）')+'</p>'+
+  '<section class="card panel" style="margin-bottom:18px">'+
+    '<div class="section-title"><span class="bar"></span>1 · 设定你的偏好</div>'+
+    '<div class="field"><label>口味偏好（可多选）</label><div class="chips">'+TASTES.map(t=>'<button class="chip'+(prefs.tastes.includes(t)?' ton on':'')+'" data-p="'+esc(t)+'" onclick="togglePrefTaste(this)">'+esc(t)+'</button>').join('')+'</div></div>'+
+    '<div class="row">'+
+      '<div class="field"><label>单份预算上限（元，1–999，可不填）</label><input class="input" id="r_budget" type="number" min="1" max="999" placeholder="例如 20" value="'+(prefs.budget==null?'':prefs.budget)+'"></div>'+
+      '<div class="field"><label>忌口食材（最多选 5 项）</label><select class="select" id="r_ex" onchange="addExcluded(this)"><option value="">+ 添加忌口…</option>'+EXCLUDED_ING.map(ing=>'<option value="'+esc(ing)+'">'+esc(ing)+'</option>').join('')+'</select></div>'+
+    '</div>'+
+    '<div class="chips" id="r_exlist" style="margin-bottom:16px">'+(prefs.excluded.length?prefs.excluded.map(x=>'<button class="chip on" onclick="removeExcluded(this,\''+esc(x)+'\')">'+esc(x)+' <span style="opacity:.6">×</span></button>').join(''):'<span class="hint">暂无忌口食材</span>')+'</div>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn btn-primary" onclick="generateRec()">'+ICONS.rec+' 生成推荐</button>'+(u?'<span class="hint">将使用你已保存的偏好，可到「偏好设置」修改</span>':'<span class="hint">游客偏好仅本次生效</span>')+'</div>'+
+  '</section>'+
+  '<section id="rec_result"></section>';
+  if(recResult)renderRecResult(recResult);
+  else renderRecEmpty('点击「生成推荐」，看看今天该吃哪几道');
+}
+function togglePrefTaste(btn){btn.classList.toggle('on');btn.classList.toggle('ton');}
+function addExcluded(sel){
+  const v=sel.value;if(!v)return;const prefs=getPrefs();
+  if(prefs.excluded.length>=5){toast('最多选择 5 项忌口食材','err');sel.value='';return}
+  if(prefs.excluded.includes(v)){toast('已添加该食材');sel.value='';return}
+  const u=currentUser();
+  if(u){u.prefs.excluded=[...(u.prefs.excluded||[]),v];save(LS.users,users)}else{tempPrefs.excluded=[...(tempPrefs.excluded||[]),v];save(LS.temp,tempPrefs)}
+  sel.value='';viewRecommend();
+}
+function removeExcluded(btn,x){
+  const u=currentUser();
+  if(u){u.prefs.excluded=(u.prefs.excluded||[]).filter(i=>i!==x);save(LS.users,users)}else{tempPrefs.excluded=tempPrefs.excluded.filter(i=>i!==x);save(LS.temp,tempPrefs)}
+  viewRecommend();
+}
+function collectRecPrefs(){
+  const tastes=[...document.querySelectorAll('#view .chip[data-p].on')].map(b=>b.dataset.p);
+  const budgetRaw=el('r_budget').value.trim();let budget=null;
+  if(budgetRaw!==''){budget=parseFloat(budgetRaw);if(!(budget>0)||budget>999){toast('预算需为 1–999 之间的数字','err');return null}}
+  const excluded=getPrefs().excluded;
+  const u=currentUser();
+  if(u){u.prefs.tastes=tastes;u.prefs.budget=budget;u.prefs.excluded=excluded;save(LS.users,users)}
+  else{tempPrefs.tastes=tastes;tempPrefs.budget=budget;tempPrefs.excluded=excluded;save(LS.temp,tempPrefs)}
+  return {tastes,budget,excluded};
+}
+function generateRec(){
+  const prefs=collectRecPrefs();if(!prefs)return;
+  recResult=computeRec(prefs);
+  renderRecResult(recResult);
+}
+function computeRec(prefs){
+  const u=currentUser();
+  const eligible=dishes.filter(d=>stallCovered(d.stall)&&d.available&&d.verified
+    &&(!prefs.budget||(d.price!=null&&d.price<=prefs.budget))
+    &&!d.ingredients.some(ing=>prefs.excluded.includes(ing)));
+  const scored=eligible.map(d=>{
+    const match=d.tastes.filter(t=>prefs.tastes.includes(t)).length;
+    const fb=u?u.feedback[d.id]:undefined;
+    const reasons=[];
+    if(match>0)reasons.push('口味匹配 '+match+' 项（'+d.tastes.filter(t=>prefs.tastes.includes(t)).join('、')+'）');
+    if(prefs.budget)reasons.push('价格 '+fmt(d.price)+'，在预算 '+prefs.budget+' 元内');
+    if(prefs.excluded.length)reasons.push('不含你的忌口食材');
+    if(fb==='like')reasons.push('你标记过「喜欢」');
+    return {d,match,fb,reasons};
+  });
+  scored.sort((a,b)=>{
+    if(b.match!==a.match)return b.match-a.match;
+    const w={like:0,none:1,undefined:1,not:2};
+    return (w[a.fb]??1)-(w[b.fb]??1)||a.d.id-b.d.id;
+  });
+  return {prefs,total:eligible.length,list:scored.slice(0,5)};
+}
+function renderRecResult(res){
+  const root=el('rec_result');if(!root)return;
+  const u=currentUser();
+  if(res.list.length===0){
+    root.innerHTML='<div class="card empty" style="padding:56px 20px">'+ICONS.search+'<div class="t">暂无符合条件的菜品</div><div class="d">可适当放宽预算、减少忌口或口味条件后重试</div></div>';
+    return;
+  }
+  root.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px"><span class="section-title" style="margin:0"><span class="bar"></span>推荐结果（最多 5 道 · 共 '+res.total+' 道符合条件）</span><button class="btn btn-ghost btn-sm" onclick="clearRec()">清除结果</button></div><div class="grid">'+
+  res.list.map(({d,match,reasons})=>
+    '<article class="card dish"><div class="thumb"><img src="'+d.img+'" alt="'+esc(d.name)+'" loading="lazy"><div class="badges">'+dishBadges(d)+'</div>'+(u?'<button class="fav'+(isFav(d.id)?' on':'')+'" onclick="toggleFav('+d.id+')" title="收藏">'+ICONS.heart+'</button>':'')+'</div>'+
+    '<div class="body"><div class="nm"><span>'+esc(d.name)+'</span><span class="price">'+fmt(d.price)+'</span></div>'+
+    '<div class="meta"><span>'+ICONS.pin+esc(STALLS[d.stall].name)+'</span><span>'+ICONS.bowl+esc(d.portion)+'</span></div>'+
+    '<div class="reason">'+reasons.map(r=>'<div><b>✓</b> '+esc(r)+'</div>').join('')+'</div>'+
+    '<div class="acts"><button class="btn btn-ghost btn-sm" onclick="openDish('+d.id+')">'+ICONS.eye+'详情</button>'+(u?'<button class="btn btn-soft btn-sm" onclick="setFeedback('+d.id+',\'like\')">喜欢</button>':'')+'</div>'+
+    '</div></article>').join('')+'</div>';
+}
+function clearRec(){recResult=null;const root=el('rec_result');if(root)renderRecEmpty('点击「生成推荐」，看看今天该吃哪几道')}
+function renderRecEmpty(msg){
+  const root=el('rec_result');if(!root)return;
+  root.innerHTML='<div class="card empty">'+ICONS.rec+'<div class="t">还没有推荐结果</div><div class="d">'+esc(msg)+'</div></div>';
+}
+function openRecommendPrefilled(id){
+  const d=dishes.find(x=>x.id===id);if(!d)return;
+  const prefs=getPrefs();
+  prefs.tastes=[...new Set([...prefs.tastes,...d.tastes])].slice(0,8);
+  const u=currentUser();
+  if(u){u.prefs.tastes=prefs.tastes;save(LS.users,users)}else{saveTemp(prefs)}
+  recResult=null;
+  location.hash='recommend';renderTabs();renderView();
+  toast('已按「'+d.name+'」口味预填偏好');
+}
+// ===================== 视图：收藏与反馈 =====================
+function viewFavorites(){
+  const u=currentUser();
+  if(!u){el('view').innerHTML='<div class="card empty" style="padding:56px 20px">'+ICONS.heart+'<div class="t">请先登录</div><div class="d">收藏与反馈仅属于当前账号，登录后即可使用</div><button class="btn btn-primary" style="margin-top:14px" onclick="openLogin()">登录 / 注册</button></div>';return}
+  const favs=u.favorites.map(id=>dishes.find(d=>d.id===id)).filter(Boolean);
+  el('view').innerHTML=
+  '<h2>我的收藏</h2><p class="page-desc">共 '+favs.length+' / 20 道收藏，可标记喜欢/不感兴趣，反馈会微调推荐排序。</p>'+
+  (favs.length?('<div class="grid">'+favs.map(d=>{
+    const fb=u.feedback[d.id];
+    return '<article class="card dish"><div class="thumb"><img src="'+d.img+'" alt="'+esc(d.name)+'" loading="lazy"><div class="badges">'+dishBadges(d)+'</div><button class="fav on" onclick="toggleFav('+d.id+')" title="取消收藏">'+ICONS.heart+'</button></div>'+
+    '<div class="body"><div class="nm"><span>'+esc(d.name)+'</span><span class="price">'+fmt(d.price)+'</span></div>'+
+    '<div class="meta"><span>'+ICONS.pin+esc(STALLS[d.stall].name)+'</span><span>'+ICONS.bowl+esc(d.portion)+'</span></div>'+
+    '<div class="feedbtn">'+
+      '<button class="'+(fb==='like'?'on-like':'')+'" onclick="setFeedback('+d.id+',\'like\')">'+ICONS.heart+' 喜欢</button>'+
+      '<button class="'+(fb==='not'?'on-not':'')+'" onclick="setFeedback('+d.id+',\'not\')">'+ICONS.x+' 不感兴趣</button>'+
+    '</div>'+
+    '<div class="acts"><button class="btn btn-ghost btn-sm" onclick="openDish('+d.id+')">'+ICONS.eye+'详情</button><button class="btn btn-ghost btn-sm" onclick="openReport('+d.id+')">'+ICONS.flag+'举报</button></div>'+
+    '</div></article>';
+  }).join('')+'</div>'):'<div class="card empty" style="padding:56px 20px">'+ICONS.heart+'<div class="t">还没有收藏</div><div class="d">在菜单或推荐里点击菜名右上角的心形即可收藏</div></div>');
+}
+
+// ===================== 视图：偏好设置 =====================
+function viewPreferences(){
+  const u=currentUser();
+  if(!u){el('view').innerHTML='<div class="card empty" style="padding:56px 20px">'+ICONS.pref+'<div class="t">登录后保存偏好</div><div class="d">游客可在「智能推荐」使用临时偏好，登录后可保存并在下次访问时自动加载</div><button class="btn btn-primary" style="margin-top:14px" onclick="openLogin()">登录 / 注册</button></div>';return}
+  const p=u.prefs;
+  el('view').innerHTML=
+  '<h2>偏好设置</h2><p class="page-desc">保存口味、预算与忌口食材，下次登录自动加载并作用于推荐。</p>'+
+  '<section class="card panel" style="max-width:760px">'+
+    '<div class="field"><label>口味偏好（可多选）</label><div class="chips">'+TASTES.map(t=>'<button class="chip'+(p.tastes.includes(t)?' ton on':'')+'" data-p="'+esc(t)+'" onclick="togglePrefTaste(this)">'+esc(t)+'</button>').join('')+'</div></div>'+
+    '<div class="field"><label>单份预算上限（元，1–999）</label><input class="input" id="pf_budget" type="number" min="1" max="999" placeholder="不设限制可留空" value="'+(p.budget==null?'':p.budget)+'" style="max-width:240px"></div>'+
+    '<div class="field"><label>忌口食材（最多 5 项）</label><select class="select" id="pf_ex" onchange="addPrefExcluded(this)" style="max-width:240px"><option value="">+ 添加忌口…</option>'+EXCLUDED_ING.map(ing=>'<option value="'+esc(ing)+'">'+esc(ing)+'</option>').join('')+'</select><div class="chips" style="margin-top:10px" id="pf_exlist">'+(p.excluded.length?p.excluded.map(x=>'<button class="chip on" onclick="removePrefExcluded(this,\''+esc(x)+'\')">'+esc(x)+' <span style="opacity:.6">×</span></button>').join(''):'<span class="hint">暂无忌口食材</span>')+'</div></div>'+
+    '<button class="btn btn-primary" onclick="savePrefsForm()">'+ICONS.check+' 保存偏好</button>'+
+  '</section>';
+}
+function addPrefExcluded(sel){
+  const v=sel.value;if(!v)return;const u=currentUser();if(!u)return;
+  if(u.prefs.excluded.length>=5){toast('最多选择 5 项忌口食材','err');sel.value='';return}
+  if(u.prefs.excluded.includes(v)){toast('已添加该食材');sel.value='';return}
+  u.prefs.excluded=[...(u.prefs.excluded||[]),v];save(LS.users,users);sel.value='';viewPreferences();
+}
+function removePrefExcluded(btn,x){const u=currentUser();if(!u)return;u.prefs.excluded=u.prefs.excluded.filter(i=>i!==x);save(LS.users,users);viewPreferences()}
+function savePrefsForm(){
+  const u=currentUser();if(!u)return;
+  const tastes=[...document.querySelectorAll('#view .chip[data-p].on')].map(b=>b.dataset.p);
+  const braw=el('pf_budget').value.trim();let budget=null;
+  if(braw!==''){budget=parseFloat(braw);if(!(budget>0)||budget>999){toast('预算需为 1–999 之间的数字','err');return}}
+  u.prefs.tastes=tastes;u.prefs.budget=budget;save(LS.users,users);
+  recResult=null;
+  toast('偏好已保存，下次推荐将自动使用','ok');
+}
+
+// ===================== 视图：菜单维护 =====================
+function viewMaintain(){
+  const u=currentUser();
+  if(!isMaintainer()){el('view').innerHTML='<div class="card empty" style="padding:56px 20px">'+ICONS.edit+'<div class="t">无维护权限</div><div class="d">仅摊位维护员可维护本摊位菜单，系统管理员可维护全部试点摊位</div></div>';return}
+  let list=dishes;
+  if(u.role==='maintainer')list=dishes.filter(d=>d.stall===u.stall);
+  el('view').innerHTML=
+  '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px"><h2 style="margin:0">菜单维护</h2><div style="display:flex;gap:8px;flex-wrap:wrap">'+
+    (isAdmin()?'<button class="btn btn-ghost" onclick="openCoverage()">试点覆盖</button>':'')+
+    '<button class="btn btn-primary" onclick="openEditDish(0)">'+ICONS.plus+' 新增菜品</button></div></div>'+
+  '<p class="page-desc">'+(u.role==='maintainer'?'你负责维护摊位：'+esc(STALLS[u.stall].name):'管理员可维护全部试点摊位，并审批错误报告')+'</p>'+
+  '<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:14%"><col style="width:11%"><col style="width:12%"><col style="width:12%"><col style="width:13%"><col style="width:18%"></colgroup><thead><tr><th>菜名</th><th>摊位</th><th>价格</th><th>份量</th><th>在售</th><th>食材核验</th><th>操作</th></tr></thead><tbody>'+
+  list.map(d=>'<tr><td>'+esc(d.name)+'</td><td>'+esc(STALLS[d.stall].name)+'</td><td>'+fmt(d.price)+'</td><td>'+esc(d.portion)+'</td><td>'+(d.available?'<span class="pill pill-ok">在售</span>':'<span class="pill pill-no">售罄</span>')+'</td><td>'+(d.verified?'<span class="pill pill-ok">已验证</span>':'<span class="pill pill-wa">未核验</span>')+'</td><td><button class="btn btn-ghost btn-sm" onclick="openEditDish('+d.id+')">'+ICONS.edit+'编辑</button></td></tr>').join('')+
+  '</tbody></table></div>';
+}
+function openCoverage(){
+  openModal('<h3>试点摊位覆盖</h3><p class="sub">选择纳入试点的摊位，试点外的菜品仍会显示但标注「试点外」。</p><div class="coverage">'+STALLS.map((s,i)=>'<label class="cov-item"><input type="checkbox" data-stall="'+i+'"'+(coverage.includes(i)?' checked':'')+'>'+esc(s.name)+'</label>').join('')+'</div><div style="margin-top:18px"><button class="btn btn-primary" onclick="saveCoverage()">保存覆盖</button></div>');
+  bindClose();
+}
+function saveCoverage(){
+  coverage=[...document.querySelectorAll('#modalRoot input[data-stall]:checked')].map(x=>parseInt(x.dataset.stall,10));
+  save(LS.coverage,coverage);closeModal();renderView();toast('试点覆盖已更新','ok');
+}
+function openEditDish(id){
+  const u=currentUser();if(!isMaintainer()){toast('无权限','err');return}
+  const d=id?dishes.find(x=>x.id===id):null;
+  const allowed=u.role==='admin'?STALLS.map((_,i)=>i):[u.stall];
+  openModal('<h3>'+(d?'编辑菜品':'新增菜品')+'</h3><p class="sub">菜名、摊位、价格为必填；修改食材后需重新核验才能进入推荐。</p>'+
+  '<div class="form-err" id="ed_err"></div>'+
+  '<div class="field"><label>菜名（同一摊位内需唯一）</label><input class="input" id="ed_name" value="'+(d?esc(d.name):'')+'"></div>'+
+  '<div class="row"><div class="field"><label>摊位</label><select class="select" id="ed_stall">'+allowed.map(i=>'<option value="'+i+'"'+(d&&d.stall===i?' selected':'')+'>'+esc(STALLS[i].name)+'</option>').join('')+'</select></div>'+
+  '<div class="field"><label>价格（元）</label><input class="input" id="ed_price" type="number" min="0" step="0.5" value="'+(d&&d.price!=null?d.price:'')+'"></div></div>'+
+  '<div class="row"><div class="field"><label>份量</label><input class="input" id="ed_port" value="'+(d?esc(d.portion):'中份')+'"></div>'+
+  '<div class="field"><label>在售状态</label><select class="select" id="ed_av"><option value="1"'+(d&&d.available?' selected':'')+'>在售</option><option value="0"'+(d&&!d.available?' selected':'')+'>售罄</option></select></div></div>'+
+  '<div class="field"><label>口味标签（可多选）</label><div class="chips" id="ed_tastes">'+TASTES.map(t=>'<button class="chip'+(d&&d.tastes.includes(t)?' ton on':'')+'" data-t="'+esc(t)+'" onclick="this.classList.toggle(\'on\');this.classList.toggle(\'ton\')">'+esc(t)+'</button>').join('')+'</div></div>'+
+  '<div class="field"><label>食材（用顿号或逗号分隔）</label><input class="input" id="ed_ing" value="'+(d?esc(d.ingredients.join('、')):'')+'" placeholder="如：鸡肉、辣椒、葱"></div>'+
+  '<div class="field"><label>食材核验状态</label><select class="select" id="ed_ver"><option value="1"'+(d&&d.verified?' selected':'')+'>已核验</option><option value="0"'+(d&&!d.verified?' selected':'')+'>未核验</option></select></div>'+
+  '<div style="display:flex;gap:10px"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveEditDish('+(d?d.id:0)+')">保存</button><button class="btn btn-ghost" onclick="closeModal()">取消</button></div>');
+  bindClose();
+}
+function saveEditDish(id){
+  const u=currentUser();if(!isMaintainer()){toast('无权限','err');return}
+  const err=el('ed_err');err.classList.remove('on');err.textContent='';
+  const name=el('ed_name').value.trim();
+  const stall=parseInt(el('ed_stall').value,10);
+  const priceRaw=el('ed_price').value.trim();
+  const portion=el('ed_port').value.trim()||'中份';
+  const tastes=[...document.querySelectorAll('#ed_tastes .chip.on')].map(b=>b.dataset.t);
+  const ing=el('ed_ing').value.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
+  const av=el('ed_av').value==='1';
+  const ver=el('ed_ver').value==='1';
+  if(!name){err.textContent='菜名不能为空';err.classList.add('on');return}
+  let price=null;
+  if(priceRaw!==''){price=parseFloat(priceRaw);if(!(price>=0)||price>9999){err.textContent='价格需为有效数字';err.classList.add('on');return}}
+  if(dishes.find(x=>x.stall===stall&&x.name===name&&x.id!==id)){err.textContent='该摊位下已存在同名菜品「'+name+'」';err.classList.add('on');return}
+  if(!ing.length){err.textContent='请填写食材';err.classList.add('on');return}
+  if(id){
+    const d=dishes.find(x=>x.id===id);
+    const ingChanged=ing.join(',')!==d.ingredients.join(',');
+    Object.assign(d,{name,stall,price,portion,tastes,ingredients:ing,available:av});
+    if(ingChanged&&ver){d.verified=false;d.vdate='';}else if(ver){d.verified=true;d.vdate=d.vdate||'2026-10-28'}else{d.verified=false;d.vdate=''}
+    d.updatedBy=u.username;d.updatedAt=new Date().toISOString();
+  }else{
+    const newId=Math.max(0,...dishes.map(x=>x.id))+1;
+    dishes.push({id:newId,name,stall,price,portion,tastes,ingredients:ing,available:av,verified:ver,vdate:ver?'2026-10-28':'',img:STALLS[stall].img,updatedBy:u.username,updatedAt:new Date().toISOString()});
+  }
+  save(LS.dishes,dishes);
+  closeModal();renderView();
+  toast(id?'菜品已更新，后续菜单与推荐立即生效':'菜品已新增','ok');
+}
+
+// ===================== 视图：错误报告 =====================
+function openReport(did){
+  const u=currentUser();if(!u){toast('请先登录','err');openLogin();return}
+  const d=dishes.find(x=>x.id===did);if(!d){toast('菜品不存在','err');return}
+  openModal('<h3>举报菜单错误</h3><p class="sub">正在举报：'+esc(d.name)+'（'+esc(STALLS[d.stall].name)+'）</p>'+
+  '<div class="field"><label>问题描述（必填，200 字以内）</label><textarea class="textarea" id="rp_desc" rows="4" placeholder="例如：实际价格与标签不符 / 食材有误"></textarea></div>'+
+  '<div style="display:flex;gap:10px"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="submitReport('+d.id+')">提交报告</button><button class="btn btn-ghost" onclick="closeModal()">取消</button></div>');
+  bindClose();
+}
+function submitReport(did){
+  const u=currentUser();if(!u){toast('请先登录','err');return}
+  const desc=el('rp_desc').value.trim();
+  if(!desc){toast('请填写问题描述','err');return}
+  if(desc.length>200){toast('描述不能超过 200 字','err');return}
+  if(!dishes.find(x=>x.id===did)){toast('菜品不存在','err');return}
+  reports.push({id:(reports.length?Math.max(...reports.map(r=>r.id))+1:1),dishId:did,by:u.username,desc,status:'pending',note:'',time:new Date().toLocaleString('zh-CN')});
+  save(LS.reports,reports);
+  closeModal();renderView();toast('错误报告已提交，等待管理员审核','ok');
+}
+function viewReports(){
+  if(!isAdmin()){el('view').innerHTML='<div class="card empty" style="padding:56px 20px">'+ICONS.flag+'<div class="t">仅管理员可查看</div><div class="d">就餐者可在菜品详情中提交错误报告</div></div>';return}
+  const list=[...reports].sort((a,b)=>(a.status==='pending'&&b.status!=='pending'?-1:1));
+  const pend=list.filter(r=>r.status==='pending').length;
+  el('view').innerHTML=
+  '<h2>错误报告审核</h2><p class="page-desc">待处理 '+pend+' 条 · 共 '+list.length+' 条。仅在实际更新菜单数据后才标记「已更正」。</p>'+
+  (list.length?('<div class="table-wrap"><table><colgroup><col style="width:17%"><col style="width:12%"><col style="width:26%"><col style="width:11%"><col style="width:34%"></colgroup><thead><tr><th>菜品</th><th>举报人</th><th>问题描述</th><th>状态</th><th>处理</th></tr></thead><tbody>'+
+  list.map(r=>{const d=dishes.find(x=>x.id===r.dishId);return '<tr><td>'+(d?esc(d.name)+'<div class="hint">'+esc(STALLS[d.stall].name)+'</div>':'<span class="hint">已删除</span>')+'</td><td>'+esc(r.by)+'</td><td>'+esc(r.desc)+'<div class="hint" style="margin-top:4px">'+esc(r.time)+'</div></td><td>'+(r.status==='pending'?'<span class="pill pill-wa">待处理</span>':r.status==='corrected'?'<span class="pill pill-ok">已更正</span>':'<span class="pill pill-mu">无需修改</span>')+'</td><td>'+
+    (r.status==='pending'
+      ?'<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="reviewReport('+r.id+',\'corrected\')">已更正</button><button class="btn btn-ghost btn-sm" onclick="reviewReport('+r.id+',\'none\')">无需修改</button></div>'
+      :'<span class="hint">'+(r.note||(r.status==='corrected'?'已更新菜单':'经核实无需修改'))+'</span>')+
+    '</td></tr>'}).join('')+'</tbody></table></div>'):
+  '<div class="card empty" style="padding:56px 20px">'+ICONS.flag+'<div class="t">暂无错误报告</div><div class="d">就餐者提交的报告会显示在这里</div></div>');
+}
+function reviewReport(id,status){
+  const r=reports.find(x=>x.id===id);if(!r)return;
+  if(status==='corrected'){
+    const d=dishes.find(x=>x.id===r.dishId);
+    if(d){
+      openModal('<h3>确认处理</h3><p class="sub">「已更正」要求菜单数据已实际更新。</p><div class="hint">若尚未修正菜品「'+esc(d.name)+'」的数据，请先到「菜单维护」编辑该菜品，再回来确认。</div><div style="margin-top:16px;display:flex;gap:10px"><button class="btn btn-ghost" onclick="goEditThen('+r.id+')">去维护该菜品</button><button class="btn btn-green" style="flex:1;justify-content:center" onclick="doReview('+id+',\'corrected\')">确认已更正</button></div>');
+      bindClose();
+    }else{doReview(id,'corrected')}
+  }else{doReview(id,'none')}
+}
+function goEditThen(id){closeModal();openEditDish(reports.find(x=>x.id===id).dishId)}
+function doReview(id,status){
+  const r=reports.find(x=>x.id===id);if(!r)return;
+  r.status=status;r.note=status==='corrected'?'已更新菜单数据':'经核实无需修改';
+  save(LS.reports,reports);closeModal();renderView();toast(status==='corrected'?'报告已标记为已更正':'已标记为无需修改','ok');
+}
+
+// ===================== 启动 =====================
+renderAccount();
+renderTabs();
+renderView();
+</script>
+</body>
+</html>
