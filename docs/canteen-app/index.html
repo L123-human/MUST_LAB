@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="warm">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>食堂好味道 · 菜品推荐与热量</title>
+  <!-- 圆润可读的无衬线字体，中文回退系统字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 手机竖屏容器：宽屏两侧留主题底色 -->
+  <div class="app">
+    <!-- 顶部：问候 + 主题一键切换 -->
+    <header class="top" id="topBar">
+      <div class="greet">
+        <div class="avatar" aria-hidden="true">食</div>
+        <div class="greet-text">
+          <p class="greet-hi" id="greetHi">早上好</p>
+          <h1 class="greet-name">同学</h1>
+        </div>
+      </div>
+      <button class="theme-switch" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="切换主题">
+        <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
+        <span id="themeLabel">普通</span>
+      </button>
+    </header>
+
+    <!-- 路由渲染区 -->
+    <main id="view" class="view"></main>
+
+    <!-- 底部 Tab：首页 / 统计 / AI录入 / 设置 -->
+    <nav class="tabbar" aria-label="底部导航">
+      <a href="#home" data-tab="home" class="tab-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>
+        <span>首页</span>
+      </a>
+      <a href="#stats" data-tab="stats" class="tab-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V10M12 19V5M19 19v-7"/></svg>
+        <span>统计</span>
+      </a>
+      <a href="#ai" data-tab="ai" class="tab-item tab-ai">
+        <span class="tab-fab" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
+        <span>AI录入</span>
+      </a>
+      <a href="#settings" data-tab="settings" class="tab-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"/></svg>
+        <span>设置</span>
+      </a>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="main.js"></script>
+</body>
+</html>
