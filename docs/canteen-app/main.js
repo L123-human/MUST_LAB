@@ -530,7 +530,7 @@ document.body.addEventListener("click", (e) => {
     const name = pref.dataset.pref;
     prefs.tastes = prefs.tastes.includes(name) ? prefs.tastes.filter((t) => t !== name) : prefs.tastes.concat(name);
     save(LS.prefs, prefs);
-    renderSettings();
+    pref.classList.toggle("on", prefs.tastes.includes(name));
     return;
   }
   const ex = e.target.closest("[data-ex]");
@@ -540,7 +540,7 @@ document.body.addEventListener("click", (e) => {
     else if (prefs.excluded.length >= 5) { toast("忌口最多 5 项"); return; }
     else prefs.excluded = prefs.excluded.concat(name);
     save(LS.prefs, prefs);
-    renderSettings();
+   ex.classList.toggle("on", prefs.excluded.includes(name));
     return;
   }
   const del = e.target.closest("[data-del]");
