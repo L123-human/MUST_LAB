@@ -959,7 +959,7 @@ html[data-theme="health"] .ring-light::after { background: rgba(50, 90, 10, 0.4)
   body { background: var(--bg); }
 }
 
-/* REQ-1.4 personal controls reuse the existing theme and card styles. */
+/* 收藏与反馈 */
 .personal-panel { margin-top: 20px; }
 .personal-panel h2 { margin: 0 0 10px; }
 .personal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }

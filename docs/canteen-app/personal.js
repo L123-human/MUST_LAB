@@ -1,4 +1,4 @@
-/* REQ-1.4 rules, independent of DOM and storage. No authentication is implemented here. */
+/* REQ-1.4 业务规则 */
 const PersonalRecords = (() => {
   const MAX_FAVORITES = 20;
   const MAX_TEXT = 200;
@@ -54,6 +54,6 @@ const PersonalRecords = (() => {
     const mark = state.feedback[id]?.mark;
     return mark === "like" ? 1 : mark === "not-interested" ? -1 : 0;
   }
-  return { empty, valid, change, tier, textLength, MAX_FAVORITES, MAX_TEXT };
+  return { empty, valid, change, tier, textLength };
 })();
 if (typeof module !== "undefined") module.exports = PersonalRecords;

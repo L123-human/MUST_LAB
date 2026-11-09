@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const P = require('../personal.js');
-// Synthetic dishes for the 20/21 boundary; never added to the production menu.
+// 20/21 项边界测试数据。
 const dishes = Array.from({ length: 21 }, (_, i) => ({ id: i + 1 }));
 function change(s, a, id, v) { return P.change(s, a, id, v, dishes); }
 
@@ -95,7 +95,7 @@ test('ranking: taste count > feedback > ID, cap 5, full menu uncapped', () => {
   assert.equal(a.run('visibleDishes()[0].id'), 13);
   assert.equal(a.run('visibleDishes(Infinity).at(-1).id'), 1);
   a.run('prefs.tastes = ["下饭"]');
-  assert.equal(a.run('visibleDishes()[0].id'), 2); // neutral taste match beats liked no-match
+  assert.equal(a.run('visibleDishes()[0].id'), 2); // 口味匹配优先于点赞。
   a.run('prefs.tastes = []; changePersonal("clear-feedback", 13); changePersonal("clear-feedback", 1)');
   assert.equal(a.run('visibleDishes()[0].id'), 1);
 });

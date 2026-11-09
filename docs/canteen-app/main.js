@@ -124,7 +124,7 @@ function toggleTheme() {
   toast(next === "health" ? "已切换到健康主题" : "已切换到普通主题");
 }
 
-/* ---------- REQ-1.4: explicit local demo, pending A's authenticated API ---------- */
+/* ---------- REQ-1.4 收藏与反馈 ---------- */
 const PERSONAL_KEY = "canteen_personal_demo_v1";
 const DEMO_SESSION_KEY = "canteen_personal_demo_active";
 let personal = PersonalRecords.empty();
@@ -145,7 +145,6 @@ function readPersonal() {
     personalError = "无法读取本地收藏与反馈。原记录未覆盖，请检查浏览器存储。";
   }
 }
-readPersonal();
 
 function setDemo(active) {
   try {
@@ -153,14 +152,13 @@ function setDemo(active) {
     else sessionStorage.removeItem(DEMO_SESSION_KEY);
   } catch (_) { toast("无法开启本地演示，请允许浏览器存储。"); return; }
   demoActive = active;
-  readPersonal();
   route();
   toast(active ? "已进入本地演示；请勿保存敏感信息。" : "已退出演示；本地数据仍保留。");
 }
 
 function changePersonal(action, id, value) {
   if (!demoActive) { toast("请登录后使用；当前可到收藏页开启本地演示。"); return false; }
-  readPersonal(); // Re-read before writing so another tab's saved actions are retained.
+  readPersonal(); // 保留其他标签页的更新。
   if (personalError) { toast(personalError); return false; }
   const result = PersonalRecords.change(personal, action, id, value, DISHES);
   if (result.error) { toast(result.error); return false; }
@@ -175,7 +173,7 @@ function personalPanel(d) {
   if (personalError) return '<div class="panel" role="alert">' + esc(personalError) + '</div>';
   const favorite = personal.favorites.includes(d.id);
   const item = personal.feedback[d.id] || { mark: "", text: "" };
-  // Retain unsaved text across marks, favorites and portion changes.
+  // 保留未保存的文字。
   const draft = ui.feedbackDrafts[d.id] ?? item.text;
   return '<section class="panel personal-panel"><h2>收藏与反馈</h2>' +
     '<p class="desc">本地演示 · 仅保存在此浏览器，共用设备可见。收藏不代表点赞。</p>' +

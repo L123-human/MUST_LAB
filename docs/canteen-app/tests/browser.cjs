@@ -1,4 +1,4 @@
-// Run against a local server; see notes/REQ-1.4-delivery.md.
+// 需启动本地服务器。
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
@@ -9,7 +9,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
-    // Fonts are optional; do not let an external font service affect this local test.
+    // 不依赖外部字体服务。
     await context.route('https://fonts.**/*', route => route.abort());
     const visit = async hash => { await page.goto(base + '/#' + hash, { waitUntil: 'domcontentloaded' }); await page.locator('#view').waitFor(); };
     await visit('favorites');
@@ -51,13 +51,13 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     await page.setViewportSize({ width: 390, height: 844 });
     await page.evaluate(() => window.scrollTo(0, 0));
     if (process.env.SCREENSHOT_DIR) await page.screenshot({ path: process.env.SCREENSHOT_DIR + '/favorites.png', fullPage: true, animations: 'disabled' });
-    // A second tab reads persisted favorites; storage events refresh the first tab.
+    // 跨标签页同步。
     const second = await context.newPage();
     await second.goto(base + '/#favorites', { waitUntil: 'domcontentloaded' });
     await second.locator('#startPersonalDemo').click();
     await second.getByRole('button', { name: '取消收藏', exact: true }).click();
     await page.getByText('还没有收藏', { exact: true }).waitFor();
-    assert.equal(await page.locator('.personal-record').count(), 1); // feedback survives
+    assert.equal(await page.locator('.personal-record').count(), 1); // 反馈保留。
     await page.getByRole('button', { name: '清除全部反馈', exact: true }).click();
     assert.equal(await page.locator('.personal-record').count(), 0);
     await visit('dish/13');
