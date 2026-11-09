@@ -68,7 +68,7 @@ function esc(s) {
 let goal = load(LS.goal, 2000);
 let prefs = load(LS.prefs, { tastes: ["清淡", "高蛋白"], excluded: [], budget: "" });
 let logs = load(LS.logs, []);
-let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food" };
+let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {} };
 
 function todayKey() {
   const d = new Date();
@@ -124,8 +124,102 @@ function toggleTheme() {
   toast(next === "health" ? "已切换到健康主题" : "已切换到普通主题");
 }
 
+/* ---------- REQ-1.4: explicit local demo, pending A's authenticated API ---------- */
+const PERSONAL_KEY = "canteen_personal_demo_v1";
+const DEMO_SESSION_KEY = "canteen_personal_demo_active";
+let personal = PersonalRecords.empty();
+let personalError = "";
+let demoActive = false;
+try { demoActive = sessionStorage.getItem(DEMO_SESSION_KEY) === "yes"; } catch (_) {}
+
+function readPersonal() {
+  personalError = "";
+  personal = PersonalRecords.empty();
+  if (!demoActive) return;
+  try {
+    const raw = localStorage.getItem(PERSONAL_KEY);
+    const saved = raw === null ? PersonalRecords.empty() : JSON.parse(raw);
+    if (!PersonalRecords.valid(saved)) throw new Error("invalid records");
+    personal = saved;
+  } catch (_) {
+    personalError = "无法读取本地收藏与反馈。原记录未覆盖，请检查浏览器存储。";
+  }
+}
+readPersonal();
+
+function setDemo(active) {
+  try {
+    if (active) sessionStorage.setItem(DEMO_SESSION_KEY, "yes");
+    else sessionStorage.removeItem(DEMO_SESSION_KEY);
+  } catch (_) { toast("无法开启本地演示，请允许浏览器存储。"); return; }
+  demoActive = active;
+  readPersonal();
+  route();
+  toast(active ? "已进入本地演示；请勿保存敏感信息。" : "已退出演示；本地数据仍保留。");
+}
+
+function changePersonal(action, id, value) {
+  if (!demoActive) { toast("请登录后使用；当前可到收藏页开启本地演示。"); return false; }
+  readPersonal(); // Re-read before writing so another tab's saved actions are retained.
+  if (personalError) { toast(personalError); return false; }
+  const result = PersonalRecords.change(personal, action, id, value, DISHES);
+  if (result.error) { toast(result.error); return false; }
+  try { save(PERSONAL_KEY, result.state); }
+  catch (_) { toast("保存失败，原记录未改变。请检查浏览器存储空间或权限。"); return false; }
+  personal = result.state;
+  return true;
+}
+
+function personalPanel(d) {
+  if (!demoActive) return '<section class="panel"><h2>收藏与反馈</h2><p class="desc">请登录后使用。账户功能待接入，可先试用本地演示。</p><a class="btn btn-soft" href="#favorites">前往收藏与反馈</a></section>';
+  if (personalError) return '<div class="panel" role="alert">' + esc(personalError) + '</div>';
+  const favorite = personal.favorites.includes(d.id);
+  const item = personal.feedback[d.id] || { mark: "", text: "" };
+  // Retain unsaved text across marks, favorites and portion changes.
+  const draft = ui.feedbackDrafts[d.id] ?? item.text;
+  return '<section class="panel personal-panel"><h2>收藏与反馈</h2>' +
+    '<p class="desc">本地演示 · 仅保存在此浏览器，共用设备可见。收藏不代表点赞。</p>' +
+    '<div class="personal-actions"><button class="btn btn-soft" type="button" data-personal="' + (favorite ? 'unfavorite' : 'favorite') + '" data-id="' + d.id + '" aria-pressed="' + favorite + '">' + (favorite ? '取消收藏' : '收藏这道菜') + '</button>' +
+    ['like', 'not-interested'].map((mark) => '<button class="chip' + (item.mark === mark ? ' on' : '') + '" type="button" data-personal="mark" data-value="' + mark + '" data-id="' + d.id + '" aria-pressed="' + (item.mark === mark) + '">' + (mark === 'like' ? '点赞' : '不感兴趣') + '</button>').join('') + '</div>' +
+    '<p class="meta">再次点击所选标记可撤销；标记仅影响口味同分菜品的顺序。</p>' +
+    '<div class="field"><label for="feedbackText">文字反馈（可选，最多 200 字符，不参与排序）</label>' +
+    '<textarea id="feedbackText" rows="3" data-dish-id="' + d.id + '" aria-describedby="feedbackCount">' + esc(draft) + '</textarea>' +
+    '<span id="feedbackCount" class="meta">' + PersonalRecords.textLength(draft) + ' / 200</span></div>' +
+    '<div class="personal-actions"><button class="btn" type="button" data-personal="text" data-id="' + d.id + '">保存文字反馈</button>' +
+    '<button class="btn btn-ghost" type="button" data-personal="clear-feedback" data-id="' + d.id + '">清除全部反馈</button></div></section>';
+}
+
+function renderFavorites() {
+  setTab("favorites");
+  showTop(true);
+  let html = '<h1 class="h1">收藏与反馈</h1>';
+  if (!demoActive) {
+    view.innerHTML = html + '<div class="panel"><h2>请登录后使用</h2><p class="desc">账户功能尚未接入。本地演示可试用收藏和反馈，数据仅存于此浏览器，共用设备可见，不会发送给食堂。</p><button class="btn" type="button" id="startPersonalDemo">进入本地演示</button></div>';
+    return;
+  }
+  html += '<p class="desc">本地演示 · 共用设备可见 · ' + personal.favorites.length + ' / 20 项收藏</p><button class="btn btn-ghost" type="button" id="stopPersonalDemo">退出本地演示</button>';
+  if (personalError) { view.innerHTML = html + '<p role="alert">' + esc(personalError) + '</p>'; return; }
+  function recordCard(id, isFavorite) {
+    const d = dishById(id);
+    const item = personal.feedback[id] || { mark: "", text: "" };
+    if (!d) return '<div class="panel">菜品 #' + id + ' 已不在当前菜单中；记录保留，等待菜单同步。</div>';
+    return '<article class="panel personal-record"><a href="#dish/' + id + '"><strong>' + esc(d.name) + '</strong></a><p class="meta">' + esc(STALLS[d.stall].name) + ' · ¥' + d.price.toFixed(2) + '</p>' +
+      '<p>' + (item.mark === 'like' ? '已点赞' : item.mark === 'not-interested' ? '不感兴趣' : '未标记') + '</p>' +
+      (item.text ? '<p class="feedback-copy">' + esc(item.text) + '</p>' : '') +
+      '<div class="personal-actions"><a class="btn btn-soft" href="#dish/' + id + '">查看与编辑</a>' +
+      (isFavorite ? '<button class="btn btn-ghost" type="button" data-personal="unfavorite" data-id="' + id + '">取消收藏</button>' : '') +
+      (personal.feedback[id] ? '<button class="btn btn-ghost" type="button" data-personal="clear-feedback" data-id="' + id + '">清除全部反馈</button>' : '') + '</div></article>';
+  }
+  html += '<div class="section-head"><h2>我的收藏</h2><a href="#menu">浏览菜单</a></div>' +
+    (personal.favorites.length ? personal.favorites.map((id) => recordCard(id, true)).join('') : '<div class="empty"><strong>还没有收藏</strong>进入菜品详情，收藏想再次查看的菜。</div>');
+  const others = Object.keys(personal.feedback).map(Number).filter((id) => !personal.favorites.includes(id));
+  html += '<div class="section-head"><h2>其他菜品反馈</h2></div>' +
+    (others.length ? others.map((id) => recordCard(id, false)).join('') : '<p class="desc">暂无其他反馈。取消收藏不会删除反馈。</p>');
+  view.innerHTML = html;
+}
+
 /* ---------- 推荐逻辑 ---------- */
-function visibleDishes() {
+function visibleDishes(limit = 5) {
   const kw = ui.kw.trim();
   return DISHES.filter((d) => {
     if (kw && !d.name.includes(kw) && !STALLS[d.stall].name.includes(kw)) return false;
@@ -135,13 +229,16 @@ function visibleDishes() {
     return true;
   }).sort((a, b) => {
     const score = (d) => d.tastes.filter((t) => prefs.tastes.includes(t)).length;
-    return score(b) - score(a) || a.id - b.id;
-  });
+    return score(b) - score(a) || PersonalRecords.tier(personal, b.id) - PersonalRecords.tier(personal, a.id) || a.id - b.id;
+  }).slice(0, limit);
 }
 function matchReason(d) {
   const hit = d.tastes.filter((t) => prefs.tastes.includes(t));
-  if (!hit.length) return "";
-  return "口味相符：" + hit.join("、");
+  const reasons = [hit.length ? "口味相符：" + hit.join("、") : "符合当前筛选条件"];
+  const mark = personal.feedback[d.id]?.mark;
+  if (mark === "like") reasons.push("你已点赞，同分时优先");
+  if (mark === "not-interested") reasons.push("你标记了不感兴趣，同分时靠后");
+  return reasons.join("；");
 }
 
 function toast(msg) {
@@ -185,7 +282,7 @@ function weekSeries() {
 }
 
 /* ---------- 页面渲染 ---------- */
-function renderHome() {
+function renderHome(menu = false) {
   setTab("home");
   showTop(true);
   const list = todayLogs();
@@ -199,7 +296,7 @@ function renderHome() {
   const pLeft = Math.max(0, mg.protein - pEaten);
   const cLeft = Math.max(0, mg.carb - cEaten);
   const fLeft = Math.max(0, mg.fat - fEaten);
-  const dishes = visibleDishes();
+  const dishes = visibleDishes(menu ? Infinity : 5);
   const week = weekSeries();
 
   view.innerHTML =
@@ -226,7 +323,8 @@ function renderHome() {
       '<button class="chip' + (ui.taste === "" ? " on" : "") + '" data-taste="" type="button">全部</button>' +
       TASTES.map((t) => '<button class="chip' + (ui.taste === t ? " on" : "") + '" data-taste="' + esc(t) + '" type="button">' + esc(t) + "</button>").join("") +
     "</div>" +
-    '<div class="section-head"><h2>今日推荐</h2><a href="#settings">调整偏好</a></div>' +
+    '<div class="section-head"><h2>' + (menu ? '菜单浏览' : '今日推荐 · 最多 5 道') + '</h2><a href="#settings">调整偏好</a></div>' +
+    '<p class="desc"><a href="' + (menu ? '#home' : '#menu') + '">' + (menu ? '返回推荐' : '浏览全部匹配菜品') + '</a> · <a href="#favorites">收藏与反馈</a></p>' +
     '<div class="list">' +
       (dishes.length ? dishes.map(dishCard).join("") :
         '<div class="empty"><strong>没有符合条件的菜</strong>试试放宽口味、预算或忌口。</div>') +
@@ -311,6 +409,7 @@ function renderDetail(id) {
           '<button class="chip' + (ui.meal === m.id ? " on" : "") + '" data-meal="' + m.id + '" type="button">' + m.name + "</button>"
         ).join("") + "</div>" +
         '<button class="btn btn-block" id="addLog" type="button">记入今日' + mealName(ui.meal) + "</button>" +
+        personalPanel(d) +
       "</div>" +
     "</div>";
 }
@@ -442,6 +541,7 @@ function renderSettings() {
 let currentDish = null;
 
 function route() {
+  readPersonal();
   const hash = (location.hash || "#home").slice(1);
   // 重新触发进入动画
   view.style.animation = "none";
@@ -458,6 +558,8 @@ function route() {
     return;
   }
   currentDish = null;
+  if (hash === "favorites") return renderFavorites();
+  if (hash === "menu") return renderHome(true);
   if (hash === "stats") return renderStats();
   if (hash === "ai") return renderAi();
   if (hash === "settings") return renderSettings();
@@ -465,6 +567,8 @@ function route() {
 }
 
 function snapshotInputs() {
+  const feedback = $("#feedbackText");
+  if (feedback) ui.feedbackDrafts[feedback.dataset.dishId] = feedback.value;
   const kw = $("#kw");
   if (kw) ui.kw = kw.value;
   const ai = $("#aiText");
@@ -492,6 +596,24 @@ function addDishLog(dish, factor) {
 /* ---------- 事件委托 ---------- */
 document.body.addEventListener("click", (e) => {
   snapshotInputs();
+  if (e.target.closest("#startPersonalDemo")) { setDemo(true); return; }
+  if (e.target.closest("#stopPersonalDemo")) { ui.feedbackDrafts = {}; setDemo(false); return; }
+  const actionButton = e.target.closest("[data-personal]");
+  if (actionButton) {
+    const id = Number(actionButton.dataset.id);
+    const action = actionButton.dataset.personal;
+    readPersonal();
+    let value = actionButton.dataset.value;
+    if (action === "mark" && personal.feedback[id]?.mark === value) value = "";
+    if (action === "text") value = $("#feedbackText").value;
+    if (changePersonal(action, id, value)) {
+      if (action === "text" || action === "clear-feedback") delete ui.feedbackDrafts[id];
+      route();
+      const messages = { favorite: "已收藏（不影响推荐排序）", unfavorite: "已取消收藏，反馈仍保留", mark: "反馈已更新，推荐将按新标记排序", text: "文字反馈已保存（不参与排序）", "clear-feedback": "全部反馈已清除，排序影响已撤销" };
+      toast(messages[action]);
+    }
+    return;
+  }
 
   // 主题开关（含内部轨道/圆钮）
   if (e.target.closest("#themeToggle")) {
@@ -509,7 +631,7 @@ document.body.addEventListener("click", (e) => {
   const taste = e.target.closest("[data-taste]");
   if (taste) {
     ui.taste = taste.dataset.taste;
-    renderHome();
+    renderHome(location.hash === "#menu");
     return;
   }
   const meal = e.target.closest("[data-meal]");
@@ -558,7 +680,7 @@ document.body.addEventListener("click", (e) => {
   }
   if (e.target.id === "doSearch") {
     ui.kw = $("#kw").value;
-    renderHome();
+    renderHome(location.hash === "#menu");
   }
   if (e.target.id === "minus") {
     ui.factor = Math.max(0.5, Math.round((ui.factor - 0.5) * 10) / 10);
@@ -605,8 +727,23 @@ document.body.addEventListener("click", (e) => {
   if (e.target.id === "themeFromSettings") toggleTheme();
 });
 
-window.addEventListener("hashchange", route);
+document.body.addEventListener("input", (e) => {
+  if (e.target.id === "feedbackText") {
+    ui.feedbackDrafts[e.target.dataset.dishId] = e.target.value;
+    const count = PersonalRecords.textLength(e.target.value);
+    $("#feedbackCount").textContent = count + " / 200" + (count > 200 ? " · 超出限制，不能保存" : "");
+    e.target.setAttribute("aria-invalid", String(count > 200));
+  }
+});
+window.addEventListener("storage", (e) => {
+  if (e.key === PERSONAL_KEY || e.key === null) { snapshotInputs(); route(); }
+});
+window.addEventListener("hashchange", () => {
+  route();
+  window.scrollTo(0, 0);
+});
 
 applyTheme(load(LS.theme, "warm"));
 if (!location.hash) location.hash = "#home";
 else route();
+
