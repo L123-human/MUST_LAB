@@ -1,270 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 移动端优先，URS要求移动优先响应式网页 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Recommendation | Campus Canteen Dish System</title>
+    <title>REQ‑1.3 个性化推荐模块</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin:0;
-            padding:0;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-        body{
-            max-width:720px;
-            margin:16px auto;
-            padding:0 12px;
-            background:#f7f8fa;
-        }
-        .container{
-            background:#fff;
-            border-radius:12px;
-            padding:20px;
-            margin-bottom:16px;
-            box-shadow:0 1px 4px #00000014;
-        }
-        h1{
-            font-size:20px;
-            margin-bottom:16px;
-            color:#222;
-        }
-        .form-row{
-            margin:12px 0;
-        }
-        label{
-            display:block;
-            font-size:14px;
-            margin-bottom:4px;
-            color:#444;
-        }
-        input{
-            width:100%;
-            padding:10px;
-            border:1px solid #ccc;
-            border-radius:6px;
-            font-size:15px;
-        }
-        button{
-            width:100%;
-            padding:12px;
-            background:#2563eb;
-            color:white;
-            border:none;
-            border-radius:8px;
-            font-size:16px;
-            cursor:pointer;
-        }
-        button:hover{
-            background:#1d4ed8;
-        }
-        .dish-card{
-            border:1px solid #e5e7eb;
-            border-radius:10px;
-            padding:14px;
-            margin:10px 0;
-        }
-        .dish-name{
-            font-weight:bold;
-            font-size:16px;
-        }
-        .meta{
-            font-size:13px;
-            color:#555;
-            margin:4px 0;
-        }
-        .reason{
-            background:#eff6ff;
-            padding:8px;
-            border-radius:6px;
-            font-size:13px;
-            margin-top:8px;
-            color:#1e40af;
-        }
-        .warning-tag{
-            font-size:12px;
-            color:#b45309;
-            background:#fffbeb;
-            padding:3px 6px;
-            border-radius:4px;
-            display:inline-block;
-            margin:4px 0;
-        }
-        .no-result{
-            padding:20px;
-            text-align:center;
-            color:#6b7280;
-        }
+        body { font-family:Arial,sans-serif; max-width:900px; margin:20px auto; padding:0 20px; }
+        .form-block { border:1px solid #ccc; padding:16px; border-radius:8px; margin-bottom:20px; }
+        .item { border:1px solid #888; padding:12px; margin:8px 0; border-radius:6px; }
+        .no-result { color:#c00; background:#ffe9e9; padding:12px; border-radius:6px; }
+        .reason-text { color:#2b549c; font-size:0.9em; }
+        .reject-log { font-size:0.85em; color:#666; margin-top:6px; }
+        button { padding:6px 12px; cursor:pointer; margin:0 4px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>REQ‑1.3 Personalized Recommendation</h1>
-    <div class="form-row">
-        <label>Max Budget (per dish)</label>
-        <input id="budget" type="number" placeholder="e.g. 25" value="25">
-    </div>
-    <div class="form-row">
-        <label>Excluded ingredients (comma‑separated)</label>
-        <input id="excludeIngredients" type="text" placeholder="e.g. peanut,seafood" value="">
-    </div>
-    <div class="form-row">
-        <label>Preferred taste tags (comma‑separated)</label>
-        <input id="preferTaste" type="text" placeholder="mild,spicy,savory" value="mild,savory">
-    </div>
-    <button id="getRecBtn">Get Personalized Recommendation</button>
-</div>
+    <h2>个性化推荐 REQ‑1.3</h2>
 
-<div class="container">
-    <h1>Recommendation Result (Max 5)</h1>
-    <div id="resultArea"></div>
-</div>
+    <div class="form-block">
+        <h4>用户偏好设置</h4>
+        <div>预算上限(留空=不限)：<input type="number" id="inpBudget" placeholder="例如30"></div>
+        <div style="margin:6px 0;">排除食材(逗号分隔)：<input type="text" id="inpExclude" placeholder="香菜,花生"></div>
+        <div>偏好口味(逗号分隔)：<input type="text" id="inpTaste" placeholder="辣,鲜"></div>
+        <br>
+        <button onclick="runRecommend()">生成推荐</button>
+    </div>
+
+    <div>
+        <h4>推荐结果：</h4>
+        <div id="output"></div>
+    </div>
 
 <script>
-// ========== Sample Dish Data（原型模拟菜品库，40‑60样本简化版）==========
-const dishList = [
-    {
-        id:1, name:"Tomato Egg Rice", stall:"Stall‑A", price:18, portion:"Normal",
-        tasteTags:["mild","savory"], ingredients:["tomato","egg","rice"],
-        ingredientsVerified:true, available:true
-    },
-    {
-        id:2, name:"Spicy Beef Noodle", stall:"Stall‑B", price:24, portion:"Large",
-        tasteTags:["spicy","savory"], ingredients:["beef","chili","noodle"],
-        ingredientsVerified:true, available:true
-    },
-    {
-        id:3, name:"Mushroom Tofu Bowl", stall:"Stall‑A", price:16, portion:"Normal",
-        tasteTags:["mild","fresh"], ingredients:["mushroom","tofu"],
-        ingredientsVerified:true, available:true
-    },
-    {
-        id:4, name:"Sweet Sour Pork", stall:"Stall‑C", price:28, portion:"Normal",
-        tasteTags:["sweet","savory"], ingredients:["pork","vinegar"],
-        ingredientsVerified:true, available:true
-    },
-    {
-        id:5, name:"Unknown‑Ingredient Fried Rice", stall:"Stall‑B", price:17, portion:"Normal",
-        tasteTags:["mild"], ingredients:[],
-        ingredientsVerified:false, available:true
-    },
-    {
-        id:6, name:"Garlic Vegetable", stall:"Stall‑A", price:12, portion:"Small",
-        tasteTags:["mild","fresh"], ingredients:["vegetable","garlic"],
-        ingredientsVerified:true, available:true
-    },
-    {
-        id:7, name:"Chili Hot Pot Rice", stall:"Stall‑C", price:32, portion:"Large",
-        tasteTags:["spicy"], ingredients:["chili","lamb"],
-        ingredientsVerified:true, available:true
-    }
+// ====================== 模拟菜品数据库 ======================
+const sampleDishes = [
+    {id:1, dishId:"D001", name:"辣子鸡", price:28, tastes:["辣","咸香"], verified:true, stall:0, available:true, ingredients:["鸡肉","干辣椒"]},
+    {id:2, dishId:"D002", name:"清蒸鲈鱼", price:32, tastes:["鲜"], verified:false, stall:1, available:true, ingredients:["鲈鱼","姜"]},
+    {id:3, dishId:"D003", name:"麻婆豆腐", price:18, tastes:["辣","咸"], verified:true, stall:0, available:true, ingredients:["豆腐","辣椒"]},
+    {id:4, dishId:"D004", name:"糖醋排骨", price:35, tastes:["甜"], verified:true, stall:2, available:false, ingredients:["排骨","糖"]},
+    {id:5, dishId:"D005", name:"番茄炒蛋", price:15, tastes:["鲜","甜"], verified:true, stall:1, available:true, ingredients:["番茄","鸡蛋"]},
+    {id:6, dishId:"D006", name:"水煮牛肉", price:33, tastes:["辣"], verified:true, stall:0, available:true, ingredients:["牛肉","辣椒"]},
+    {id:7, dishId:"D007", name:"白灼菜心", price:12, tastes:["鲜"], verified:true, stall:3, available:true, ingredients:["菜心"]},
+    {id:8, dishId:"D008", name:"宫保鸡丁", price:26, tastes:["辣","咸香"], verified:true, stall:0, available:true, ingredients:["鸡肉","花生"]}
 ];
 
-/**
- * 【硬约束过滤 Hard Constraint Filter】REQ‑1.3 Processing
- * 规则：硬约束绝对不能违反；价格缺失就排除；未验证食材不直接过滤，打警告标签
- */
-function hardConstraintFilter(dishes, preference){
-    const excludeArr = preference.excludeIngredients.split(',').map(s=>s.trim().toLowerCase()).filter(s=>s);
-    return dishes.filter(dish=>{
-        // 1.价格存在并且不超过预算；没有价格直接排除
-        if(dish.price === undefined || dish.price > preference.maxBudget){
+// 收藏反馈模拟：key=dishId，值：'liked' / 'notInterested' / null
+let feedback = {
+    "D001":"liked",
+    "D008":"notInterested"
+};
+
+// ====================== 核心推荐函数 REQ‑1.3 ======================
+function getRecommendation(dishes, prefs, feedbackObj){
+    const rejectReasons = [];
+    const {maxBudget, excludeIngredients=[], preferredTastes=[]} = prefs;
+
+    // 1.硬约束过滤
+    let candidates = dishes.filter(dish=>{
+        if(!dish.available){
+            rejectReasons.push(`【${dish.name}】菜品暂不可供应`);
             return false;
         }
-        // 2.菜品不可用直接排除
-        if(!dish.available) return false;
-        // 3.食材已经验证：检查是否包含被排除食材
-        if(dish.ingredientsVerified){
-            const dishIngLower = dish.ingredients.map(i=>i.toLowerCase());
-            for(let ex of excludeArr){
-                if(dishIngLower.includes(ex)) return false;
+        if(dish.verified !== true){
+            rejectReasons.push(`【${dish.name}】配料未验证，已过滤`);
+            return false;
+        }
+        const hasBanIng = excludeIngredients.some(ing=> dish.ingredients.includes(ing));
+        if(hasBanIng){
+            rejectReasons.push(`【${dish.name}】包含被排除食材`);
+            return false;
+        }
+        if(maxBudget !== "" && maxBudget != null){
+            const b = Number(maxBudget);
+            if(!isNaN(b) && dish.price > b){
+                rejectReasons.push(`【${dish.name}】超出预算`);
+                return false;
             }
         }
-        // 未验证食材：不筛掉，保留，后续UI展示ingredients‑unknown警告
         return true;
-    })
-}
+    });
 
-/**
- * 口味打分 score ，生成推荐理由
- */
-function scoreAndGenerateReason(dish, preferTasteArr){
-    let score = 0;
-    const matchTags = [];
-    for(let t of preferTasteArr){
-        if(dish.tasteTags.includes(t)){
-            score += 2;
-            matchTags.push(t);
+    // 2.打分+生成推荐理由
+    candidates = candidates.map(dish=>{
+        let score = 0;
+        const matchTaste = dish.tastes.filter(t=> preferredTastes.includes(t));
+        score += matchTaste.length;
+
+        const fb = feedbackObj[dish.dishId];
+        let feedbackRank;
+        if(fb === "liked"){ score +=1.5; feedbackRank=0; }
+        else if(fb === "notInterested"){ score -=1.5; feedbackRank=2; }
+        else { feedbackRank=1; }
+
+        let reason = "";
+        if(matchTaste.length>0){
+            reason = `匹配口味：${matchTaste.join("、")}`;
+        }else{
+            reason = "符合筛选条件，无口味匹配";
         }
-    }
-    let reasonParts = [];
-    reasonParts.push(`Within your budget (${dish.price})`);
-    if(matchTags.length>0){
-        reasonParts.push(`Matches taste preference: ${matchTags.join(", ")}`);
-    }
-    if(!dish.ingredientsVerified){
-        reasonParts.push("⚠ Ingredients unknown, please be careful");
-    }
-    return {score, reasonText: reasonParts.join("; ")}
+        if(fb==="liked") reason += "；你标记过喜欢该菜品";
+        if(fb==="notInterested") reason += "；你标记过不感兴趣";
+
+        return {...dish, score, feedbackRank, reason};
+    });
+
+    //3.排序：分数降序 → feedbackRank升序 → dishId升序
+    candidates.sort((a,b)=>{
+        if(b.score !== a.score) return b.score - a.score;
+        if(a.feedbackRank !== b.feedbackRank) return a.feedbackRank - b.feedbackRank;
+        return String(a.dishId).localeCompare(String(b.dishId));
+    });
+
+    const list = candidates.slice(0,5);
+    return {list, rejectReasons};
 }
 
-/**
- * 主推荐入口函数
- */
-function getRecommendation(preference){
-    const preferTasteArr = preference.preferTaste.split(',').map(s=>s.trim()).filter(s=>s);
-    // Step1：硬约束过滤
-    let candidates = hardConstraintFilter(dishList, preference);
-    // Step2：打分排序
-    const scored = candidates.map(dish=>{
-        const {score, reasonText} = scoreAndGenerateReason(dish, preferTasteArr);
-        return {dish, score, reasonText}
-    })
-    scored.sort((a,b)=> b.score - a.score);
-    // Step3：最多返回5条（URS REQ‑1.3 constraint）
-    const top5 = scored.slice(0,5);
-    return top5;
-}
+// ====================== 页面交互逻辑 ======================
+function runRecommend(){
+    const budget = document.getElementById("inpBudget").value;
+    const excludeRaw = document.getElementById("inpExclude").value;
+    const tasteRaw = document.getElementById("inpTaste").value;
 
-// 渲染页面
-function renderResult(list){
-    const area = document.getElementById("resultArea");
-    area.innerHTML = "";
-    if(list.length ===0){
-        area.innerHTML = `
-        <div class="no-result">
-            <h3>No matching dishes</h3>
-            <p>No dish satisfies all hard‑constraint conditions.</p>
-            <p>Please modify your budget or excluded ingredients and retry.</p>
-        </div>`;
+    const excludeIngredients = excludeRaw.split(",").map(s=>s.trim()).filter(s=>s);
+    const preferredTastes = tasteRaw.split(",").map(s=>s.trim()).filter(s=>s);
+
+    const prefs = {
+        maxBudget: budget,
+        excludeIngredients: excludeIngredients,
+        preferredTastes: preferredTastes
+    };
+
+    const res = getRecommendation(sampleDishes, prefs, feedback);
+    const outDom = document.getElementById("output");
+    outDom.innerHTML = "";
+
+    if(res.list.length === 0){
+        let html = `<div class="no-result">没有匹配的推荐菜品</div>`;
+        if(res.rejectReasons.length>0){
+            html += `<div class="reject-log"><b>被筛除原因记录：</b><br>`;
+            html += res.rejectReasons.join("<br>");
+            html += `</div>`;
+        }
+        outDom.innerHTML = html;
         return;
     }
-    list.forEach(item=>{
-        const d = item.dish;
-        const card = document.createElement("div");
-        card.className = "dish-card";
-        card.innerHTML = `
-            <div class="dish-name">${d.name}</div>
-            <div class="meta">Stall:${d.stall}｜Price:${d.price}｜Portion:${d.portion}</div>
-            ${!d.ingredientsVerified ? `<span class="warning-tag">ingredients unknown</span>` : ""}
-            <div class="meta">Taste tags: ${d.tasteTags.join(", ")}</div>
-            <div class="reason">💡 Recommend reason: ${item.reasonText}</div>
-        `;
-        area.appendChild(card);
-    })
-}
 
-// 按钮事件
-document.getElementById("getRecBtn").addEventListener("click", ()=>{
-    const pref = {
-        maxBudget: Number(document.getElementById("budget").value),
-        excludeIngredients: document.getElementById("excludeIngredients").value,
-        preferTaste: document.getElementById("preferTaste").value
+    //渲染推荐列表
+    res.list.forEach(item=>{
+        let div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+            <div><b>${item.name}</b>｜ID:${item.dishId}｜价格：${item.price}元｜分数:${item.score.toFixed(2)}</div>
+            <div class="reason-text">💡推荐理由：${item.reason}</div>
+        `;
+        outDom.appendChild(div);
+    });
+
+    if(res.rejectReasons.length>0){
+        const logDiv = document.createElement("div");
+        logDiv.className = "reject-log";
+        logDiv.innerHTML = `<br><b>本次被过滤菜品记录：</b><br>` + res.rejectReasons.join("<br>");
+        outDom.appendChild(logDiv);
     }
-    const recList = getRecommendation(pref);
-    renderResult(recList);
-})
+}
 </script>
 </body>
 </html>
