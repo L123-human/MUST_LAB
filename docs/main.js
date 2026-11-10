@@ -68,7 +68,7 @@ function esc(s) {
 let goal = load(LS.goal, 2000);
 let prefs = load(LS.prefs, { tastes: ["清淡", "高蛋白"], excluded: [], budget: "" });
 let logs = load(LS.logs, []);
-let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {} };
+let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {}, day: "" };
 
 function todayKey() {
   const d = new Date();
@@ -77,6 +77,17 @@ function todayKey() {
 function todayLogs() {
   const key = todayKey();
   return logs.filter((item) => item.day === key);
+}
+/* 当前选中的日期，空字符串表示“今天” */
+function activeDay() {
+  return ui.day || todayKey();
+}
+function dayLogs() {
+  const key = activeDay();
+  return logs.filter((item) => item.day === key);
+}
+function isTodaySelected() {
+  return activeDay() === todayKey();
 }
 function sumKcal(list) {
   return list.reduce((n, item) => n + (item.kcal || 0), 0);
@@ -283,7 +294,7 @@ function weekSeries() {
 function renderHome(menu = false) {
   setTab("home");
   showTop(true);
-  const list = todayLogs();
+  const list = dayLogs();
   const eaten = sumKcal(list);
   const pct = goal ? Math.min(100, Math.round(eaten / goal * 100)) : 0;
   const left = Math.max(0, goal - eaten);
@@ -300,12 +311,12 @@ function renderHome(menu = false) {
   view.innerHTML =
     '<div class="week" role="list" aria-label="本周日期">' +
       week.map((d) =>
-        '<button class="day-pill' + (d.today ? " on" : "") + '" type="button" disabled>' +
+        '<button class="day-pill' + (((ui.day === "" && d.today) || ui.day === d.key) ? " on" : "") + '" type="button" data-day="' + d.key + '" aria-pressed="' + (((ui.day === "" && d.today) || ui.day === d.key) ? "true" : "false") + '">' +
           '<span>' + d.label + '</span><span class="num">' + d.num + "</span></button>"
       ).join("") +
     "</div>" +
     '<a class="cal-card" href="#stats">' +
-      '<div><div class="label">今日热量</div>' +
+      '<div><div class="label">' + (isTodaySelected() ? '今日热量' : '当日热量') + '</div>' +
       '<div class="nums">' + eaten + ' <span>/ ' + goal + ' kcal</span></div>' +
       '<div class="hint">还剩约 ' + left + ' kcal · 点此看明细</div></div>' +
       '<div class="ring" style="--p:' + pct + '"><span>' + pct + '%</span></div>' +
@@ -629,6 +640,12 @@ document.body.addEventListener("click", (e) => {
   const taste = e.target.closest("[data-taste]");
   if (taste) {
     ui.taste = taste.dataset.taste;
+    renderHome(location.hash === "#menu");
+    return;
+  }
+  const dayPill = e.target.closest("[data-day]");
+  if (dayPill) {
+    ui.day = dayPill.dataset.day === todayKey() ? "" : dayPill.dataset.day;
     renderHome(location.hash === "#menu");
     return;
   }
