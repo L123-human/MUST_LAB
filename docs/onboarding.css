@@ -1,0 +1,27 @@
+.welcome-dialog{box-sizing:border-box;width:min(440px,calc(100% - 32px));max-height:88dvh;overflow:auto;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--surface);color:var(--ink);box-shadow:0 24px 80px #0003}
+.welcome-dialog::backdrop{background:rgba(30,25,20,.48);backdrop-filter:blur(4px)}
+.welcome-dialog .welcome-eyebrow{color:var(--accent-deep);font-size:12px;letter-spacing:1px;margin:0 0 10px}
+.welcome-dialog h2{font-size:25px;line-height:1.3;margin:0 0 12px}
+.welcome-intro{color:var(--ink-2);font-size:14px;line-height:1.7;margin:0 0 24px}
+.welcome-dialog h3,.welcome-dialog summary{font-size:15px;margin:0 0 12px;font-weight:600}
+.welcome-dialog small{font-size:12px;color:var(--muted);font-weight:400}
+.welcome-dialog details{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}
+.welcome-dialog summary{cursor:pointer}
+.welcome-note{font-size:12px;color:var(--ink-2);line-height:1.7;margin:22px 0 0}
+#welcome-error{font-size:13px;color:#a33222;margin:8px 0;min-height:20px}
+.welcome-actions{display:grid;gap:10px}
+.welcome-dialog button:focus-visible,.welcome-dialog summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.preference-picker{width:min(560px,calc(100% - 24px));padding:24px}
+#tag-search{box-sizing:border-box;width:100%;border:1px solid var(--line);background:var(--bg-soft);color:var(--ink);border-radius:12px;padding:12px;margin:8px 0 18px}
+.preference-layout{display:grid;grid-template-columns:96px 1fr;gap:18px;min-height:190px}
+.preference-categories{display:flex;flex-direction:column;gap:8px;border-right:1px solid var(--line);padding-right:10px}
+.preference-categories button{padding:10px 6px;border:0;border-radius:10px;background:transparent;color:var(--ink-2);font-size:13px;text-align:left}
+.preference-categories button.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+.selected-heading{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;font-size:13px}
+#clear-tags{background:none;border:0;color:var(--ink-2);font-size:12px;padding:6px}
+#selected-tags{font-size:13px;color:var(--muted)}
+#coverage-note{font-size:12px;line-height:1.7;background:var(--bg-soft);padding:10px;border-radius:10px;color:var(--ink-2);margin:12px 0}
+.preference-picker .welcome-intro{margin-bottom:14px}
+.preference-picker details{margin-top:12px;padding-top:12px}
+.preference-picker .welcome-note{margin-top:12px}
+@media(max-width:380px){.preference-picker{padding:18px}.preference-layout{grid-template-columns:82px 1fr;gap:12px}}
