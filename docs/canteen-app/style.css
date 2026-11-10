@@ -958,3 +958,13 @@ html[data-theme="health"] .ring-light::after { background: rgba(50, 90, 10, 0.4)
 @media (min-width: 431px) {
   body { background: var(--bg); }
 }
+
+/* 收藏与反馈 */
+.personal-panel { margin-top: 20px; }
+.personal-panel h2 { margin: 0 0 10px; }
+.personal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.personal-actions .chip { margin: 0; }
+.personal-record { margin-bottom: 12px; }
+.feedback-copy { white-space: pre-wrap; overflow-wrap: anywhere; }
+.personal-panel textarea[aria-invalid="true"] { border-color: #b03a20; }
+.personal-panel .meta { display: block; }
