@@ -16,7 +16,9 @@ const PersonalRecords = (() => {
   }
 
   function change(state, action, id, value, dishes) {
-    if (!Number.isSafeInteger(id) || !dishes.some((d) => d.id === id)) {
+    const removing = (action === "unfavorite" && state.favorites.includes(id)) ||
+      (action === "clear-feedback" && !!state.feedback[id]);
+    if (!Number.isSafeInteger(id) || (!dishes.some((d) => d.id === id) && !removing)) {
       return { error: "找不到这道菜，未保存操作。" };
     }
     const next = { favorites: state.favorites.slice(), feedback: { ...state.feedback } };

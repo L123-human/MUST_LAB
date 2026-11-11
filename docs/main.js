@@ -1,31 +1,5 @@
 /* 食堂好味道：校园食堂菜品推荐 + 卡路里计算（纯前端，可直接打开） */
 
-// 摊位图片沿用项目 assets
-const STALLS = [
-  { name: "川湘小炒", img: "assets/chuan.jpg" },
-  { name: "粤味烧腊", img: "assets/shaola.jpg" },
-  { name: "面食工坊", img: "assets/mian.jpg" },
-  { name: "轻食沙拉", img: "assets/qingshi.jpg" },
-  { name: "现煮汤粉", img: "assets/tangfen.jpg" }
-];
-
-/* 热量与宏量为常见份量估算，仅用于界面演示 */
-const DISHES = [
-  { id: 1, name: "农家小炒肉", stall: 0, price: 18, portion: "中份", tastes: ["微辣", "下饭"], ingredients: ["猪肉", "辣椒", "蒜"], kcal: 420, protein: 28, fat: 26, carb: 14 },
-  { id: 2, name: "麻婆豆腐", stall: 0, price: 12, portion: "中份", tastes: ["中辣", "下饭"], ingredients: ["豆腐", "辣椒", "花椒"], kcal: 280, protein: 16, fat: 16, carb: 12 },
-  { id: 3, name: "醋溜土豆丝", stall: 0, price: 9, portion: "小份", tastes: ["清淡", "素食", "少油"], ingredients: ["土豆", "醋", "辣椒"], kcal: 160, protein: 3, fat: 4, carb: 28 },
-  { id: 4, name: "烧鸭饭", stall: 1, price: 20, portion: "中份", tastes: ["下饭", "高蛋白"], ingredients: ["鸭肉", "青菜", "米饭"], kcal: 680, protein: 32, fat: 22, carb: 82 },
-  { id: 5, name: "白切鸡饭", stall: 1, price: 18, portion: "中份", tastes: ["清淡", "高蛋白"], ingredients: ["鸡肉", "姜", "米饭"], kcal: 560, protein: 34, fat: 12, carb: 74 },
-  { id: 6, name: "叉烧饭", stall: 1, price: 19, portion: "中份", tastes: ["甜口", "下饭"], ingredients: ["猪肉", "青菜", "米饭"], kcal: 720, protein: 30, fat: 24, carb: 88 },
-  { id: 7, name: "红烧牛肉面", stall: 2, price: 20, portion: "大份", tastes: ["微辣", "汤水"], ingredients: ["牛肉", "面条", "青菜"], kcal: 640, protein: 32, fat: 18, carb: 78 },
-  { id: 8, name: "番茄鸡蛋面", stall: 2, price: 13, portion: "中份", tastes: ["清淡", "汤水"], ingredients: ["番茄", "鸡蛋", "面条"], kcal: 430, protein: 18, fat: 10, carb: 64 },
-  { id: 9, name: "葱油拌面", stall: 2, price: 12, portion: "中份", tastes: ["清淡", "少油"], ingredients: ["面条", "葱", "酱油"], kcal: 480, protein: 14, fat: 12, carb: 76 },
-  { id: 10, name: "牛油果鸡胸沙拉", stall: 3, price: 26, portion: "一份", tastes: ["清淡", "高蛋白", "少油"], ingredients: ["鸡胸肉", "牛油果", "生菜"], kcal: 390, protein: 32, fat: 18, carb: 16 },
-  { id: 11, name: "藜麦蔬菜碗", stall: 3, price: 22, portion: "一份", tastes: ["清淡", "素食", "少油"], ingredients: ["藜麦", "生菜", "玉米"], kcal: 340, protein: 12, fat: 8, carb: 48 },
-  { id: 12, name: "番茄牛肉汤粉", stall: 4, price: 18, portion: "大份", tastes: ["中辣", "汤水"], ingredients: ["牛肉", "番茄", "米粉"], kcal: 520, protein: 26, fat: 12, carb: 70 },
-  { id: 13, name: "清汤牛腩粉", stall: 4, price: 20, portion: "大份", tastes: ["清淡", "汤水", "高蛋白"], ingredients: ["牛肉", "米粉", "萝卜"], kcal: 490, protein: 28, fat: 10, carb: 66 }
-];
-
 const TASTES = ["日式", "韩式", "川湘", "粤式", "炸物", "烤肉", "面食", "盖饭", "轻食", "清淡", "微辣", "中辣", "麻辣", "酸甜", "甜口", "浓郁", "高蛋白", "少油", "素食", "汤水", "下饭"];
 const MEALS = [
   { id: "breakfast", name: "早餐" },
@@ -136,47 +110,63 @@ function toggleTheme() {
 }
 
 /* ---------- REQ-1.4 收藏与反馈 ---------- */
-const PERSONAL_KEY = "canteen_personal_demo_v1";
-const DEMO_SESSION_KEY = "canteen_personal_demo_active";
 let personal = PersonalRecords.empty();
 let personalError = "";
-let demoActive = false;
-try { demoActive = sessionStorage.getItem(DEMO_SESSION_KEY) === "yes"; } catch (_) {}
+let demoActive = PersonalApi.active();
+let personalRequest = 0;
+let personalSession = 0;
+let personalSaving = false;
 
-function readPersonal() {
+async function readPersonal() {
+  const request = ++personalRequest;
   personalError = "";
   personal = PersonalRecords.empty();
-  if (!demoActive) return;
+  if (!demoActive) return true;
   try {
-    const raw = localStorage.getItem(PERSONAL_KEY);
-    const saved = raw === null ? PersonalRecords.empty() : JSON.parse(raw);
-    if (!PersonalRecords.valid(saved)) throw new Error("invalid records");
+    const saved = await PersonalApi.read();
+    if (request !== personalRequest) return false;
     personal = saved;
-  } catch (_) {
-    personalError = "无法读取本地收藏与反馈。原记录未覆盖，请检查浏览器存储。";
+  } catch (error) {
+    if (request !== personalRequest) return false;
+    personalError = error.message;
   }
+  return true;
 }
 
 function setDemo(active) {
   try {
-    if (active) sessionStorage.setItem(DEMO_SESSION_KEY, "yes");
-    else sessionStorage.removeItem(DEMO_SESSION_KEY);
+    if (active) sessionStorage.setItem(PersonalApi.sessionKey, "yes");
+    else sessionStorage.removeItem(PersonalApi.sessionKey);
   } catch (_) { toast("无法开启本地演示，请允许浏览器存储。"); return; }
   demoActive = active;
-  route();
+  personalSession++;
+  ui.feedbackDrafts = {};
+  if (!active) view.innerHTML = '<p class="desc">已退出本地演示。</p>';
+  const pending = route();
   toast(active ? "已进入本地演示；请勿保存敏感信息。" : "已退出演示；本地数据仍保留。");
+  return pending;
 }
 
-function changePersonal(action, id, value) {
+async function changePersonal(action, id, value) {
   if (!demoActive) { toast("请登录后使用；当前可到收藏页开启本地演示。"); return false; }
-  readPersonal(); // 保留其他标签页的更新。
-  if (personalError) { toast(personalError); return false; }
-  const result = PersonalRecords.change(personal, action, id, value, DISHES);
-  if (result.error) { toast(result.error); return false; }
-  try { save(PERSONAL_KEY, result.state); }
-  catch (_) { toast("保存失败，原记录未改变。请检查浏览器存储空间或权限。"); return false; }
-  personal = result.state;
-  return true;
+  if (personalSaving) return false;
+  personalSaving = true;
+  const session = personalSession;
+  document.querySelectorAll("[data-personal]").forEach(button => { button.disabled = true; });
+  try {
+    const saved = await PersonalApi.change(action, id, value);
+    if (session !== personalSession) return false;
+    personalRequest++;
+    personal = saved;
+    personalError = "";
+    return true;
+  } catch (error) {
+    if (session === personalSession) toast(error.message);
+    return false;
+  } finally {
+    personalSaving = false;
+    document.querySelectorAll("[data-personal]").forEach(button => { button.disabled = false; });
+  }
 }
 
 function personalPanel(d) {
@@ -201,7 +191,7 @@ function personalPanel(d) {
 function renderFavorites() {
   setTab("favorites");
   showTop(true);
-  let html = '<h1 class="h1">收藏与反馈</h1>';
+  let html = '<h1 class="h1">收藏与反馈</h1>' + menuNotice();
   if (!demoActive) {
     view.innerHTML = html + '<div class="panel"><h2>请登录后使用</h2><p class="desc">账户功能尚未接入。本地演示可试用收藏和反馈，数据仅存于此浏览器，共用设备可见，不会发送给食堂。</p><button class="btn" type="button" id="startPersonalDemo">进入本地演示</button></div>';
     return;
@@ -211,11 +201,12 @@ function renderFavorites() {
   function recordCard(id, isFavorite) {
     const d = dishById(id);
     const item = personal.feedback[id] || { mark: "", text: "" };
-    if (!d) return '<div class="panel">菜品 #' + id + ' 已不在当前菜单中；记录保留，等待菜单同步。</div>';
-    return '<article class="panel personal-record"><a href="#dish/' + id + '"><strong>' + esc(d.name) + '</strong></a><p class="meta">' + esc(STALLS[d.stall].name) + ' · ¥' + d.price.toFixed(2) + '</p>' +
+    const title = d ? '<a href="#dish/' + id + '"><strong>' + esc(d.name) + '</strong></a>' : '<strong>菜品 #' + id + ' 已不在菜单中</strong>';
+    const info = d ? esc(STALLS[d.stall].name) + ' · ' + (Number.isFinite(d.price) ? '¥' + d.price.toFixed(2) : '价格待确认') + ' · ' + esc(dishStatus(d)) : '原记录保留，可取消收藏或清除反馈。';
+    return '<article class="panel personal-record">' + title + '<p class="meta">' + info + '</p>' +
       '<p>' + (item.mark === 'like' ? '已点赞' : item.mark === 'not-interested' ? '不感兴趣' : '未标记') + '</p>' +
       (item.text ? '<p class="feedback-copy">' + esc(item.text) + '</p>' : '') +
-      '<div class="personal-actions"><a class="btn btn-soft" href="#dish/' + id + '">查看与编辑</a>' +
+      '<div class="personal-actions">' + (d ? '<a class="btn btn-soft" href="#dish/' + id + '">查看与编辑</a>' : '') +
       (isFavorite ? '<button class="btn btn-ghost" type="button" data-personal="unfavorite" data-id="' + id + '">取消收藏</button>' : '') +
       (personal.feedback[id] ? '<button class="btn btn-ghost" type="button" data-personal="clear-feedback" data-id="' + id + '">清除全部反馈</button>' : '') + '</div></article>';
   }
@@ -230,24 +221,31 @@ function renderFavorites() {
 /* ---------- 推荐逻辑 ---------- */
 function visibleDishes(limit = 5) {
   const kw = ui.kw.trim();
-  return DISHES.filter((d) => {
-    if (kw && !d.name.includes(kw) && !STALLS[d.stall].name.includes(kw)) return false;
-    if (ui.taste && !d.tastes.includes(ui.taste)) return false;
-    if (prefs.budget && d.price > Number(prefs.budget)) return false;
-    if (prefs.excluded.some((ing) => d.ingredients.includes(ing))) return false;
-    return true;
-  }).sort((a, b) => {
-    const score = (d) => d.tastes.filter((t) => (ui.selectedTastes?.length ? ui.selectedTastes : prefs.tastes).includes(t)).length;
-    return score(b) - score(a) || PersonalRecords.tier(personal, b.id) - PersonalRecords.tier(personal, a.id) || a.id - b.id;
-  }).slice(0, limit);
+  const dishes = DISHES.filter(d =>
+    (!kw || d.name.includes(kw) || STALLS[d.stall].name.includes(kw)) &&
+    (!ui.taste || d.tastes.includes(ui.taste)));
+  const tastes = ui.selectedTastes.length ? ui.selectedTastes : prefs.tastes;
+  if (limit === Infinity) {
+    return rankDishes(dishes.filter(d =>
+      (!prefs.budget || (Number.isFinite(d.price) && d.price >= 0 && d.price <= Number(prefs.budget))) &&
+      !prefs.excluded.some(ing => d.ingredients.includes(ing))), tastes, personal);
+  }
+  return getRecommendation(dishes, {
+    maxBudget: prefs.budget, excludeIngredients: prefs.excluded, preferredTastes: tastes
+  }, personal).list;
 }
-function matchReason(d) {
-  const hit = d.tastes.filter((t) => (ui.selectedTastes?.length ? ui.selectedTastes : prefs.tastes).includes(t));
-  const reasons = [hit.length ? "口味相符：" + hit.join("、") : "符合当前筛选条件"];
-  const mark = personal.feedback[d.id]?.mark;
-  if (mark === "like") reasons.push("你已点赞，同分时优先");
-  if (mark === "not-interested") reasons.push("你标记了不感兴趣，同分时靠后");
-  return reasons.join("；");
+
+let menuMock = false;
+let menuError = "";
+
+function menuNotice() {
+  const text = menuError || (menuMock ? "演示菜单：菜品、价格、供应及核验状态均为模拟。" : "");
+  return '<p class="desc" role="status">' + esc(text) + '</p><button class="btn btn-soft" type="button" id="refreshMenu">刷新菜单</button>';
+}
+
+function dishStatus(d) {
+  return (d.available === true ? "可售" : d.available === false ? "暂不可售" : "可售状态待确认") +
+    " · " + (d.verified === true ? "食材已核验" : "食材待核验");
 }
 
 function toast(msg) {
@@ -308,7 +306,7 @@ function renderHome(menu = false) {
   const dishes = visibleDishes(menu ? Infinity : 5);
   const week = weekSeries();
 
-  view.innerHTML =
+  view.innerHTML = menuNotice() +
     '<div class="week" role="list" aria-label="本周日期">' +
       week.map((d) =>
         '<button class="day-pill' + (((ui.day === "" && d.today) || ui.day === d.key) ? " on" : "") + '" type="button" data-day="' + d.key + '" aria-pressed="' + (((ui.day === "" && d.today) || ui.day === d.key) ? "true" : "false") + '">' +
@@ -336,7 +334,7 @@ function renderHome(menu = false) {
     '<p class="desc"><a href="' + (menu ? '#home' : '#menu') + '">' + (menu ? '返回推荐' : '浏览全部匹配菜品') + '</a> · <a href="#favorites">收藏与反馈</a></p>' +
     '<div class="list">' +
       (dishes.length ? dishes.map(dishCard).join("") :
-        '<div class="empty"><strong>没有符合条件的菜</strong>试试放宽口味、预算或忌口。</div>') +
+        '<div class="empty"><strong>没有符合条件的菜</strong>' + (menu ? '请调整搜索条件或偏好。' : '仅推荐可售且食材已核验的菜品；请浏览菜单查看状态，或调整预算、忌口后重试。') + '</div>') +
     "</div>";
 }
 
@@ -350,7 +348,7 @@ function macroMini(cls, left, goalVal, label) {
 }
 
 function dishCard(d) {
-  const reason = matchReason(d);
+  const reason = d.reason;
   return '<a class="card dish" href="#dish/' + d.id + '">' +
     '<img src="' + STALLS[d.stall].img + '" alt="' + esc(d.name) + '">' +
     '<div class="dish-body">' +
@@ -362,6 +360,7 @@ function dishCard(d) {
           '<span class="dc">C' + d.carb + "</span>" +
           '<span class="df">F' + d.fat + "</span>" +
         "</span></div>" +
+      '<p class="meta">' + esc(dishStatus(d)) + '</p>' +
       '<div class="tags">' + d.tastes.slice(0, 3).map((t) => '<span class="tag">' + esc(t) + "</span>").join("") + "</div>" +
       (reason ? '<div class="reason">' + esc(reason) + "</div>" : "") +
     "</div></a>";
@@ -387,7 +386,7 @@ function renderDetail(id) {
   const maxC = Math.round(d.carb * 2) || 1;
   const maxF = Math.round(d.fat * 2) || 1;
 
-  view.innerHTML =
+  view.innerHTML = menuNotice() +
     '<div class="detail-page">' +
       '<div class="detail-hero">' +
         '<img src="' + STALLS[d.stall].img + '" alt="' + esc(d.name) + '">' +
@@ -397,6 +396,7 @@ function renderDetail(id) {
       '<div class="detail-sheet">' +
         '<h1 class="detail-title">' + esc(d.name) + "</h1>" +
         '<p class="detail-sub">' + esc(STALLS[d.stall].name) + " · " + esc(d.portion) + " · ¥" + d.price + "</p>" +
+        '<p class="meta">' + esc(dishStatus(d)) + '</p>' +
         '<div class="tags" style="margin-bottom:14px">' + d.tastes.map((t) => '<span class="tag">' + esc(t) + "</span>").join("") + "</div>" +
         '<div class="nutri-card">' +
           '<div class="ring-light" style="--p:' + ringPct + '"><div class="inner"><b>' + kcal + "</b><small>kcal</small></div></div>" +
@@ -548,10 +548,26 @@ function renderSettings() {
 }
 
 let currentDish = null;
+let routeRequest = 0;
 
-function route() {
-  readPersonal();
+async function route() {
+  const request = ++routeRequest;
+  const [menu, records] = await Promise.allSettled([MenuApi.read(), readPersonal()]);
+  if (request !== routeRequest || records.value !== true) return;
+  menuError = "";
+  if (menu.status === "fulfilled") {
+    STALLS.splice(0, STALLS.length, ...menu.value.stalls);
+    DISHES.splice(0, DISHES.length, ...menu.value.dishes);
+    menuMock = menu.value.mock === true;
+  } else {
+    menuError = "菜单读取失败，请重试。收藏与反馈记录未删除。";
+  }
   const hash = (location.hash || "#home").slice(1);
+  if (menuError && (hash === "home" || hash === "menu" || hash === "favorites" || hash.startsWith("dish/"))) {
+    showTop(true);
+    view.innerHTML = menuNotice();
+    return;
+  }
   // 重新触发进入动画
   view.style.animation = "none";
   void view.offsetWidth;
@@ -603,21 +619,21 @@ function addDishLog(dish, factor) {
 }
 
 /* ---------- 事件委托 ---------- */
-document.body.addEventListener("click", (e) => {
+document.body.addEventListener("click", async (e) => {
   snapshotInputs();
+  if (e.target.closest("#refreshMenu")) { await route(); return; }
   if (e.target.closest("#startPersonalDemo")) { setDemo(true); return; }
-  if (e.target.closest("#stopPersonalDemo")) { ui.feedbackDrafts = {}; setDemo(false); return; }
+  if (e.target.closest("#stopPersonalDemo")) { setDemo(false); return; }
   const actionButton = e.target.closest("[data-personal]");
   if (actionButton) {
     const id = Number(actionButton.dataset.id);
     const action = actionButton.dataset.personal;
-    readPersonal();
     let value = actionButton.dataset.value;
-    if (action === "mark" && personal.feedback[id]?.mark === value) value = "";
+    if (action === "mark" && actionButton.getAttribute("aria-pressed") === "true") value = "";
     if (action === "text") value = $("#feedbackText").value;
-    if (changePersonal(action, id, value)) {
-      if (action === "text" || action === "clear-feedback") delete ui.feedbackDrafts[id];
-      route();
+    if (await changePersonal(action, id, value)) {
+      if ((action === "text" && ui.feedbackDrafts[id] === value) || action === "clear-feedback") delete ui.feedbackDrafts[id];
+      await route();
       const messages = { favorite: "已收藏（不影响推荐排序）", unfavorite: "已取消收藏，反馈仍保留", mark: "反馈已更新，推荐将按新标记排序", text: "文字反馈已保存（不参与排序）", "clear-feedback": "全部反馈已清除，排序影响已撤销" };
       toast(messages[action]);
     }
@@ -751,7 +767,7 @@ document.body.addEventListener("input", (e) => {
   }
 });
 window.addEventListener("storage", (e) => {
-  if (e.key === PERSONAL_KEY || e.key === null) { snapshotInputs(); route(); }
+  if (e.key === PersonalApi.storageKey || e.key === null) { snapshotInputs(); route(); }
 });
 window.addEventListener("hashchange", () => {
   route();
