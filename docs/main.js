@@ -26,7 +26,7 @@ const DISHES = [
   { id: 13, name: "清汤牛腩粉", stall: 4, price: 20, portion: "大份", tastes: ["清淡", "汤水", "高蛋白"], ingredients: ["牛肉", "米粉", "萝卜"], kcal: 490, protein: 28, fat: 10, carb: 66 }
 ];
 
-const TASTES = ["清淡", "微辣", "高蛋白", "少油", "素食", "汤水", "下饭"];
+const TASTES = ["日式", "韩式", "川湘", "粤式", "炸物", "烤肉", "面食", "盖饭", "轻食", "清淡", "微辣", "中辣", "麻辣", "酸甜", "甜口", "浓郁", "高蛋白", "少油", "素食", "汤水", "下饭"];
 const MEALS = [
   { id: "breakfast", name: "早餐" },
   { id: "lunch", name: "午餐" },
@@ -66,9 +66,9 @@ function esc(s) {
 }
 
 let goal = load(LS.goal, 2000);
-let prefs = load(LS.prefs, { tastes: ["清淡", "高蛋白"], excluded: [], budget: "" });
+let prefs = load(LS.prefs, { tastes: [], excluded: [], budget: "" });
 let logs = load(LS.logs, []);
-let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {}, day: "" };
+let ui = { kw: "", taste: "", selectedTastes: [], meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {}, day: "" };
 
 function todayKey() {
   const d = new Date();
@@ -237,12 +237,12 @@ function visibleDishes(limit = 5) {
     if (prefs.excluded.some((ing) => d.ingredients.includes(ing))) return false;
     return true;
   }).sort((a, b) => {
-    const score = (d) => d.tastes.filter((t) => prefs.tastes.includes(t)).length;
+    const score = (d) => d.tastes.filter((t) => (ui.selectedTastes?.length ? ui.selectedTastes : prefs.tastes).includes(t)).length;
     return score(b) - score(a) || PersonalRecords.tier(personal, b.id) - PersonalRecords.tier(personal, a.id) || a.id - b.id;
   }).slice(0, limit);
 }
 function matchReason(d) {
-  const hit = d.tastes.filter((t) => prefs.tastes.includes(t));
+  const hit = d.tastes.filter((t) => (ui.selectedTastes?.length ? ui.selectedTastes : prefs.tastes).includes(t));
   const reasons = [hit.length ? "口味相符：" + hit.join("、") : "符合当前筛选条件"];
   const mark = personal.feedback[d.id]?.mark;
   if (mark === "like") reasons.push("你已点赞，同分时优先");
@@ -328,9 +328,9 @@ function renderHome(menu = false) {
     "</div>" +
     '<div class="search"><input id="kw" placeholder="搜菜名或摊位，例如白切鸡" value="' + esc(ui.kw) + '" aria-label="搜索菜名或摊位">' +
       '<button class="btn" id="doSearch" type="button">搜索</button></div>' +
-    '<div class="chips" role="list">' +
-      '<button class="chip' + (ui.taste === "" ? " on" : "") + '" data-taste="" type="button">全部</button>' +
-      TASTES.map((t) => '<button class="chip' + (ui.taste === t ? " on" : "") + '" data-taste="' + esc(t) + '" type="button">' + esc(t) + "</button>").join("") +
+     '<p class="desc">标签可多选，匹配越多越靠前。预算与忌口始终生效。</p><button class="btn btn-soft" type="button" data-open-onboarding>搜索标签 / 分类选择</button><div class="chips" role="list">' +
+      '<button class="chip' + (!(ui.selectedTastes || []).length ? " on" : "") + '" data-taste="" type="button">使用已保存偏好</button>' +
+      TASTES.filter(t => DISHES.some(d => d.tastes.includes(t))).map((t) => '<button class="chip' + ((ui.selectedTastes || []).includes(t) ? " on" : "") + '" data-taste="' + esc(t) + '" type="button">' + esc(t) + "</button>").join("") +
     "</div>" +
     '<div class="section-head"><h2>' + (menu ? '菜单浏览' : '今日推荐 · 最多 5 道') + '</h2><a href="#settings">调整偏好</a></div>' +
     '<p class="desc"><a href="' + (menu ? '#home' : '#menu') + '">' + (menu ? '返回推荐' : '浏览全部匹配菜品') + '</a> · <a href="#favorites">收藏与反馈</a></p>' +
@@ -529,12 +529,12 @@ function renderSettings() {
   setTab("settings");
   showTop(true);
   view.innerHTML =
-    '<h1 class="h1">设置</h1><p class="desc">偏好会改变首页排序，忌口和预算会过滤菜品。</p>' +
+    '<h1 class="h1">设置</h1><button class="btn btn-soft" type="button" data-open-onboarding>调整我的偏好</button><p class="desc">修改后请点击保存。口味影响排序，忌口和预算过滤菜品；热量目标仅保存在本机。</p>' +
     '<div class="setting-block"><div class="field"><label for="goal">每日热量目标（kcal）</label>' +
       '<input id="goal" type="number" min="800" max="4000" value="' + esc(goal) + '"></div>' +
       '<div class="field"><label for="budget">单份预算上限（元，可空）</label>' +
       '<input id="budget" type="number" min="1" max="999" placeholder="不限制" value="' + esc(prefs.budget) + '"></div>' +
-      '<button class="btn btn-block" id="saveGoal" type="button">保存目标与预算</button></div>' +
+      '<button class="btn btn-block" id="saveGoal" type="button">保存偏好与目标</button></div>' +
     '<div class="setting-block"><strong>喜欢的口味</strong><div class="chips">' +
       TASTES.map((t) => '<button class="chip' + (prefs.tastes.includes(t) ? " on" : "") + '" data-pref="' + esc(t) + '" type="button">' + esc(t) + "</button>").join("") +
     "</div></div>" +
@@ -639,7 +639,7 @@ document.body.addEventListener("click", (e) => {
 
   const taste = e.target.closest("[data-taste]");
   if (taste) {
-    ui.taste = taste.dataset.taste;
+    const tag = taste.dataset.taste; ui.selectedTastes = !tag ? [] : (ui.selectedTastes || []).includes(tag) ? ui.selectedTastes.filter(x => x !== tag) : [...(ui.selectedTastes || []), tag]; ui.taste = "";
     renderHome(location.hash === "#menu");
     return;
   }
