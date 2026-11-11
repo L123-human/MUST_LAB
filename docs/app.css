@@ -409,6 +409,15 @@ a.dish:focus-visible,
 .macro-card.f .m-val { color: var(--macro-f); }
 .macro-card.f .macro-arc i { background: var(--macro-f); }
 
+/* ===== 试运营标识 ===== */
+.pilot-note {
+  margin: 0 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.1px;
+}
+
 /* ===== 搜索与口味 ===== */
 .search {
   display: flex;
@@ -456,6 +465,50 @@ a.dish:focus-visible,
   border-color: transparent;
 }
 
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 6px 6px 6px 14px;
+  margin: 0 0 8px;
+  box-shadow: var(--shadow);
+}
+.price-range-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  flex: none;
+}
+.price-range input {
+  width: 72px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 10px;
+  min-height: 36px;
+  text-align: center;
+}
+.price-range input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.price-range-sep {
+  color: var(--muted);
+  font-weight: 700;
+  flex: none;
+}
+.price-range .btn {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 13px;
+  margin-left: auto;
+}
+
 /* ===== 菜品卡片列表 ===== */
 .list { display: flex; flex-direction: column; gap: 12px; }
 a.dish {
@@ -467,16 +520,65 @@ a.dish {
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  position: relative;
 }
 a.dish:active { transform: scale(0.985); }
-a.dish img {
+a.dish.is-unavailable { opacity: 0.55; }
+.dish-media {
+  position: relative;
   width: 88px;
+  margin: 8px 0 8px 8px;
+  min-height: 96px;
+  align-self: stretch;
+}
+a.dish img.dish-thumb,
+a.dish .img-ph.dish-thumb {
+  width: 100%;
   height: 100%;
   min-height: 96px;
   object-fit: cover;
   border-radius: 20px;
-  margin: 8px 0 8px 8px;
+  margin: 0;
+}
+.img-ph {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 70%, var(--surface)) 0%, var(--ring-track) 100%);
+  display: grid;
+  place-items: center;
+}
+.img-ph::after {
+  content: "暂无图片";
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.dish-badges {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: calc(100% - 10px);
+  pointer-events: none;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  padding: 3px 6px;
+  border-radius: 8px;
+  color: #fff;
+  white-space: nowrap;
+}
+.badge-off {
+  background: #6B6570;
+}
+.badge-unverified {
+  background: color-mix(in srgb, var(--accent-deep) 85%, #000 15%);
 }
 .dish-body {
   padding: 12px 14px 12px 12px;
@@ -554,11 +656,16 @@ a.dish img {
   height: 260px;
   overflow: hidden;
 }
-.detail-hero img {
+.detail-hero img,
+.detail-hero .img-ph.detail-hero-media {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+.detail-hero .img-ph.detail-hero-media::after {
+  font-size: 14px;
+}
+.detail-info .meta + .meta { margin-top: 6px; }
 .detail-hero .veil {
   position: absolute;
   inset: 0;
@@ -930,6 +1037,104 @@ html[data-theme="health"] .ring-light::after { background: rgba(50, 90, 10, 0.4)
   margin-bottom: 10px;
 }
 
+/* ===== REQ-1.5 菜单维护 / 错误上报 ===== */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 12px;
+  overflow-x: auto;
+}
+.admin-tabs .chip { text-decoration: none; }
+.admin-toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.admin-toolbar .btn { min-height: 40px; padding: 8px 16px; font-size: 14px; }
+.admin-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+}
+.admin-row.is-off { opacity: 0.72; }
+.admin-row-main { min-width: 0; }
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-row-actions .btn {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+.admin-row-actions .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.role-pick .btn { margin-top: 8px; }
+.admin-form select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 16px;
+  padding: 12px 14px;
+  min-height: 44px;
+}
+.admin-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.switch-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0 16px;
+}
+.switch-lab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.switch-lab input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.report-box { margin-top: 14px; }
+.report-box strong { display: block; font-size: 15px; }
+.report-card { margin-bottom: 10px; }
+.report-desc {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.45;
+}
+.status-pill {
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+.status-pill.status-pending { background: #F0E8DC; color: #5C5348; }
+.status-pill.status-corrected { background: color-mix(in srgb, var(--good) 22%, #fff); color: var(--good); }
+.status-pill.status-nochange { background: var(--ring-track); color: var(--muted); }
+
 /* ===== Toast ===== */
 .toast {
   position: fixed;
@@ -958,13 +1163,3 @@ html[data-theme="health"] .ring-light::after { background: rgba(50, 90, 10, 0.4)
 @media (min-width: 431px) {
   body { background: var(--bg); }
 }
-
-/* 收藏与反馈 */
-.personal-panel { margin-top: 20px; }
-.personal-panel h2 { margin: 0 0 10px; }
-.personal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-.personal-actions .chip { margin: 0; }
-.personal-record { margin-bottom: 12px; }
-.feedback-copy { white-space: pre-wrap; overflow-wrap: anywhere; }
-.personal-panel textarea[aria-invalid="true"] { border-color: #b03a20; }
-.personal-panel .meta { display: block; }
