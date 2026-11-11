@@ -1,7 +1,7 @@
 // 需启动本地服务器。
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
-const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
+const base = process.env.BASE_URL || 'http://127.0.0.1:8765/docs';
 (async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
@@ -13,6 +13,9 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     await context.route('https://fonts.**/*', route => route.abort());
     const visit = async hash => { await page.goto(base + '/#' + hash, { waitUntil: 'domcontentloaded' }); await page.locator('#view').waitFor(); };
     await visit('favorites');
+    await page.locator('.welcome-dialog[open]').waitFor();
+    await page.locator('[data-welcome-skip]').click();
+    assert.equal(await page.evaluate(() => localStorage.getItem('canteen_prefs')), null);
     await page.getByRole('heading', { name: '请登录后使用' }).waitFor();
     assert.equal(await page.evaluate(() => localStorage.getItem('canteen_personal_demo_v1')), null);
     await page.locator('#startPersonalDemo').click();
@@ -20,8 +23,19 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     await visit('menu');
     assert.equal(await page.locator('.dish').count(), 13);
     await visit('home');
+    assert.equal(await page.locator('.dish').count(), 0);
+    assert.match(await page.locator('.empty').textContent(), /可售且食材已核验/);
+    // 测试夹具，不修改菜单核验状态。
+    await page.evaluate(() => { DISHES.forEach(d => { d.available = true; d.verified = true; }); return route(); });
     assert.equal(await page.locator('.dish').count(), 5);
     await visit('dish/13');
+    await page.evaluate(() => {
+      const change = PersonalApi.change;
+      PersonalApi.change = async () => { PersonalApi.change = change; throw new Error('mock 保存失败'); };
+    });
+    await page.getByRole('button', { name: '收藏这道菜', exact: true }).click();
+    assert.match(await page.locator('#toast').textContent(), /mock 保存失败/);
+    assert.equal(await page.evaluate(() => localStorage.getItem('canteen_personal_demo_v1')), null);
     await page.getByRole('button', { name: '收藏这道菜', exact: true }).click();
     await page.locator('#feedbackText').fill('这是一份尚未保存的反馈');
     await page.getByRole('button', { name: '点赞', exact: true }).click();
@@ -37,6 +51,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     await page.locator('#feedbackText').fill('<img src=x onerror=alert(1)> ' + '😀'.repeat(170));
     await page.getByRole('button', { name: '保存文字反馈', exact: true }).click();
     await page.reload({ waitUntil: 'domcontentloaded' });
+    assert.equal(await page.locator('.welcome-dialog[open]').count(), 0);
     assert.ok((await page.locator('#feedbackText').inputValue()).startsWith('<img'));
     assert.equal(await page.locator('.personal-panel img').count(), 0);
     await page.getByRole('button', { name: '点赞', exact: true }).click();
@@ -83,7 +98,44 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765';
     await visit('dish/13');
     await page.evaluate(() => window.scrollTo(0, 0));
     if (process.env.SCREENSHOT_DIR) await page.screenshot({ path: process.env.SCREENSHOT_DIR + '/detail.png', fullPage: true, animations: 'disabled' });
+
+    await page.getByRole('button', { name: '点赞', exact: true }).click();
+    const recommendationPage = await context.newPage();
+    recommendationPage.on('pageerror', e => errors.push(e.message));
+    const recommendationUrl = new URL('../recommand1/', base + '/').href;
+    await recommendationPage.goto(recommendationUrl, { waitUntil: 'domcontentloaded' });
+    assert.match(await recommendationPage.locator('#feedback-status').textContent(), /游客模式/);
+    assert.equal(await recommendationPage.locator('.item').count(), 0);
+    await recommendationPage.evaluate(() => { DISHES.forEach(d => { d.available = true; d.verified = true; }); return runRecommend(); });
+    assert.match(await recommendationPage.locator('.item').first().textContent(), /农家小炒肉.*ID:1｜/);
+    await recommendationPage.goto(base + '/#favorites', { waitUntil: 'domcontentloaded' });
+    await recommendationPage.locator('#startPersonalDemo').click();
+    await recommendationPage.goto(recommendationUrl, { waitUntil: 'domcontentloaded' });
+    await recommendationPage.evaluate(() => { DISHES.forEach(d => { d.available = true; d.verified = true; }); return runRecommend(); });
+    assert.match(await recommendationPage.locator('#feedback-status').textContent(), /本地演示/);
+    assert.match(await recommendationPage.locator('.item').first().textContent(), /清汤牛腩粉.*ID:13｜/);
+    await recommendationPage.locator('#inpTaste').fill('下饭');
+    await recommendationPage.getByRole('button', { name: '生成推荐' }).click();
+    assert.match(await recommendationPage.locator('.item').first().textContent(), /ID:1｜/);
+    await recommendationPage.locator('#inpTaste').fill('');
+    await recommendationPage.getByRole('button', { name: '生成推荐' }).click();
+    await page.getByRole('button', { name: '点赞', exact: true }).click();
+    await recommendationPage.waitForFunction(() => document.querySelector('.item')?.textContent.includes('ID:1｜'));
+    await recommendationPage.evaluate(() => { DISHES[0].available = false; DISHES[1].verified = false; return runRecommend(); });
+    assert.match(await recommendationPage.locator('.item').first().textContent(), /ID:3｜/);
+    assert.match(await recommendationPage.locator('.reject-log').textContent(), /暂不可供应/);
+    assert.match(await recommendationPage.locator('.reject-log').textContent(), /食材待核验/);
+
+    await page.locator('#feedbackText').fill('保留的反馈');
+    await page.getByRole('button', { name: '保存文字反馈', exact: true }).click();
+    await visit('favorites');
+    await page.evaluate(() => { DISHES.splice(DISHES.findIndex(d => d.id === 13), 1); return route(); });
+    assert.match(await page.locator('.personal-record').textContent(), /已不在菜单中/);
+    await page.getByRole('button', { name: '取消收藏', exact: true }).click();
+    assert.match(await page.locator('.personal-record').textContent(), /保留的反馈/);
+    await page.getByRole('button', { name: '清除全部反馈', exact: true }).click();
+    assert.equal(await page.locator('.personal-record').count(), 0);
     assert.deepEqual(errors, []);
-    console.log('PASS: guest gate, demo opt-in/out, menu 13 / recommendation 5, favorites, exclusive marks/undo, drafts, 200/201 characters, escaped text, reload, cross-tab sync, responsive widths, diet log regression, no page errors.');
+    console.log('PASS: onboarding, guest/demo boundaries, favorites, marks/undo, drafts, text limits/escaping, reload, cross-tab sync, responsive widths, diet logs, shared C/D ranking, mock save failure, menu status filtering, stale record cleanup, no page errors.');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exit(1); });
