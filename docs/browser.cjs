@@ -40,6 +40,20 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8765/docs';
     await page.locator('#feedbackText').fill('这是一份尚未保存的反馈');
     await page.getByRole('button', { name: '点赞', exact: true }).click();
     assert.equal(await page.locator('#feedbackText').inputValue(), '这是一份尚未保存的反馈');
+    await page.evaluate(() => {
+      const read = PersonalApi.read;
+      PersonalApi.read = () => {
+        PersonalApi.read = read;
+        return new Promise(resolve => { window.finishDelayedRead = async () => resolve(await read()); });
+      };
+      route();
+    });
+    await page.getByRole('button', { name: '点赞', exact: true }).click();
+    assert.equal(await page.getByRole('button', { name: '点赞', exact: true }).getAttribute('aria-pressed'), 'false');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem(PersonalApi.storageKey)).feedback[13]?.mark || ''), '');
+    await page.evaluate(() => window.finishDelayedRead());
+    assert.equal(await page.getByRole('button', { name: '点赞', exact: true }).getAttribute('aria-pressed'), 'false');
+    await page.getByRole('button', { name: '点赞', exact: true }).click();
     await page.getByRole('button', { name: '不感兴趣', exact: true }).click();
     assert.equal(await page.getByRole('button', { name: '点赞', exact: true }).getAttribute('aria-pressed'), 'false');
     assert.equal(await page.getByRole('button', { name: '不感兴趣', exact: true }).getAttribute('aria-pressed'), 'true');

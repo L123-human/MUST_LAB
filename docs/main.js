@@ -603,7 +603,7 @@ document.body.addEventListener("click", async (e) => {
     const id = Number(actionButton.dataset.id);
     const action = actionButton.dataset.personal;
     let value = actionButton.dataset.value;
-    if (action === "mark" && personal.feedback[id]?.mark === value) value = "";
+    if (action === "mark" && actionButton.getAttribute("aria-pressed") === "true") value = "";
     if (action === "text") value = $("#feedbackText").value;
     if (await changePersonal(action, id, value)) {
       if ((action === "text" && ui.feedbackDrafts[id] === value) || action === "clear-feedback") delete ui.feedbackDrafts[id];
