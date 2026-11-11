@@ -11,19 +11,26 @@ const STALLS = [
 
 /* 热量与宏量为常见份量估算，仅用于界面演示 */
 const DISHES = [
-  { id: 1, name: "农家小炒肉", stall: 0, price: 18, portion: "中份", tastes: ["微辣", "下饭"], ingredients: ["猪肉", "辣椒", "蒜"], kcal: 420, protein: 28, fat: 26, carb: 14 },
-  { id: 2, name: "麻婆豆腐", stall: 0, price: 12, portion: "中份", tastes: ["中辣", "下饭"], ingredients: ["豆腐", "辣椒", "花椒"], kcal: 280, protein: 16, fat: 16, carb: 12 },
-  { id: 3, name: "醋溜土豆丝", stall: 0, price: 9, portion: "小份", tastes: ["清淡", "素食", "少油"], ingredients: ["土豆", "醋", "辣椒"], kcal: 160, protein: 3, fat: 4, carb: 28 },
-  { id: 4, name: "烧鸭饭", stall: 1, price: 20, portion: "中份", tastes: ["下饭", "高蛋白"], ingredients: ["鸭肉", "青菜", "米饭"], kcal: 680, protein: 32, fat: 22, carb: 82 },
-  { id: 5, name: "白切鸡饭", stall: 1, price: 18, portion: "中份", tastes: ["清淡", "高蛋白"], ingredients: ["鸡肉", "姜", "米饭"], kcal: 560, protein: 34, fat: 12, carb: 74 },
-  { id: 6, name: "叉烧饭", stall: 1, price: 19, portion: "中份", tastes: ["甜口", "下饭"], ingredients: ["猪肉", "青菜", "米饭"], kcal: 720, protein: 30, fat: 24, carb: 88 },
-  { id: 7, name: "红烧牛肉面", stall: 2, price: 20, portion: "大份", tastes: ["微辣", "汤水"], ingredients: ["牛肉", "面条", "青菜"], kcal: 640, protein: 32, fat: 18, carb: 78 },
-  { id: 8, name: "番茄鸡蛋面", stall: 2, price: 13, portion: "中份", tastes: ["清淡", "汤水"], ingredients: ["番茄", "鸡蛋", "面条"], kcal: 430, protein: 18, fat: 10, carb: 64 },
-  { id: 9, name: "葱油拌面", stall: 2, price: 12, portion: "中份", tastes: ["清淡", "少油"], ingredients: ["面条", "葱", "酱油"], kcal: 480, protein: 14, fat: 12, carb: 76 },
-  { id: 10, name: "牛油果鸡胸沙拉", stall: 3, price: 26, portion: "一份", tastes: ["清淡", "高蛋白", "少油"], ingredients: ["鸡胸肉", "牛油果", "生菜"], kcal: 390, protein: 32, fat: 18, carb: 16 },
-  { id: 11, name: "藜麦蔬菜碗", stall: 3, price: 22, portion: "一份", tastes: ["清淡", "素食", "少油"], ingredients: ["藜麦", "生菜", "玉米"], kcal: 340, protein: 12, fat: 8, carb: 48 },
-  { id: 12, name: "番茄牛肉汤粉", stall: 4, price: 18, portion: "大份", tastes: ["中辣", "汤水"], ingredients: ["牛肉", "番茄", "米粉"], kcal: 520, protein: 26, fat: 12, carb: 70 },
-  { id: 13, name: "清汤牛腩粉", stall: 4, price: 20, portion: "大份", tastes: ["清淡", "汤水", "高蛋白"], ingredients: ["牛肉", "米粉", "萝卜"], kcal: 490, protein: 28, fat: 10, carb: 66 }
+  { id: 1, name: "农家小炒肉", stall: 0, price: 18, portion: "中份", tastes: ["微辣", "下饭"], ingredients: ["猪肉", "辣椒", "蒜"], kcal: 420, protein: 28, fat: 26, carb: 14, available: true, verified: true, verifiedAt: "2026-10-12" },
+  { id: 2, name: "麻婆豆腐", stall: 0, price: 12, portion: "中份", tastes: ["中辣", "下饭"], ingredients: ["豆腐", "辣椒", "花椒"], kcal: 280, protein: 16, fat: 16, carb: 12, available: true, verified: true, verifiedAt: "2026-10-12" },
+  { id: 3, name: "醋溜土豆丝", stall: 0, price: 9, portion: "小份", tastes: ["清淡", "素食", "少油"], ingredients: ["土豆", "醋", "辣椒"], kcal: 160, protein: 3, fat: 4, carb: 28, available: false, verified: true, verifiedAt: "2026-09-28" },
+  { id: 4, name: "烧鸭饭", stall: 1, price: 20, portion: "中份", tastes: ["下饭", "高蛋白"], ingredients: ["鸭肉", "青菜", "米饭"], kcal: 680, protein: 32, fat: 22, carb: 82, available: true, verified: true, verifiedAt: "2026-10-18" },
+  { id: 5, name: "白切鸡饭", stall: 1, price: 18, portion: "中份", tastes: ["清淡", "高蛋白"], ingredients: ["鸡肉", "姜", "米饭"], kcal: 560, protein: 34, fat: 12, carb: 74, available: true, verified: true, verifiedAt: "2026-10-18" },
+  { id: 6, name: "叉烧饭", stall: 1, price: 19, portion: "中份", tastes: ["甜口", "下饭"], ingredients: ["猪肉", "青菜", "米饭"], kcal: 720, protein: 30, fat: 24, carb: 88, available: true, verified: true, verifiedAt: "2026-10-18" },
+  { id: 7, name: "红烧牛肉面", stall: 2, price: 20, portion: "大份", tastes: ["微辣", "汤水"], ingredients: ["牛肉", "面条", "青菜"], kcal: 640, protein: 32, fat: 18, carb: 78, available: true, verified: true, verifiedAt: "2026-10-20" },
+  { id: 8, name: "番茄鸡蛋面", stall: 2, price: 13, portion: "中份", tastes: ["清淡", "汤水"], ingredients: ["番茄", "鸡蛋", "面条"], kcal: 430, protein: 18, fat: 10, carb: 64, available: true, verified: true, verifiedAt: "2026-10-20" },
+  { id: 9, name: "葱油拌面", stall: 2, price: 12, portion: "中份", tastes: ["清淡", "少油"], ingredients: ["面条", "葱", "酱油"], kcal: 480, protein: 14, fat: 12, carb: 76, available: true, verified: false, verifiedAt: null },
+  { id: 10, name: "牛油果鸡胸沙拉", stall: 3, price: 26, portion: "一份", tastes: ["清淡", "高蛋白", "少油"], ingredients: ["鸡胸肉", "牛油果", "生菜"], kcal: 390, protein: 32, fat: 18, carb: 16, available: true, verified: true, verifiedAt: "2026-10-22" },
+  { id: 11, name: "藜麦蔬菜碗", stall: 3, price: 22, portion: "一份", tastes: ["清淡", "素食", "少油"], ingredients: ["藜麦", "生菜", "玉米"], kcal: 340, protein: 12, fat: 8, carb: 48, available: true, verified: false, verifiedAt: null },
+  { id: 12, name: "番茄牛肉汤粉", stall: 4, price: 18, portion: "大份", tastes: ["中辣", "汤水"], ingredients: ["牛肉", "番茄", "米粉"], kcal: 520, protein: 26, fat: 12, carb: 70, available: true, verified: true, verifiedAt: "2026-10-15" },
+  { id: 13, name: "清汤牛腩粉", stall: 4, price: 20, portion: "大份", tastes: ["清淡", "汤水", "高蛋白"], ingredients: ["牛肉", "米粉", "萝卜"], kcal: 490, protein: 28, fat: 10, carb: 66, available: true, verified: true, verifiedAt: "2026-10-15" },
+  { id: 14, name: "鱼香肉丝", stall: 0, price: 16, portion: "中份", tastes: ["微辣", "下饭"], ingredients: ["猪肉", "木耳", "胡萝卜"], kcal: 380, protein: 24, fat: 20, carb: 18, available: true, verified: true, verifiedAt: "2026-10-12" },
+  { id: 15, name: "宫保鸡丁", stall: 0, price: 17, portion: "中份", tastes: ["微辣", "下饭"], ingredients: ["鸡肉", "花生", "辣椒"], kcal: 410, protein: 30, fat: 22, carb: 16, available: true, verified: true, verifiedAt: "2026-10-12" },
+  { id: 16, name: "烧鹅饭", stall: 1, price: 22, portion: "中份", tastes: ["下饭", "高蛋白"], ingredients: ["鹅肉", "青菜", "米饭"], kcal: 710, protein: 34, fat: 24, carb: 84, available: false, verified: true, verifiedAt: "2026-10-18" },
+  { id: 17, name: "阳春面", stall: 2, price: 10, portion: "中份", tastes: ["清淡", "汤水"], ingredients: ["面条", "葱", "高汤"], kcal: 360, protein: 12, fat: 6, carb: 62, available: true, verified: true, verifiedAt: "2026-10-20" },
+  { id: 18, name: "凯撒沙拉", stall: 3, price: 24, portion: "一份", tastes: ["清淡", "高蛋白", "少油"], ingredients: ["生菜", "鸡胸肉", "奶酪"], kcal: 320, protein: 26, fat: 14, carb: 12, available: true, verified: true, verifiedAt: "2026-10-22" },
+  { id: 19, name: "酸辣汤粉", stall: 4, price: 15, portion: "大份", tastes: ["微辣", "汤水"], ingredients: ["米粉", "豆腐", "辣椒"], kcal: 440, protein: 14, fat: 8, carb: 72, available: true, verified: true, verifiedAt: "2026-10-15" },
+  { id: 20, name: "干煸四季豆", stall: 0, price: 11, portion: "小份", tastes: ["微辣", "素食"], ingredients: ["四季豆", "猪肉", "蒜"], kcal: 220, protein: 8, fat: 14, carb: 16, available: true, verified: true, verifiedAt: "2026-10-12" }
 ];
 
 const TASTES = ["清淡", "微辣", "高蛋白", "少油", "素食", "汤水", "下饭"];
@@ -40,7 +47,16 @@ const LS = {
   theme: "canteen_theme",
   goal: "canteen_goal",
   prefs: "canteen_prefs",
-  logs: "canteen_logs"
+  logs: "canteen_logs",
+  dishes: "canteen_dishes",
+  reports: "canteen_reports",
+  role: "canteen_role"
+};
+
+const REPORT_STATUS_LABEL = {
+  pending: "Pending",
+  corrected: "Corrected",
+  nochange: "No change required"
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -68,7 +84,121 @@ function esc(s) {
 let goal = load(LS.goal, 2000);
 let prefs = load(LS.prefs, { tastes: ["清淡", "高蛋白"], excluded: [], budget: "" });
 let logs = load(LS.logs, []);
-let ui = { kw: "", taste: "", meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food", feedbackDrafts: {}, day: "" };
+let role = load(LS.role, { type: "user", stall: 0 });
+let reports = load(LS.reports, []);
+let dishes = loadDishes();
+let ui = {
+  kw: "", taste: "", stall: "", priceMin: "", priceMax: "",
+  meal: "lunch", factor: 1, aiText: "", aiHits: null, aiMode: "food",
+  adminTab: "menu", reportDesc: "", formTastes: [],
+  adminFilterStall: "", adminOnlyOff: false, forceRolePick: false
+};
+let menuFilterInited = false;
+let adminFormDraft = null;
+
+function cloneDish(d) {
+  return Object.assign({}, d, {
+    tastes: (d.tastes || []).slice(),
+    ingredients: (d.ingredients || []).slice()
+  });
+}
+
+function loadDishes() {
+  const saved = load(LS.dishes, null);
+  if (Array.isArray(saved) && saved.length) {
+    return saved.map(cloneDish);
+  }
+  return DISHES.map((d) => cloneDish(Object.assign({ updatedAt: null, img: "" }, d)));
+}
+
+/* 菜单写操作统一入口，方便以后换后端 */
+function saveDishes() {
+  save(LS.dishes, dishes);
+}
+
+function persistReports() {
+  save(LS.reports, reports);
+}
+
+function persistRole() {
+  save(LS.role, role);
+}
+
+function roleLabel() {
+  if (role.type === "admin") return "管理员";
+  if (role.type === "stallOwner") {
+    const s = STALLS[role.stall];
+    return "商家 · " + (s ? s.name : "");
+  }
+  return "同学（已登录）";
+}
+
+function isStaff() {
+  return role.type === "admin" || role.type === "stallOwner";
+}
+
+function needsAdminRolePick() {
+  return ui.forceRolePick || !isStaff();
+}
+
+function isLoggedIn() {
+  return role.type === "user" || role.type === "stallOwner" || role.type === "admin";
+}
+
+function canEditStall(stallIdx) {
+  if (role.type === "admin") return true;
+  if (role.type === "stallOwner") return Number(stallIdx) === Number(role.stall);
+  return false;
+}
+
+function nextDishId() {
+  return dishes.reduce((m, d) => Math.max(m, d.id), 0) + 1;
+}
+
+function nextReportId() {
+  return reports.reduce((m, r) => Math.max(m, r.id), 0) + 1;
+}
+
+/* 菜品 updatedAt：YYYY-MM-DD HH:mm */
+function nowStamp() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0") + " " +
+    String(d.getHours()).padStart(2, "0") + ":" +
+    String(d.getMinutes()).padStart(2, "0");
+}
+
+function formatUpdatedAt(v) {
+  if (!v) return "尚未修改";
+  return String(v).replace("T", " ").slice(0, 16);
+}
+
+function ingredientsEqual(a, b) {
+  const norm = (list) => (list || []).map((x) => String(x).trim()).filter(Boolean).join("\0");
+  return norm(a) === norm(b);
+}
+
+function parseIngredientInput(raw) {
+  return String(raw || "").split(/[,，、]/).map((s) => s.trim()).filter(Boolean);
+}
+
+function isValidPrice(raw) {
+  const s = String(raw == null ? "" : raw).trim();
+  if (!s) return false;
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return false;
+  const n = Number(s);
+  return Number.isFinite(n) && n > 0;
+}
+
+function formatPrice(n) {
+  return Number(n).toFixed(2);
+}
+
+function initMenuFiltersOnce() {
+  if (menuFilterInited) return;
+  ui.priceMax = prefs.budget !== "" && prefs.budget != null ? String(prefs.budget) : "";
+  menuFilterInited = true;
+}
 
 function todayKey() {
   const d = new Date();
@@ -77,17 +207,6 @@ function todayKey() {
 function todayLogs() {
   const key = todayKey();
   return logs.filter((item) => item.day === key);
-}
-/* 当前选中的日期，空字符串表示“今天” */
-function activeDay() {
-  return ui.day || todayKey();
-}
-function dayLogs() {
-  const key = activeDay();
-  return logs.filter((item) => item.day === key);
-}
-function isTodaySelected() {
-  return activeDay() === todayKey();
 }
 function sumKcal(list) {
   return list.reduce((n, item) => n + (item.kcal || 0), 0);
@@ -100,7 +219,7 @@ function mealName(id) {
   return found ? found.name : "加餐";
 }
 function dishById(id) {
-  return DISHES.find((d) => d.id === id);
+  return dishes.find((d) => d.id === Number(id));
 }
 
 /* 按热量目标估算三大营养素日上限（演示用） */
@@ -135,119 +254,78 @@ function toggleTheme() {
   toast(next === "health" ? "已切换到健康主题" : "已切换到普通主题");
 }
 
-/* ---------- REQ-1.4 收藏与反馈 ---------- */
-const PERSONAL_KEY = "canteen_personal_demo_v1";
-const DEMO_SESSION_KEY = "canteen_personal_demo_active";
-let personal = PersonalRecords.empty();
-let personalError = "";
-let demoActive = false;
-try { demoActive = sessionStorage.getItem(DEMO_SESSION_KEY) === "yes"; } catch (_) {}
-
-function readPersonal() {
-  personalError = "";
-  personal = PersonalRecords.empty();
-  if (!demoActive) return;
-  try {
-    const raw = localStorage.getItem(PERSONAL_KEY);
-    const saved = raw === null ? PersonalRecords.empty() : JSON.parse(raw);
-    if (!PersonalRecords.valid(saved)) throw new Error("invalid records");
-    personal = saved;
-  } catch (_) {
-    personalError = "无法读取本地收藏与反馈。原记录未覆盖，请检查浏览器存储。";
-  }
+/* ---------- 菜单筛选（REQ-1.2） ---------- */
+function parsePriceRange() {
+  const minRaw = String(ui.priceMin == null ? "" : ui.priceMin).trim();
+  const maxRaw = String(ui.priceMax == null ? "" : ui.priceMax).trim();
+  if (!minRaw && !maxRaw) return { ok: true, min: null, max: null };
+  const min = minRaw === "" ? null : Number(minRaw);
+  const max = maxRaw === "" ? null : Number(maxRaw);
+  if (minRaw !== "" && (!Number.isFinite(min) || min < 0)) return { ok: false };
+  if (maxRaw !== "" && (!Number.isFinite(max) || max < 0)) return { ok: false };
+  if (min != null && max != null && min > max) return { ok: false };
+  return { ok: true, min, max };
 }
 
-function setDemo(active) {
-  try {
-    if (active) sessionStorage.setItem(DEMO_SESSION_KEY, "yes");
-    else sessionStorage.removeItem(DEMO_SESSION_KEY);
-  } catch (_) { toast("无法开启本地演示，请允许浏览器存储。"); return; }
-  demoActive = active;
-  route();
-  toast(active ? "已进入本地演示；请勿保存敏感信息。" : "已退出演示；本地数据仍保留。");
+function clearMenuFilters() {
+  ui.kw = "";
+  ui.taste = "";
+  ui.stall = "";
+  ui.priceMin = "";
+  ui.priceMax = prefs.budget !== "" && prefs.budget != null ? String(prefs.budget) : "";
 }
 
-function changePersonal(action, id, value) {
-  if (!demoActive) { toast("请登录后使用；当前可到收藏页开启本地演示。"); return false; }
-  readPersonal(); // 保留其他标签页的更新。
-  if (personalError) { toast(personalError); return false; }
-  const result = PersonalRecords.change(personal, action, id, value, DISHES);
-  if (result.error) { toast(result.error); return false; }
-  try { save(PERSONAL_KEY, result.state); }
-  catch (_) { toast("保存失败，原记录未改变。请检查浏览器存储空间或权限。"); return false; }
-  personal = result.state;
-  return true;
+/* 纯排序：available 优先 → 摊位名升序 → id 升序；不依赖 DOM / ui */
+function sortDishes(list) {
+  return list.slice().sort((a, b) => {
+    const av = a.available === false ? 1 : 0;
+    const bv = b.available === false ? 1 : 0;
+    if (av !== bv) return av - bv;
+    const na = STALLS[a.stall].name;
+    const nb = STALLS[b.stall].name;
+    return na.localeCompare(nb, "zh") || a.id - b.id;
+  });
 }
 
-function personalPanel(d) {
-  if (!demoActive) return '<section class="panel"><h2>收藏与反馈</h2><p class="desc">请登录后使用。账户功能待接入，可先试用本地演示。</p><a class="btn btn-soft" href="#favorites">前往收藏与反馈</a></section>';
-  if (personalError) return '<div class="panel" role="alert">' + esc(personalError) + '</div>';
-  const favorite = personal.favorites.includes(d.id);
-  const item = personal.feedback[d.id] || { mark: "", text: "" };
-  // 保留未保存的文字。
-  const draft = ui.feedbackDrafts[d.id] ?? item.text;
-  return '<section class="panel personal-panel"><h2>收藏与反馈</h2>' +
-    '<p class="desc">本地演示 · 仅保存在此浏览器，共用设备可见。收藏不代表点赞。</p>' +
-    '<div class="personal-actions"><button class="btn btn-soft" type="button" data-personal="' + (favorite ? 'unfavorite' : 'favorite') + '" data-id="' + d.id + '" aria-pressed="' + favorite + '">' + (favorite ? '取消收藏' : '收藏这道菜') + '</button>' +
-    ['like', 'not-interested'].map((mark) => '<button class="chip' + (item.mark === mark ? ' on' : '') + '" type="button" data-personal="mark" data-value="' + mark + '" data-id="' + d.id + '" aria-pressed="' + (item.mark === mark) + '">' + (mark === 'like' ? '点赞' : '不感兴趣') + '</button>').join('') + '</div>' +
-    '<p class="meta">再次点击所选标记可撤销；标记仅影响口味同分菜品的顺序。</p>' +
-    '<div class="field"><label for="feedbackText">文字反馈（可选，最多 200 字符，不参与排序）</label>' +
-    '<textarea id="feedbackText" rows="3" data-dish-id="' + d.id + '" aria-describedby="feedbackCount">' + esc(draft) + '</textarea>' +
-    '<span id="feedbackCount" class="meta">' + PersonalRecords.textLength(draft) + ' / 200</span></div>' +
-    '<div class="personal-actions"><button class="btn" type="button" data-personal="text" data-id="' + d.id + '">保存文字反馈</button>' +
-    '<button class="btn btn-ghost" type="button" data-personal="clear-feedback" data-id="' + d.id + '">清除全部反馈</button></div></section>';
-}
-
-function renderFavorites() {
-  setTab("favorites");
-  showTop(true);
-  let html = '<h1 class="h1">收藏与反馈</h1>';
-  if (!demoActive) {
-    view.innerHTML = html + '<div class="panel"><h2>请登录后使用</h2><p class="desc">账户功能尚未接入。本地演示可试用收藏和反馈，数据仅存于此浏览器，共用设备可见，不会发送给食堂。</p><button class="btn" type="button" id="startPersonalDemo">进入本地演示</button></div>';
-    return;
-  }
-  html += '<p class="desc">本地演示 · 共用设备可见 · ' + personal.favorites.length + ' / 20 项收藏</p><button class="btn btn-ghost" type="button" id="stopPersonalDemo">退出本地演示</button>';
-  if (personalError) { view.innerHTML = html + '<p role="alert">' + esc(personalError) + '</p>'; return; }
-  function recordCard(id, isFavorite) {
-    const d = dishById(id);
-    const item = personal.feedback[id] || { mark: "", text: "" };
-    if (!d) return '<div class="panel">菜品 #' + id + ' 已不在当前菜单中；记录保留，等待菜单同步。</div>';
-    return '<article class="panel personal-record"><a href="#dish/' + id + '"><strong>' + esc(d.name) + '</strong></a><p class="meta">' + esc(STALLS[d.stall].name) + ' · ¥' + d.price.toFixed(2) + '</p>' +
-      '<p>' + (item.mark === 'like' ? '已点赞' : item.mark === 'not-interested' ? '不感兴趣' : '未标记') + '</p>' +
-      (item.text ? '<p class="feedback-copy">' + esc(item.text) + '</p>' : '') +
-      '<div class="personal-actions"><a class="btn btn-soft" href="#dish/' + id + '">查看与编辑</a>' +
-      (isFavorite ? '<button class="btn btn-ghost" type="button" data-personal="unfavorite" data-id="' + id + '">取消收藏</button>' : '') +
-      (personal.feedback[id] ? '<button class="btn btn-ghost" type="button" data-personal="clear-feedback" data-id="' + id + '">清除全部反馈</button>' : '') + '</div></article>';
-  }
-  html += '<div class="section-head"><h2>我的收藏</h2><a href="#menu">浏览菜单</a></div>' +
-    (personal.favorites.length ? personal.favorites.map((id) => recordCard(id, true)).join('') : '<div class="empty"><strong>还没有收藏</strong>进入菜品详情，收藏想再次查看的菜。</div>');
-  const others = Object.keys(personal.feedback).map(Number).filter((id) => !personal.favorites.includes(id));
-  html += '<div class="section-head"><h2>其他菜品反馈</h2></div>' +
-    (others.length ? others.map((id) => recordCard(id, false)).join('') : '<p class="desc">暂无其他反馈。取消收藏不会删除反馈。</p>');
-  view.innerHTML = html;
-}
-
-/* ---------- 推荐逻辑 ---------- */
-function visibleDishes(limit = 5) {
+function visibleDishes() {
   const kw = ui.kw.trim();
-  return DISHES.filter((d) => {
+  const price = parsePriceRange();
+  // 价格区间无效时不改动列表：调用方应拦截；此处跳过价格条件以免误清空
+  const filtered = dishes.filter((d) => {
     if (kw && !d.name.includes(kw) && !STALLS[d.stall].name.includes(kw)) return false;
     if (ui.taste && !d.tastes.includes(ui.taste)) return false;
+    if (ui.stall !== "" && String(d.stall) !== String(ui.stall)) return false;
+    if (price.ok) {
+      if (price.min != null && d.price < price.min) return false;
+      if (price.max != null && d.price > price.max) return false;
+    }
     if (prefs.budget && d.price > Number(prefs.budget)) return false;
     if (prefs.excluded.some((ing) => d.ingredients.includes(ing))) return false;
     return true;
-  }).sort((a, b) => {
-    const score = (d) => d.tastes.filter((t) => prefs.tastes.includes(t)).length;
-    return score(b) - score(a) || PersonalRecords.tier(personal, b.id) - PersonalRecords.tier(personal, a.id) || a.id - b.id;
-  }).slice(0, limit);
+  });
+  return sortDishes(filtered);
 }
 function matchReason(d) {
   const hit = d.tastes.filter((t) => prefs.tastes.includes(t));
-  const reasons = [hit.length ? "口味相符：" + hit.join("、") : "符合当前筛选条件"];
-  const mark = personal.feedback[d.id]?.mark;
-  if (mark === "like") reasons.push("你已点赞，同分时优先");
-  if (mark === "not-interested") reasons.push("你标记了不感兴趣，同分时靠后");
-  return reasons.join("；");
+  if (!hit.length) return "";
+  return "口味相符：" + hit.join("、");
+}
+
+function dishImgSrc(d) {
+  if (d.img) return d.img;
+  const stall = STALLS[d.stall];
+  return stall && stall.img ? stall.img : "";
+}
+
+function dishMedia(d, kind) {
+  const src = dishImgSrc(d);
+  const cls = kind === "hero" ? "detail-hero-media" : "dish-thumb";
+  if (!src) {
+    return '<div class="img-ph ' + cls + '" role="img" aria-label="' + esc(d.name) + '"></div>';
+  }
+  return '<img class="' + cls + '" src="' + esc(src) + '" alt="' + esc(d.name) +
+    '" onerror="this.onerror=null;this.outerHTML=\'<div class=&quot;img-ph ' + cls +
+    '&quot; role=&quot;img&quot; aria-label=&quot;' + esc(d.name) + '&quot;></div>\'">';
 }
 
 function toast(msg) {
@@ -291,10 +369,11 @@ function weekSeries() {
 }
 
 /* ---------- 页面渲染 ---------- */
-function renderHome(menu = false) {
+function renderHome() {
   setTab("home");
   showTop(true);
-  const list = dayLogs();
+  initMenuFiltersOnce();
+  const list = todayLogs();
   const eaten = sumKcal(list);
   const pct = goal ? Math.min(100, Math.round(eaten / goal * 100)) : 0;
   const left = Math.max(0, goal - eaten);
@@ -305,18 +384,20 @@ function renderHome(menu = false) {
   const pLeft = Math.max(0, mg.protein - pEaten);
   const cLeft = Math.max(0, mg.carb - cEaten);
   const fLeft = Math.max(0, mg.fat - fEaten);
-  const dishes = visibleDishes(menu ? Infinity : 5);
+  const dishes = visibleDishes();
   const week = weekSeries();
+  const pilotNames = STALLS.slice(0, 3).map((s) => s.name).join(" / ");
 
   view.innerHTML =
+    '<p class="pilot-note">试运营范围：' + esc(pilotNames) + "</p>" +
     '<div class="week" role="list" aria-label="本周日期">' +
       week.map((d) =>
-        '<button class="day-pill' + (((ui.day === "" && d.today) || ui.day === d.key) ? " on" : "") + '" type="button" data-day="' + d.key + '" aria-pressed="' + (((ui.day === "" && d.today) || ui.day === d.key) ? "true" : "false") + '">' +
+        '<button class="day-pill' + (d.today ? " on" : "") + '" type="button" disabled>' +
           '<span>' + d.label + '</span><span class="num">' + d.num + "</span></button>"
       ).join("") +
     "</div>" +
     '<a class="cal-card" href="#stats">' +
-      '<div><div class="label">' + (isTodaySelected() ? '今日热量' : '当日热量') + '</div>' +
+      '<div><div class="label">今日热量</div>' +
       '<div class="nums">' + eaten + ' <span>/ ' + goal + ' kcal</span></div>' +
       '<div class="hint">还剩约 ' + left + ' kcal · 点此看明细</div></div>' +
       '<div class="ring" style="--p:' + pct + '"><span>' + pct + '%</span></div>' +
@@ -328,15 +409,28 @@ function renderHome(menu = false) {
     "</div>" +
     '<div class="search"><input id="kw" placeholder="搜菜名或摊位，例如白切鸡" value="' + esc(ui.kw) + '" aria-label="搜索菜名或摊位">' +
       '<button class="btn" id="doSearch" type="button">搜索</button></div>' +
-    '<div class="chips" role="list">' +
+    '<div class="chips" role="list" aria-label="口味筛选">' +
       '<button class="chip' + (ui.taste === "" ? " on" : "") + '" data-taste="" type="button">全部</button>' +
       TASTES.map((t) => '<button class="chip' + (ui.taste === t ? " on" : "") + '" data-taste="' + esc(t) + '" type="button">' + esc(t) + "</button>").join("") +
     "</div>" +
-    '<div class="section-head"><h2>' + (menu ? '菜单浏览' : '今日推荐 · 最多 5 道') + '</h2><a href="#settings">调整偏好</a></div>' +
-    '<p class="desc"><a href="' + (menu ? '#home' : '#menu') + '">' + (menu ? '返回推荐' : '浏览全部匹配菜品') + '</a> · <a href="#favorites">收藏与反馈</a></p>' +
+    '<div class="chips" role="list" aria-label="摊位筛选">' +
+      '<button class="chip' + (ui.stall === "" ? " on" : "") + '" data-stall="" type="button">全部摊位</button>' +
+      STALLS.map((s, i) =>
+        '<button class="chip' + (String(ui.stall) === String(i) ? " on" : "") + '" data-stall="' + i + '" type="button">' + esc(s.name) + "</button>"
+      ).join("") +
+    "</div>" +
+    '<div class="price-range">' +
+      '<span class="price-range-label">价格</span>' +
+      '<input id="priceMin" type="number" min="0" step="0.01" inputmode="decimal" placeholder="最低" value="' + esc(ui.priceMin) + '" aria-label="最低价格">' +
+      '<span class="price-range-sep">–</span>' +
+      '<input id="priceMax" type="number" min="0" step="0.01" inputmode="decimal" placeholder="最高" value="' + esc(ui.priceMax) + '" aria-label="最高价格">' +
+      '<button class="btn btn-soft" id="doPriceFilter" type="button">筛选</button>' +
+    "</div>" +
+    '<div class="section-head"><h2>菜单浏览</h2><a href="#settings">调整偏好</a></div>' +
     '<div class="list">' +
       (dishes.length ? dishes.map(dishCard).join("") :
-        '<div class="empty"><strong>没有符合条件的菜</strong>试试放宽口味、预算或忌口。</div>') +
+        '<div class="empty"><strong>没有符合条件的菜品，试试放宽筛选条件</strong>' +
+          '<button class="btn btn-ghost" id="clearFilters" type="button" style="margin-top:14px">清空筛选</button></div>') +
     "</div>";
 }
 
@@ -351,10 +445,16 @@ function macroMini(cls, left, goalVal, label) {
 
 function dishCard(d) {
   const reason = matchReason(d);
-  return '<a class="card dish" href="#dish/' + d.id + '">' +
-    '<img src="' + STALLS[d.stall].img + '" alt="' + esc(d.name) + '">' +
+  const badges =
+    (!d.available ? '<span class="badge badge-off">暂不可售</span>' : "") +
+    (!d.verified ? '<span class="badge badge-unverified">配料未核验</span>' : "");
+  return '<a class="card dish' + (d.available ? "" : " is-unavailable") + '" href="#dish/' + d.id + '">' +
+    '<div class="dish-media">' +
+      (badges ? '<div class="dish-badges">' + badges + "</div>" : "") +
+      dishMedia(d, "thumb") +
+    "</div>" +
     '<div class="dish-body">' +
-      '<div class="dish-name"><span>' + esc(d.name) + '</span><span class="price">¥' + d.price + "</span></div>" +
+      '<div class="dish-name"><span>' + esc(d.name) + '</span><span class="price">¥' + formatPrice(d.price) + "</span></div>" +
       '<div class="meta">' + esc(STALLS[d.stall].name) + " · " + esc(d.portion) + "</div>" +
       '<div class="kcal-row"><span class="kcal-badge">+' + d.kcal + " kcal</span>" +
         '<span class="macro-dots">' +
@@ -387,17 +487,25 @@ function renderDetail(id) {
   const maxC = Math.round(d.carb * 2) || 1;
   const maxF = Math.round(d.fat * 2) || 1;
 
+  const verifyText = d.verifiedAt ? d.verifiedAt : "未核验";
+  const availText = d.available ? "在售" : "暂不可售";
+
   view.innerHTML =
     '<div class="detail-page">' +
       '<div class="detail-hero">' +
-        '<img src="' + STALLS[d.stall].img + '" alt="' + esc(d.name) + '">' +
+        dishMedia(d, "hero") +
         '<div class="veil"></div>' +
         '<a class="back-fab" href="#home" aria-label="返回首页">←</a>' +
       "</div>" +
       '<div class="detail-sheet">' +
         '<h1 class="detail-title">' + esc(d.name) + "</h1>" +
-        '<p class="detail-sub">' + esc(STALLS[d.stall].name) + " · " + esc(d.portion) + " · ¥" + d.price + "</p>" +
+        '<p class="detail-sub">' + esc(STALLS[d.stall].name) + " · " + esc(d.portion) + " · ¥" + formatPrice(d.price) + "</p>" +
         '<div class="tags" style="margin-bottom:14px">' + d.tastes.map((t) => '<span class="tag">' + esc(t) + "</span>").join("") + "</div>" +
+        '<div class="panel detail-info">' +
+          '<div class="meta">配料：' + esc(d.ingredients.join("、")) + "</div>" +
+          '<div class="meta">是否可用：' + esc(availText) + "</div>" +
+          '<div class="meta">核验日期：' + esc(verifyText) + "</div>" +
+        "</div>" +
         '<div class="nutri-card">' +
           '<div class="ring-light" style="--p:' + ringPct + '"><div class="inner"><b>' + kcal + "</b><small>kcal</small></div></div>" +
           '<div class="nutri-side">' +
@@ -407,8 +515,7 @@ function renderDetail(id) {
             barRow("脂肪", fat, maxF) +
           "</div>" +
         "</div>" +
-        '<div class="panel"><div class="meta">食材：' + esc(d.ingredients.join("、")) + "</div>" +
-          '<div class="reason" style="margin-top:6px">热量按常见份量估算，未做实验室检测。</div></div>' +
+        '<div class="panel"><div class="reason">热量按常见份量估算，未做实验室检测。</div></div>' +
         '<div class="stepper">' +
           '<button type="button" id="minus" aria-label="减少份量">−</button>' +
           '<div class="grow">' + portionLabel(factor) + "</div>" +
@@ -418,7 +525,15 @@ function renderDetail(id) {
           '<button class="chip' + (ui.meal === m.id ? " on" : "") + '" data-meal="' + m.id + '" type="button">' + m.name + "</button>"
         ).join("") + "</div>" +
         '<button class="btn btn-block" id="addLog" type="button">记入今日' + mealName(ui.meal) + "</button>" +
-        personalPanel(d) +
+        '<div class="panel report-box">' +
+          '<strong>报告菜单错误</strong>' +
+          '<p class="meta" style="margin:6px 0 10px">当前菜品：' + esc(d.name) + " · " + esc(STALLS[d.stall].name) + "</p>" +
+          (isLoggedIn()
+            ? '<div class="field"><label for="reportDesc">错误描述</label>' +
+              '<textarea id="reportDesc" rows="3" placeholder="例如：价格已涨到 22 元 / 配料少了花生">' + esc(ui.reportDesc) + "</textarea></div>" +
+              '<button class="btn btn-ghost btn-block" id="submitReport" type="button">提交错误报告</button>'
+            : '<p class="meta">请先在设置页模拟登录后再上报。</p>') +
+        "</div>" +
       "</div>" +
     "</div>";
 }
@@ -530,6 +645,10 @@ function renderSettings() {
   showTop(true);
   view.innerHTML =
     '<h1 class="h1">设置</h1><p class="desc">偏好会改变首页排序，忌口和预算会过滤菜品。</p>' +
+    '<div class="setting-block"><strong>菜单管理</strong>' +
+      '<p class="desc" style="margin-bottom:10px">维护菜品上下架与核验。当前角色：' + esc(roleLabel()) + "</p>" +
+      '<a class="btn btn-block" href="#admin">进入菜单管理</a>' +
+    "</div>" +
     '<div class="setting-block"><div class="field"><label for="goal">每日热量目标（kcal）</label>' +
       '<input id="goal" type="number" min="800" max="4000" value="' + esc(goal) + '"></div>' +
       '<div class="field"><label for="budget">单份预算上限（元，可空）</label>' +
@@ -547,10 +666,437 @@ function renderSettings() {
       (document.documentElement.dataset.theme === "health" ? "普通主题" : "健康主题") + "</button></div>";
 }
 
+/* ---------- REQ-1.5 菜单管理（维护） ---------- */
+function renderAdminGate() {
+  setTab("settings");
+  showTop(true);
+  view.innerHTML =
+    '<h1 class="h1">菜单管理</h1>' +
+    '<p class="desc">请选择角色后继续（纯前端模拟，不做真登录）。</p>' +
+    '<div class="setting-block role-pick">' +
+      '<strong>选择角色</strong>' +
+      '<p class="desc" style="margin-bottom:10px">商家需指定所属摊位；管理员可管理全部摊位。</p>' +
+      '<button class="btn btn-block" type="button" data-role="admin">管理员</button>' +
+      '<p class="meta" style="margin:14px 0 8px">商家 · 选择所属摊位</p>' +
+      '<div class="chips">' +
+        STALLS.map((s, i) =>
+          '<button class="chip" type="button" data-role="stallOwner" data-rolestall="' + i + '">' + esc(s.name) + "</button>"
+        ).join("") +
+      "</div>" +
+      '<a class="btn btn-ghost btn-block" href="#settings" style="margin-top:12px">返回设置</a>' +
+    "</div>";
+}
+
+function adminNav(active) {
+  return '<div class="admin-tabs">' +
+    '<a class="chip' + (active === "menu" ? " on" : "") + '" href="#admin">菜品维护</a>' +
+    '<a class="chip' + (active === "reports" ? " on" : "") + '" href="#admin/reports">错误报告</a>' +
+  "</div>";
+}
+
+function adminListFilter(list) {
+  return list.filter((d) => {
+    if (ui.adminFilterStall !== "" && String(d.stall) !== String(ui.adminFilterStall)) return false;
+    if (ui.adminOnlyOff && d.available !== false) return false;
+    return true;
+  });
+}
+
+function renderAdminList() {
+  if (needsAdminRolePick()) return renderAdminGate();
+  setTab("settings");
+  showTop(true);
+  ui.adminTab = "menu";
+  const list = adminListFilter(sortDishes(dishes.slice()));
+  view.innerHTML =
+    '<h1 class="h1">菜单管理</h1>' +
+    '<p class="desc">' + esc(roleLabel()) + '</p>' +
+    adminNav("menu") +
+    '<div class="admin-toolbar">' +
+      '<button class="btn" id="adminNew" type="button">新增菜品</button>' +
+      '<button class="btn btn-ghost" id="switchRole" type="button">切换角色</button>' +
+      '<a class="btn btn-ghost" href="#settings">返回设置</a>' +
+    "</div>" +
+    '<div class="chips" role="list" aria-label="摊位筛选">' +
+      '<button class="chip' + (ui.adminFilterStall === "" ? " on" : "") + '" type="button" data-admin-stall="">全部摊位</button>' +
+      STALLS.map((s, i) =>
+        '<button class="chip' + (String(ui.adminFilterStall) === String(i) ? " on" : "") +
+          '" type="button" data-admin-stall="' + i + '">' + esc(s.name) + "</button>"
+      ).join("") +
+    "</div>" +
+    '<div class="chips" style="padding-top:0">' +
+      '<button class="chip' + (ui.adminOnlyOff ? " on" : "") + '" type="button" id="toggleOnlyOff">' +
+        (ui.adminOnlyOff ? "仅看下架 · 开" : "仅看下架") +
+      "</button>" +
+    "</div>" +
+    '<div class="admin-list">' +
+      (list.length ? list.map((d) => {
+        const stallName = STALLS[d.stall] ? STALLS[d.stall].name : "?";
+        const can = canEditStall(d.stall);
+        return '<div class="admin-row' + (d.available ? "" : " is-off") + '">' +
+          '<div class="admin-row-main">' +
+            '<div class="dish-name"><span>' + esc(d.name) + '</span><span class="price">¥' + formatPrice(d.price) + "</span></div>" +
+            '<div class="meta">' + esc(stallName) + "</div>" +
+            '<div class="meta">在售：' + (d.available ? "是" : "否") +
+              " · 核验：" + (d.verified ? ("是（" + esc(d.verifiedAt || "—") + "）") : "否") +
+            "</div>" +
+            '<div class="meta">最后修改：' + esc(formatUpdatedAt(d.updatedAt)) + "</div>" +
+          "</div>" +
+          '<div class="admin-row-actions">' +
+            '<button class="btn btn-soft" type="button" data-admin-edit="' + d.id + '"' + (can ? "" : " disabled") + ">编辑</button>" +
+            '<button class="btn btn-ghost" type="button" data-toggle-avail="' + d.id + '"' + (can ? "" : " disabled") + ">" +
+              (d.available ? "下架" : "上架") + "</button>" +
+            '<button class="btn btn-ghost" type="button" data-toggle-verify="' + d.id + '"' + (can ? "" : " disabled") + ">" +
+              (d.verified ? "取消核验" : "核验") + "</button>" +
+          "</div>" +
+        "</div>";
+      }).join("") : '<div class="empty"><strong>没有符合条件的菜品</strong>试试调整筛选。</div>') +
+    "</div>";
+}
+
+function emptyDishDraft(stallIdx) {
+  return {
+    id: null,
+    name: "",
+    stall: stallIdx,
+    price: "",
+    portion: "中份",
+    img: "",
+    tastes: [],
+    ingredients: [],
+    available: true,
+    verified: false,
+    verifiedAt: null,
+    kcal: 400,
+    protein: 20,
+    fat: 12,
+    carb: 40
+  };
+}
+
+function renderAdminForm(editId) {
+  if (needsAdminRolePick()) return renderAdminGate();
+  setTab("settings");
+  showTop(true);
+  const isNew = editId == null || editId === "new";
+  let draft = adminFormDraft;
+  if (!draft) {
+    if (isNew) {
+      const stall = role.type === "stallOwner" ? Number(role.stall) : 0;
+      draft = emptyDishDraft(stall);
+    } else {
+      const found = dishById(editId);
+      if (!found) {
+        toast("菜品不存在，可能已被删除");
+        location.hash = "#admin";
+        return;
+      }
+      if (!canEditStall(found.stall)) {
+        toast("无权操作该摊位");
+        location.hash = "#admin";
+        return;
+      }
+      draft = cloneDish(found);
+    }
+    adminFormDraft = draft;
+  }
+  ui.formTastes = (draft.tastes || []).slice();
+  const stallDisabled = role.type === "stallOwner";
+
+  view.innerHTML =
+    '<h1 class="h1">' + (isNew ? "新增菜品" : "编辑菜品") + "</h1>" +
+    '<p class="desc">' + esc(roleLabel()) + "</p>" +
+    '<div class="panel admin-form">' +
+      '<div class="field"><label for="fName">菜名 *</label>' +
+        '<input id="fName" value="' + esc(draft.name) + '" placeholder="例如：农家小炒肉"></div>' +
+      '<div class="field"><label for="fStall">摊位 *</label>' +
+        '<select id="fStall"' + (stallDisabled ? " disabled" : "") + ">" +
+          STALLS.map((s, i) =>
+            '<option value="' + i + '"' + (Number(draft.stall) === i ? " selected" : "") + ">" + esc(s.name) + "</option>"
+          ).join("") +
+        "</select></div>" +
+      '<div class="field"><label for="fPrice">价格 *</label>' +
+        '<input id="fPrice" type="number" min="0.01" step="0.01" inputmode="decimal" value="' +
+          esc(draft.price === "" || draft.price == null ? "" : draft.price) + '" placeholder="例如：18.00"></div>' +
+      '<div class="field"><label for="fPortion">份量</label>' +
+        '<input id="fPortion" value="' + esc(draft.portion || "") + '" placeholder="中份"></div>' +
+      '<div class="field"><label>口味标签</label><div class="chips" id="formTastes">' +
+        TASTES.map((t) =>
+          '<button class="chip' + (ui.formTastes.includes(t) ? " on" : "") + '" type="button" data-form-taste="' + esc(t) + '">' + esc(t) + "</button>"
+        ).join("") +
+      "</div></div>" +
+      '<div class="field"><label for="fIngredients">配料（逗号分隔）</label>' +
+        '<input id="fIngredients" value="' + esc((draft.ingredients || []).join("，")) + '" placeholder="猪肉，辣椒，蒜"></div>' +
+      '<div class="switch-row">' +
+        '<label class="switch-lab"><input type="checkbox" id="fAvailable"' + (draft.available !== false ? " checked" : "") + "> 可用（在售）</label>" +
+        '<label class="switch-lab"><input type="checkbox" id="fVerified"' + (draft.verified ? " checked" : "") + "> 已核验</label>" +
+      "</div>" +
+      '<button class="btn btn-block" id="saveDish" type="button">保存</button>' +
+      '<button class="btn btn-ghost btn-block" id="cancelDish" type="button" style="margin-top:8px">取消</button>' +
+    "</div>";
+}
+
+function readAdminForm() {
+  const stallEl = $("#fStall");
+  const stall = role.type === "stallOwner"
+    ? Number(role.stall)
+    : (stallEl ? Number(stallEl.value) : NaN);
+  return {
+    name: ($("#fName") && $("#fName").value || "").trim(),
+    stall: stall,
+    priceRaw: ($("#fPrice") && $("#fPrice").value || "").trim(),
+    portion: ($("#fPortion") && $("#fPortion").value || "").trim() || "中份",
+    tastes: ui.formTastes.slice(),
+    ingredients: parseIngredientInput($("#fIngredients") && $("#fIngredients").value),
+    available: !!($("#fAvailable") && $("#fAvailable").checked),
+    verified: !!($("#fVerified") && $("#fVerified").checked)
+  };
+}
+
+function saveAdminDish(editId) {
+  const isNew = editId == null || editId === "new";
+  const form = readAdminForm();
+  if (!form.name || form.priceRaw === "" || form.stall === "" || form.stall == null || Number.isNaN(Number(form.stall))) {
+    toast("请填写菜名、摊位和价格");
+    return false;
+  }
+  if (!isValidPrice(form.priceRaw)) {
+    toast("价格无效，请填写大于 0 且最多两位小数的金额");
+    return false;
+  }
+  if (!canEditStall(form.stall)) {
+    toast("无权操作该摊位");
+    return false;
+  }
+  const price = Number(form.priceRaw);
+  const dup = dishes.some((d) =>
+    Number(d.stall) === Number(form.stall) &&
+    d.name === form.name &&
+    (isNew || d.id !== Number(editId))
+  );
+  if (dup) {
+    toast("该摊位已存在同名菜品");
+    return false;
+  }
+
+  const stamp = nowStamp();
+  let unverifiedByIngredients = false;
+  if (isNew) {
+    const item = {
+      id: nextDishId(),
+      name: form.name,
+      stall: Number(form.stall),
+      price: price,
+      portion: form.portion,
+      img: "",
+      tastes: form.tastes,
+      ingredients: form.ingredients,
+      available: form.available,
+      verified: form.verified,
+      verifiedAt: form.verified ? todayKey() : null,
+      updatedAt: stamp,
+      kcal: 400,
+      protein: 20,
+      fat: 12,
+      carb: 40
+    };
+    dishes.push(item);
+  } else {
+    const idx = dishes.findIndex((d) => d.id === Number(editId));
+    if (idx < 0) {
+      toast("菜品不存在，可能已被删除");
+      return false;
+    }
+    const prev = dishes[idx];
+    if (!canEditStall(prev.stall) || !canEditStall(form.stall)) {
+      toast("无权操作该摊位");
+      return false;
+    }
+    const ingredientsChanged = !ingredientsEqual(prev.ingredients, form.ingredients);
+    let verified = prev.verified;
+    let verifiedAt = prev.verifiedAt || null;
+
+    // 普通字段变更不改核验；主动开关才改；已核验后改配料则作废核验
+    if (ingredientsChanged && prev.verified) {
+      verified = false;
+      verifiedAt = null;
+      unverifiedByIngredients = true;
+    } else if (form.verified && !prev.verified) {
+      verified = true;
+      verifiedAt = todayKey();
+    } else if (!form.verified && prev.verified) {
+      verified = false;
+      verifiedAt = null;
+    }
+
+    dishes[idx] = Object.assign(cloneDish(prev), {
+      name: form.name,
+      stall: Number(form.stall),
+      price: price,
+      portion: form.portion,
+      tastes: form.tastes,
+      ingredients: form.ingredients,
+      available: form.available,
+      verified: verified,
+      verifiedAt: verifiedAt,
+      updatedAt: stamp
+    });
+  }
+
+  saveDishes();
+  adminFormDraft = null;
+  if (unverifiedByIngredients) {
+    toast("配料已变更，需重新核验后方可进入推荐");
+    setTimeout(() => toast("已保存，菜单将使用最新数据"), 1900);
+  } else {
+    toast("已保存，菜单将使用最新数据");
+  }
+  location.hash = "#admin";
+  return true;
+}
+
+function toggleDishAvailable(id) {
+  const idx = dishes.findIndex((d) => d.id === Number(id));
+  if (idx < 0) {
+    toast("菜品不存在，可能已被删除");
+    return false;
+  }
+  const d = dishes[idx];
+  if (!canEditStall(d.stall)) {
+    toast("无权操作该摊位");
+    return false;
+  }
+  const next = d.available === false;
+  dishes[idx] = Object.assign(cloneDish(d), {
+    available: next,
+    updatedAt: nowStamp()
+  });
+  saveDishes();
+  toast(next ? "已上架" : "已下架，该菜品不再进入推荐");
+  renderAdminList();
+  return true;
+}
+
+function toggleDishVerified(id) {
+  const idx = dishes.findIndex((d) => d.id === Number(id));
+  if (idx < 0) {
+    toast("菜品不存在，可能已被删除");
+    return false;
+  }
+  const d = dishes[idx];
+  if (!canEditStall(d.stall)) {
+    toast("无权操作该摊位");
+    return false;
+  }
+  const turnOn = !d.verified;
+  dishes[idx] = Object.assign(cloneDish(d), {
+    verified: turnOn,
+    verifiedAt: turnOn ? todayKey() : null,
+    updatedAt: nowStamp()
+  });
+  saveDishes();
+  toast("已保存，菜单将使用最新数据");
+  renderAdminList();
+  return true;
+}
+
+function renderAdminReports() {
+  if (needsAdminRolePick()) return renderAdminGate();
+  setTab("settings");
+  showTop(true);
+  ui.adminTab = "reports";
+  const sorted = reports.slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  view.innerHTML =
+    '<h1 class="h1">错误报告</h1>' +
+    '<p class="desc">' + esc(roleLabel()) + " · 上报不会直接改菜单</p>" +
+    adminNav("reports") +
+    (sorted.length ? sorted.map((r) => {
+      const d = dishById(r.dishId);
+      const name = d ? d.name : ("菜品#" + r.dishId);
+      const stall = d && STALLS[d.stall] ? STALLS[d.stall].name : "";
+      const status = REPORT_STATUS_LABEL[r.status] || r.status;
+      const pending = r.status === "pending";
+      return '<div class="panel report-card" data-report-id="' + r.id + '">' +
+        '<div class="dish-name"><span>' + esc(name) + '</span><span class="status-pill status-' + esc(r.status) + '">' + esc(status) + "</span></div>" +
+        '<div class="meta">' + esc(stall) + " · 上报于 " + esc(r.createdAt) + "</div>" +
+        '<p class="report-desc">' + esc(r.description) + "</p>" +
+        (r.explanation ? '<p class="meta">处理说明：' + esc(r.explanation) + "</p>" : "") +
+        (pending && role.type === "admin"
+          ? '<div class="field" style="margin-top:10px"><label for="exp-' + r.id + '">处理说明</label>' +
+            '<textarea id="exp-' + r.id + '" rows="2" placeholder="说明处理结果">' + esc(r.explanation || "") + "</textarea></div>" +
+            '<div class="admin-toolbar">' +
+              '<button class="btn btn-soft" type="button" data-resolve="' + r.id + '" data-status="corrected">标记 Corrected</button>' +
+              '<button class="btn btn-ghost" type="button" data-resolve="' + r.id + '" data-status="nochange">No change required</button>' +
+            "</div>"
+          : (pending && role.type === "stallOwner"
+            ? '<p class="meta" style="margin-top:8px">仅管理员可处理报告状态。</p>'
+            : (r.resolvedAt ? '<div class="meta">处理于 ' + esc(r.resolvedAt) + "</div>" : ""))) +
+      "</div>";
+    }).join("") : '<div class="empty"><strong>暂无错误报告</strong>用户可在菜品详情页提交。</div>');
+}
+
+function submitDishReport(dishId) {
+  if (!isLoggedIn()) {
+    toast("请先在设置页模拟登录");
+    return false;
+  }
+  const desc = ($("#reportDesc") && $("#reportDesc").value || "").trim();
+  ui.reportDesc = desc;
+  if (!desc) {
+    toast("请填写错误描述");
+    return false;
+  }
+  if (!dishById(dishId)) {
+    toast("找不到这道菜");
+    return false;
+  }
+  reports.push({
+    id: nextReportId(),
+    dishId: Number(dishId),
+    description: desc,
+    status: "pending",
+    explanation: "",
+    createdAt: nowStamp(),
+    resolvedAt: null
+  });
+  persistReports();
+  ui.reportDesc = "";
+  toast("已提交错误报告");
+  renderDetail(dishId);
+  return true;
+}
+
+function resolveReport(reportId, status) {
+  if (role.type !== "admin") {
+    toast("仅管理员可处理报告");
+    return false;
+  }
+  const r = reports.find((item) => item.id === Number(reportId));
+  if (!r || r.status !== "pending") {
+    toast("报告不存在或已处理");
+    return false;
+  }
+  const expEl = $("#exp-" + r.id);
+  const explanation = (expEl && expEl.value || "").trim();
+  if (status === "corrected") {
+    const d = dishById(r.dishId);
+    if (!d || !d.updatedAt || String(d.updatedAt) < String(r.createdAt)) {
+      toast("请先更新菜品数据再标记已更正");
+      return false;
+    }
+  }
+  r.status = status;
+  r.explanation = explanation;
+  r.resolvedAt = nowStamp();
+  persistReports();
+  toast(status === "corrected" ? "已标记为 Corrected" : "已标记为 No change required");
+  renderAdminReports();
+  return true;
+}
+
 let currentDish = null;
 
 function route() {
-  readPersonal();
   const hash = (location.hash || "#home").slice(1);
   // 重新触发进入动画
   view.style.animation = "none";
@@ -561,14 +1107,37 @@ function route() {
     const id = Number(hash.split("/")[1]);
     if (currentDish !== id) {
       ui.factor = 1;
+      ui.reportDesc = "";
       currentDish = id;
     }
     renderDetail(id);
     return;
   }
   currentDish = null;
-  if (hash === "favorites") return renderFavorites();
-  if (hash === "menu") return renderHome(true);
+
+  if (hash === "admin" || hash === "admin/") {
+    adminFormDraft = null;
+    return renderAdminList();
+  }
+  if (hash === "admin/reports") {
+    adminFormDraft = null;
+    return renderAdminReports();
+  }
+  if (hash === "admin/new") {
+    if (!adminFormDraft || adminFormDraft.id != null) {
+      adminFormDraft = null;
+    }
+    return renderAdminForm("new");
+  }
+  if (hash.startsWith("admin/edit/")) {
+    const id = Number(hash.split("/")[2]);
+    if (!adminFormDraft || adminFormDraft.id !== id) {
+      adminFormDraft = null;
+    }
+    return renderAdminForm(id);
+  }
+
+  adminFormDraft = null;
   if (hash === "stats") return renderStats();
   if (hash === "ai") return renderAi();
   if (hash === "settings") return renderSettings();
@@ -576,12 +1145,26 @@ function route() {
 }
 
 function snapshotInputs() {
-  const feedback = $("#feedbackText");
-  if (feedback) ui.feedbackDrafts[feedback.dataset.dishId] = feedback.value;
   const kw = $("#kw");
   if (kw) ui.kw = kw.value;
+  const priceMin = $("#priceMin");
+  if (priceMin) ui.priceMin = priceMin.value;
+  const priceMax = $("#priceMax");
+  if (priceMax) ui.priceMax = priceMax.value;
   const ai = $("#aiText");
   if (ai) ui.aiText = ai.value;
+  const reportDesc = $("#reportDesc");
+  if (reportDesc) ui.reportDesc = reportDesc.value;
+}
+
+function applyMenuFilter() {
+  snapshotInputs();
+  if (!parsePriceRange().ok) {
+    toast("价格区间无效，请检查最小值和最大值");
+    return false;
+  }
+  renderHome();
+  return true;
 }
 
 function addDishLog(dish, factor) {
@@ -605,24 +1188,6 @@ function addDishLog(dish, factor) {
 /* ---------- 事件委托 ---------- */
 document.body.addEventListener("click", (e) => {
   snapshotInputs();
-  if (e.target.closest("#startPersonalDemo")) { setDemo(true); return; }
-  if (e.target.closest("#stopPersonalDemo")) { ui.feedbackDrafts = {}; setDemo(false); return; }
-  const actionButton = e.target.closest("[data-personal]");
-  if (actionButton) {
-    const id = Number(actionButton.dataset.id);
-    const action = actionButton.dataset.personal;
-    readPersonal();
-    let value = actionButton.dataset.value;
-    if (action === "mark" && personal.feedback[id]?.mark === value) value = "";
-    if (action === "text") value = $("#feedbackText").value;
-    if (changePersonal(action, id, value)) {
-      if (action === "text" || action === "clear-feedback") delete ui.feedbackDrafts[id];
-      route();
-      const messages = { favorite: "已收藏（不影响推荐排序）", unfavorite: "已取消收藏，反馈仍保留", mark: "反馈已更新，推荐将按新标记排序", text: "文字反馈已保存（不参与排序）", "clear-feedback": "全部反馈已清除，排序影响已撤销" };
-      toast(messages[action]);
-    }
-    return;
-  }
 
   // 主题开关（含内部轨道/圆钮）
   if (e.target.closest("#themeToggle")) {
@@ -637,16 +1202,101 @@ document.body.addEventListener("click", (e) => {
     return;
   }
 
-  const taste = e.target.closest("[data-taste]");
-  if (taste) {
-    ui.taste = taste.dataset.taste;
-    renderHome(location.hash === "#menu");
+  const roleBtn = e.target.closest("[data-role]");
+  if (roleBtn) {
+    const type = roleBtn.dataset.role;
+    if (type === "admin") role = { type: "admin", stall: 0 };
+    else if (type === "stallOwner") role = { type: "stallOwner", stall: Number(roleBtn.dataset.rolestall || 0) };
+    else role = { type: "user", stall: 0 };
+    ui.forceRolePick = false;
+    persistRole();
+    toast("已切换为" + roleLabel());
+    if ((location.hash || "").slice(1).startsWith("admin")) {
+      location.hash = "#admin";
+      renderAdminList();
+    } else {
+      route();
+    }
     return;
   }
-  const dayPill = e.target.closest("[data-day]");
-  if (dayPill) {
-    ui.day = dayPill.dataset.day === todayKey() ? "" : dayPill.dataset.day;
-    renderHome(location.hash === "#menu");
+
+  const formTaste = e.target.closest("[data-form-taste]");
+  if (formTaste) {
+    const t = formTaste.dataset.formTaste;
+    if (ui.formTastes.includes(t)) ui.formTastes = ui.formTastes.filter((x) => x !== t);
+    else ui.formTastes = ui.formTastes.concat(t);
+    if (adminFormDraft) {
+      const live = readAdminForm();
+      adminFormDraft = Object.assign({}, adminFormDraft, live, {
+        price: live.priceRaw,
+        tastes: ui.formTastes.slice()
+      });
+    }
+    const hash = (location.hash || "").slice(1);
+    if (hash === "admin/new") renderAdminForm("new");
+    else if (hash.startsWith("admin/edit/")) renderAdminForm(Number(hash.split("/")[2]));
+    return;
+  }
+
+  const adminStall = e.target.closest("[data-admin-stall]");
+  if (adminStall) {
+    ui.adminFilterStall = adminStall.dataset.adminStall;
+    renderAdminList();
+    return;
+  }
+
+  const adminEdit = e.target.closest("[data-admin-edit]");
+  if (adminEdit) {
+    if (adminEdit.disabled) return;
+    const id = Number(adminEdit.dataset.adminEdit);
+    const d = dishById(id);
+    if (!d) { toast("菜品不存在，可能已被删除"); return; }
+    if (!canEditStall(d.stall)) { toast("无权操作该摊位"); return; }
+    adminFormDraft = null;
+    location.hash = "#admin/edit/" + id;
+    return;
+  }
+
+  const toggleAvail = e.target.closest("[data-toggle-avail]");
+  if (toggleAvail) {
+    if (toggleAvail.disabled) return;
+    toggleDishAvailable(toggleAvail.dataset.toggleAvail);
+    return;
+  }
+
+  const toggleVerify = e.target.closest("[data-toggle-verify]");
+  if (toggleVerify) {
+    if (toggleVerify.disabled) return;
+    toggleDishVerified(toggleVerify.dataset.toggleVerify);
+    return;
+  }
+
+  const resolveBtn = e.target.closest("[data-resolve]");
+  if (resolveBtn) {
+    resolveReport(resolveBtn.dataset.resolve, resolveBtn.dataset.status);
+    return;
+  }
+
+  const taste = e.target.closest("[data-taste]");
+  if (taste) {
+    snapshotInputs();
+    if (!parsePriceRange().ok) {
+      toast("价格区间无效，请检查最小值和最大值");
+      return;
+    }
+    ui.taste = taste.dataset.taste;
+    renderHome();
+    return;
+  }
+  const stall = e.target.closest("[data-stall]");
+  if (stall) {
+    snapshotInputs();
+    if (!parsePriceRange().ok) {
+      toast("价格区间无效，请检查最小值和最大值");
+      return;
+    }
+    ui.stall = stall.dataset.stall;
+    renderHome();
     return;
   }
   const meal = e.target.closest("[data-meal]");
@@ -667,7 +1317,7 @@ document.body.addEventListener("click", (e) => {
     const name = pref.dataset.pref;
     prefs.tastes = prefs.tastes.includes(name) ? prefs.tastes.filter((t) => t !== name) : prefs.tastes.concat(name);
     save(LS.prefs, prefs);
-    pref.classList.toggle("on", prefs.tastes.includes(name));
+    renderSettings();
     return;
   }
   const ex = e.target.closest("[data-ex]");
@@ -677,7 +1327,7 @@ document.body.addEventListener("click", (e) => {
     else if (prefs.excluded.length >= 5) { toast("忌口最多 5 项"); return; }
     else prefs.excluded = prefs.excluded.concat(name);
     save(LS.prefs, prefs);
-   ex.classList.toggle("on", prefs.excluded.includes(name));
+    renderSettings();
     return;
   }
   const del = e.target.closest("[data-del]");
@@ -693,9 +1343,14 @@ document.body.addEventListener("click", (e) => {
     if (d) addDishLog(d, 1);
     return;
   }
-  if (e.target.id === "doSearch") {
-    ui.kw = $("#kw").value;
-    renderHome(location.hash === "#menu");
+  if (e.target.id === "doSearch" || e.target.id === "doPriceFilter") {
+    applyMenuFilter();
+    return;
+  }
+  if (e.target.id === "clearFilters") {
+    clearMenuFilters();
+    renderHome();
+    return;
   }
   if (e.target.id === "minus") {
     ui.factor = Math.max(0.5, Math.round((ui.factor - 0.5) * 10) / 10);
@@ -718,8 +1373,41 @@ document.body.addEventListener("click", (e) => {
   }
   if (e.target.id === "parseAi") {
     ui.aiText = $("#aiText").value.trim();
-    ui.aiHits = DISHES.filter((d) => ui.aiText.includes(d.name));
+    ui.aiHits = dishes.filter((d) => ui.aiText.includes(d.name));
     renderAi();
+  }
+  if (e.target.id === "switchRole") {
+    ui.forceRolePick = true;
+    adminFormDraft = null;
+    renderAdminGate();
+    return;
+  }
+  if (e.target.id === "toggleOnlyOff") {
+    ui.adminOnlyOff = !ui.adminOnlyOff;
+    renderAdminList();
+    return;
+  }
+  if (e.target.id === "adminNew") {
+    if (needsAdminRolePick()) { toast("请先选择商家或管理员角色"); return; }
+    adminFormDraft = null;
+    location.hash = "#admin/new";
+    return;
+  }
+  if (e.target.id === "saveDish") {
+    const hash = (location.hash || "").slice(1);
+    if (hash === "admin/new") saveAdminDish("new");
+    else if (hash.startsWith("admin/edit/")) saveAdminDish(Number(hash.split("/")[2]));
+    return;
+  }
+  if (e.target.id === "cancelDish") {
+    adminFormDraft = null;
+    location.hash = "#admin";
+    return;
+  }
+  if (e.target.id === "submitReport") {
+    const id = Number((location.hash || "").split("/")[1]);
+    submitDishReport(id);
+    return;
   }
   if (e.target.id === "saveGoal") {
     const n = Number($("#goal").value);
@@ -742,23 +1430,8 @@ document.body.addEventListener("click", (e) => {
   if (e.target.id === "themeFromSettings") toggleTheme();
 });
 
-document.body.addEventListener("input", (e) => {
-  if (e.target.id === "feedbackText") {
-    ui.feedbackDrafts[e.target.dataset.dishId] = e.target.value;
-    const count = PersonalRecords.textLength(e.target.value);
-    $("#feedbackCount").textContent = count + " / 200" + (count > 200 ? " · 超出限制，不能保存" : "");
-    e.target.setAttribute("aria-invalid", String(count > 200));
-  }
-});
-window.addEventListener("storage", (e) => {
-  if (e.key === PERSONAL_KEY || e.key === null) { snapshotInputs(); route(); }
-});
-window.addEventListener("hashchange", () => {
-  route();
-  window.scrollTo(0, 0);
-});
+window.addEventListener("hashchange", route);
 
 applyTheme(load(LS.theme, "warm"));
 if (!location.hash) location.hash = "#home";
 else route();
-
