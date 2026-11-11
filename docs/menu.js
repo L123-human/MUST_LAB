@@ -23,3 +23,13 @@ const DISHES = [
   { id: 12, name: "番茄牛肉汤粉", stall: 4, price: 18, portion: "大份", tastes: ["中辣", "汤水"], ingredients: ["牛肉", "番茄", "米粉"], kcal: 520, protein: 26, fat: 12, carb: 70 },
   { id: 13, name: "清汤牛腩粉", stall: 4, price: 20, portion: "大份", tastes: ["清淡", "汤水", "高蛋白"], ingredients: ["牛肉", "米粉", "萝卜"], kcal: 490, protein: 28, fat: 10, carb: 66 }
 ];
+
+// B 菜单 mock；供应及核验状态仅用于演示。
+const MenuApi = (() => {
+  const sample = JSON.stringify({
+    mock: true,
+    stalls: STALLS,
+    dishes: DISHES.map(dish => ({ ...dish, available: dish.id !== 12, verified: dish.id !== 11 }))
+  });
+  return { async read() { return JSON.parse(sample); } };
+})();

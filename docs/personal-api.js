@@ -21,7 +21,9 @@ const PersonalApi = (() => {
     storageKey, sessionKey, active,
     async read() { return readState(); },
     async change(action, dishId, value) {
-      const result = PersonalRecords.change(readState(), action, dishId, value, DISHES);
+      if (!active()) throw new Error("请先开启本地演示。");
+      const dishes = action === "unfavorite" || action === "clear-feedback" ? DISHES : (await MenuApi.read()).dishes;
+      const result = PersonalRecords.change(readState(), action, dishId, value, dishes);
       if (result.error) throw new Error(result.error);
       try { localStorage.setItem(storageKey, JSON.stringify(result.state)); }
       catch (_) { throw new Error("保存失败，原记录未改变。请检查浏览器存储空间或权限。"); }

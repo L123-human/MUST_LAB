@@ -141,6 +141,7 @@ function setDemo(active) {
   demoActive = active;
   personalSession++;
   ui.feedbackDrafts = {};
+  if (!active) view.innerHTML = '<p class="desc">已退出本地演示。</p>';
   const pending = route();
   toast(active ? "已进入本地演示；请勿保存敏感信息。" : "已退出演示；本地数据仍保留。");
   return pending;
@@ -190,7 +191,7 @@ function personalPanel(d) {
 function renderFavorites() {
   setTab("favorites");
   showTop(true);
-  let html = '<h1 class="h1">收藏与反馈</h1>';
+  let html = '<h1 class="h1">收藏与反馈</h1>' + menuNotice();
   if (!demoActive) {
     view.innerHTML = html + '<div class="panel"><h2>请登录后使用</h2><p class="desc">账户功能尚未接入。本地演示可试用收藏和反馈，数据仅存于此浏览器，共用设备可见，不会发送给食堂。</p><button class="btn" type="button" id="startPersonalDemo">进入本地演示</button></div>';
     return;
@@ -232,6 +233,14 @@ function visibleDishes(limit = 5) {
   return getRecommendation(dishes, {
     maxBudget: prefs.budget, excludeIngredients: prefs.excluded, preferredTastes: tastes
   }, personal).list;
+}
+
+let menuMock = false;
+let menuError = "";
+
+function menuNotice() {
+  const text = menuError || (menuMock ? "演示菜单：菜品、价格、供应及核验状态均为模拟。" : "");
+  return '<p class="desc" role="status">' + esc(text) + '</p><button class="btn btn-soft" type="button" id="refreshMenu">刷新菜单</button>';
 }
 
 function dishStatus(d) {
@@ -297,7 +306,7 @@ function renderHome(menu = false) {
   const dishes = visibleDishes(menu ? Infinity : 5);
   const week = weekSeries();
 
-  view.innerHTML =
+  view.innerHTML = menuNotice() +
     '<div class="week" role="list" aria-label="本周日期">' +
       week.map((d) =>
         '<button class="day-pill' + (((ui.day === "" && d.today) || ui.day === d.key) ? " on" : "") + '" type="button" data-day="' + d.key + '" aria-pressed="' + (((ui.day === "" && d.today) || ui.day === d.key) ? "true" : "false") + '">' +
@@ -377,7 +386,7 @@ function renderDetail(id) {
   const maxC = Math.round(d.carb * 2) || 1;
   const maxF = Math.round(d.fat * 2) || 1;
 
-  view.innerHTML =
+  view.innerHTML = menuNotice() +
     '<div class="detail-page">' +
       '<div class="detail-hero">' +
         '<img src="' + STALLS[d.stall].img + '" alt="' + esc(d.name) + '">' +
@@ -539,10 +548,26 @@ function renderSettings() {
 }
 
 let currentDish = null;
+let routeRequest = 0;
 
 async function route() {
-  if (!await readPersonal()) return;
+  const request = ++routeRequest;
+  const [menu, records] = await Promise.allSettled([MenuApi.read(), readPersonal()]);
+  if (request !== routeRequest || records.value !== true) return;
+  menuError = "";
+  if (menu.status === "fulfilled") {
+    STALLS.splice(0, STALLS.length, ...menu.value.stalls);
+    DISHES.splice(0, DISHES.length, ...menu.value.dishes);
+    menuMock = menu.value.mock === true;
+  } else {
+    menuError = "菜单读取失败，请重试。收藏与反馈记录未删除。";
+  }
   const hash = (location.hash || "#home").slice(1);
+  if (menuError && (hash === "home" || hash === "menu" || hash === "favorites" || hash.startsWith("dish/"))) {
+    showTop(true);
+    view.innerHTML = menuNotice();
+    return;
+  }
   // 重新触发进入动画
   view.style.animation = "none";
   void view.offsetWidth;
@@ -596,6 +621,7 @@ function addDishLog(dish, factor) {
 /* ---------- 事件委托 ---------- */
 document.body.addEventListener("click", async (e) => {
   snapshotInputs();
+  if (e.target.closest("#refreshMenu")) { await route(); return; }
   if (e.target.closest("#startPersonalDemo")) { setDemo(true); return; }
   if (e.target.closest("#stopPersonalDemo")) { setDemo(false); return; }
   const actionButton = e.target.closest("[data-personal]");

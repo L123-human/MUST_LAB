@@ -9,6 +9,6 @@
 - 规则测试：`node --test docs/personal.test.cjs`
 - 浏览器测试：启动服务器并安装 Playwright、Chrome 后运行 `node docs/browser.cjs`。
 
-`docs/menu.js` 保留原有 13 道样例菜。B 尚未提供 `available`、`verified`，这些菜可浏览和收藏，暂不进入推荐。C 页面 `/recommand1/` 共用菜单和推荐规则；测试中的核验状态仅为夹具。
+`menu.js` 的 `MenuApi.read()` 返回 `{ mock, stalls, dishes }` 的 Promise，供主页面和 C 页面 `/recommand1/` 共用。沿用原有 13 道样例：ID 11 模拟未核验，ID 12 模拟下架，其余可进入推荐；所有状态均非真实核验。点击“刷新菜单”或重新生成推荐可重读数据。B 接入时替换读取实现，保留菜品 ID、`available`、`verified`。
 
 需求与待联调事项见 [REQ-1.4](REQ-1.4-delivery.md)。
